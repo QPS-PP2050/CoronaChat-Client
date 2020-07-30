@@ -1,0 +1,9 @@
+{
+  "name": "coronachat-client",
+  "version": "0.0.1",
+  "description": "Secure Chat Server & Client Project for RMIT Capstone Project 1",
+  "main": "src/index.js",
+  "repository": "https://github.com/QPS-PP2050/CoronaChat-Client.git",
+  "author": "QPS-PP2050",
+  "license": "MIT"
+}

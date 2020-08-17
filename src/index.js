@@ -38,7 +38,7 @@ const clientSocket = new SocketConnect();
 
 //Connect Function for connecting to Server, will be updated later
 function connectServer() {
-  clientSocket.connect("coronachat.xyz", 8080);
+  clientSocket.connect();
 }
 
 

@@ -1,22 +1,44 @@
 const io = require('socket.io-client');
 
+const CHATEVENT = 
+{
+    CONNECT : 'connect',
+    DISCONNECT : 'disconnect',
+    MESSAGE : 'message'
+}
+
 class SocketConnect
 {
-    constructor() { }
+    PORT = 8080;
+    URL = "coronachat.xyz";
+    socket;
 
-    async connect(url, port)
+
+    constructor()
     {
-        console.log(`${url}:${port}`);
-        this.socket = io(`ws://${url}:${port}`);
-        this.socket.on('connect', () => {
-            this.socket.on('message', (data) => {
-                console.log(data);
-            });
+        this.socket = io(`${this.URL}:${this.PORT}`);
+    }
+
+    async connect()
+    {
+        this.socket.on(CHATEVENT.CONNECT, () => {
+                
+        });
+        
+        this.socket.on(CHATEVENT.MESSAGE, (data) => {
+                
         });
     }
+
+    async disconnect()
+    {
+        this.socket.emit(CHATEVENT.disconnect);
+        this.socket.close();
+    }
+
     async send(msg)
     {
-        this.socket.emit('message', msg);
+        this.socket.emit(CHATEVENT.MESSAGE, msg);
     }
 }
 

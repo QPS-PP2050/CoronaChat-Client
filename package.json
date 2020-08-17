@@ -12,5 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^9.2.0"
+  },
+  "dependencies": {
+    "socket.io": "^2.3.0"
   }
 }

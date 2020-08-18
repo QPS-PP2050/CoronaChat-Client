@@ -1,9 +1,11 @@
-const { app, BrowserWindow } = require('electron');
-const { Menu } = require('electron');
+const { Menu, app, BrowserWindow, ipcMain, ipcRenderer } = require('electron');
 const {SocketConnect} = require('./lib/socket');
+const url = require('url');
+const path = require('path');
+
 
 const isMac = process.platform === 'darwin';
-
+var win = null;
 //Creates Menu Template
 const menuTemplate = [
   ...(isMac ? [{
@@ -38,14 +40,13 @@ const clientSocket = new SocketConnect();
 
 //Connect Function for connecting to Server, will be updated later
 function connectServer() {
-  clientSocket.connect();
+  clientSocket.connect(win);
 }
 
 
 function createWindow() 
 {
-
-  const win = new BrowserWindow({
+   win = new BrowserWindow({
     width: 800,
     height: 600,
     title: "Corona Chat",
@@ -53,8 +54,9 @@ function createWindow()
       nodeIntegration: true
     }
   });
-
-  win.loadFile('html/index.html');
+  win.loadURL(`file://${__dirname}/html/index.html`);
+  //win.webContents.openDevTools();
+  ipc = win.ipcRenderer;
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -70,8 +72,11 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
-})
+});
+
+ipcMain.on('send-message', (event, data) => {
+  clientSocket.send(data);
+});

@@ -1,4 +1,5 @@
 const io = require('socket.io-client');
+const { dialog } = require('electron');
 
 const CHATEVENT = 
 {
@@ -10,33 +11,41 @@ const CHATEVENT =
 class SocketConnect
 {
     PORT = 8080;
-    URL = "coronachat.xyz";
+    URL = "localhost"; //"coronachat.xyz";
     socket;
-
+    win;
 
     constructor()
     {
-        this.socket = io(`${this.URL}:${this.PORT}`);
-    }
-
-    async connect()
-    {
-        this.socket.on(CHATEVENT.CONNECT, () => {
-                
-        });
         
-        this.socket.on(CHATEVENT.MESSAGE, (data) => {
-                
+    }
+
+    connect(win)
+    {
+        this.socket = io.connect("http://localhost:8080");
+        this.win = win;
+        this.socket.on(CHATEVENT.CONNECT, (client) => {
+            this.socket.on(CHATEVENT.MESSAGE, (data) => {
+                this.win.webContents.send('actionreply', {text: data.message});
+            }); 
+        });
+        this.socket.on(CHATEVENT.DISCONNECT, function(){
+            dialog.showErrorBox("Connection Fail", "Connection to server was dropped");
         });
     }
 
-    async disconnect()
+    message()
+    {
+        
+    }
+
+    disconnect()
     {
         this.socket.emit(CHATEVENT.disconnect);
         this.socket.close();
     }
 
-    async send(msg)
+    send(msg)
     {
         this.socket.emit(CHATEVENT.MESSAGE, msg);
     }

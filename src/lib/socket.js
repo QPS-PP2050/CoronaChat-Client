@@ -15,10 +15,7 @@ class SocketConnect
     socket;
     win;
 
-    constructor()
-    {
-        
-    }
+    constructor(){}
 
     connect(win)
     {
@@ -26,7 +23,7 @@ class SocketConnect
         this.win = win;
         this.socket.on(CHATEVENT.CONNECT, (client) => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
-                this.win.webContents.send('actionreply', {text: data.message});
+                this.win.webContents.send('actionreply', {text: data});
             }); 
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
@@ -34,20 +31,18 @@ class SocketConnect
         });
     }
 
-    message()
-    {
-        
-    }
-
     disconnect()
-    {
+    {   
         this.socket.emit(CHATEVENT.disconnect);
         this.socket.close();
     }
 
     send(msg)
     {
-        this.socket.emit(CHATEVENT.MESSAGE, msg);
+        if(this.socket)
+        {
+            this.socket.emit(CHATEVENT.MESSAGE, msg);
+        }
     }
 }
 

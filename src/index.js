@@ -55,7 +55,7 @@ function createWindow()
     }
   });
   win.loadURL(`file://${__dirname}/html/index.html`);
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
   ipc = win.ipcRenderer;
 }
 

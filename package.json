@@ -6,14 +6,23 @@
   "repository": "https://github.com/QPS-PP2050/CoronaChat-Client.git",
   "scripts": {
     "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "QPS-PP2050",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^9.2.0"
+    "electron": "^9.2.0",
+    "electron-builder": "^22.8.0"
   },
   "dependencies": {
     "socket.io": "^2.3.0"
+  },
+  "build": {
+      "win": {
+          "target": "portable",
+          "publish": ["github"]
+      }
   }
 }

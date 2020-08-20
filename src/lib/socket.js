@@ -11,7 +11,7 @@ const CHATEVENT =
 class SocketConnect
 {
     PORT = 8080;
-    URL = "localhost"; //"coronachat.xyz";
+    URL = "coronachat.xyz";
     socket;
     win;
 
@@ -19,7 +19,7 @@ class SocketConnect
 
     connect(win)
     {
-        this.socket = io.connect("http://localhost:8080");
+        this.socket = io.connect(`http://${URL}:${PORT}`);
         this.win = win;
         this.socket.on(CHATEVENT.CONNECT, (client) => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {

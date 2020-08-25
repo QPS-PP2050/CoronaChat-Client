@@ -23,7 +23,9 @@
   "build": {
     "win": {
       "target": "portable",
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     }
   }
 }

@@ -16,13 +16,14 @@ class SocketConnect
     win;
 
     constructor(){}
-
+    //Deals with connecting to the server
     connect(win)
     {
         this.socket = io.connect(`http://${this.URL}:${this.PORT}`);
         this.win = win;
         this.socket.on(CHATEVENT.CONNECT, (client) => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
+                //Everytime a message comes through this function gets used to update the ui
                 this.win.webContents.send('actionreply', {text: data});
             }); 
         });

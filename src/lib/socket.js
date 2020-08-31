@@ -11,7 +11,7 @@ const CHATEVENT =
 class SocketConnect
 {
     PORT = 8080;
-    URL = "coronachat.xyz";
+    URL = "localhost" //"coronachat.xyz";
     socket;
     win;
 
@@ -32,17 +32,28 @@ class SocketConnect
         });
     }
 
+    //Disconects from Server
     disconnect()
     {   
         this.socket.emit(CHATEVENT.disconnect);
         this.socket.close();
     }
 
+    //Sends message to the server
     send(msg)
     {
         if(this.socket)
         {
             this.socket.emit(CHATEVENT.MESSAGE, msg);
+        }
+    }
+
+    //Changes channel
+    changeChannel(channel)
+    {
+        if(this.socket)
+        {
+            this.socket.emit("channel-change", channel);
         }
     }
 }

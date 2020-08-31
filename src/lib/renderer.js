@@ -1,6 +1,10 @@
 const ipcRenderer = require('electron').ipcRenderer; 
 var $, jQuery;
 $ = jQuery = require('jquery');
+var chat = 0;
+
+
+const {React} = require('react');
 
 //Submits input form and sends message
 $(function(){
@@ -12,7 +16,6 @@ $(function(){
       //Sends message to the server
       ipcRenderer.send('send-message', $("#message").val());
       $("#message").val('');
-      console.log("Submit");
     }
   });
 });
@@ -35,6 +38,14 @@ $(document).mouseup(function(e){
     $(".server-list").removeClass("show");
   }
 });
+//Changes the chat channel
+$(function(){
+  $(".channel").on("click", function(e){
+    chat = $(this).data("id");
+    ipcRenderer.send('change-channel', chat);
+  });
+});
+
 
 //Gets updates from main process when a new message comes through
 ipcRenderer.on('actionreply', (event, data) => {

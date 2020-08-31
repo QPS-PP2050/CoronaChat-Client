@@ -8,29 +8,38 @@
     
   </head>
   <body>
-    <div class="chat-window">
-          <div id="chat-log" class="chat">
-            <ul id="messages"></ul>
-          </div>
-            <form action="" id="send-msg" class="bottom message-sec">
-              <input placeholder="Message" id="message" autocomplete="off"/><button id="sendmsg">Send</button>
-            </form>
-          <div class="side-panel">
-            <div id="select" class="select-drop">
-              <a class="server-btn" id="server-drop">Server List</a>
-                <div class="server-list">
-                  <a class="init">No Server's Avaliable</a>
-                </div>
-            </div>
-            <div id="member-list" class="member-pan">
-              <p>Member List</p>
-            </div>
-          </div>
-          </div>
-      </div>
-    </div>
     <script>
       require('../lib/renderer');
     </script>
+    <div class="chat-window">
+        <div class="side-panel-left">
+          <ul class="channel-list" id="channel-list">
+            <!-- This is a test for changing channels, data.id stores the channel id for changing channels -->
+              <li><a data-id="123" class="channel">#Test-Chanel-1</a></li>
+              <li><a data-id="124" class="channel">#Test-Chanel-2</a></li>
+          </ul>
+        </div>
+        <div id="chat-log" class="chat">
+          <div class="message-log">
+            <ul id="messages"></ul>
+          </div>
+          <form action="" id="send-msg" class="message-sec">
+            <input placeholder="Message" id="message" autocomplete="off"/><button id="sendmsg">Send</button>
+          </form>
+        </div>
+        <div class="side-panel-right">
+          <div id="select" class="select-drop">
+            <a class="server-btn" id="server-drop">Server List</a>
+              <div class="server-list">
+                <a class="init">No Server's Avaliable</a>
+              </div>
+          </div>
+          <div id="member-list" class="member-pan">
+            <p>Member List</p>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

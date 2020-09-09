@@ -3,9 +3,6 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 var chat = 0;
 
-
-const {React} = require('react');
-
 //Submits input form and sends message
 $(function(){
   $("#send-msg").submit(function(e){
@@ -39,12 +36,12 @@ $(document).mouseup(function(e){
   }
 });
 //Changes the chat channel
-$(function(){
-  $(".channel").on("click", function(e){
-    chat = $(this).data("id");
-    ipcRenderer.send('change-channel', chat);
-  });
-});
+// $(function(){
+//   $(".channel").on("click", function(e){
+//     chat = $(this).data("id");
+//     ipcRenderer.send('change-channel', chat);
+//   });
+// });
 
 
 //Gets updates from main process when a new message comes through

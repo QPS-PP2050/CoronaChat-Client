@@ -96,9 +96,9 @@ app.on('activate', () => {
 });
 
 
-ipcMain.on('change-channel', (event, data) => {
-  clientSocket.changeChannel(data);
-});
+// ipcMain.on('change-channel', (event, data) => {
+//   clientSocket.changeChannel(data);
+// });
 ipcMain.on('send-message', (event, data) => {
   clientSocket.send(data);
 });

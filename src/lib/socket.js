@@ -24,7 +24,7 @@ class SocketConnect
         this.socket.on(CHATEVENT.CONNECT, (client) => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
-                this.win.webContents.send('actionreply', {text: data});
+                this.win.webContents.send('actionreply', {author: data.author, text: data.message});
             });
             this.socket.on('member_list', (list) => {
                 console.log(list);

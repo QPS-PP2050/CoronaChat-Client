@@ -50,7 +50,7 @@ class SocketConnect
     {
         if(this.socket)
         {
-            this.socket.emit(CHATEVENT.MESSAGE, msg);
+            this.socket.emit(CHATEVENT.MESSAGE, {author: this.socket.id, message: msg});
         }
     }
 

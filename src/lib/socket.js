@@ -27,7 +27,6 @@ class SocketConnect
                 this.win.webContents.send('actionreply', data);
             });
             this.socket.on('member_list', (list) => {
-                console.log(list);
                 this.win.webContents.send('update_member', list);
                 
             });

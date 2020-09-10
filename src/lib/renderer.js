@@ -53,6 +53,6 @@ ipcRenderer.on('update_member', (event, member) => {
 
 //Gets updates from main process when a new message comes through
 ipcRenderer.on('actionreply', (event, data) => {
-  $("#messages").append(`<li>${data.text}</li>`);
+  $("#messages").append(`<li>${data.author}<br>${data.text}</li>`);
   $('#chat-log').scrollTop($('#chat-log')[0].scrollHeight);
 });

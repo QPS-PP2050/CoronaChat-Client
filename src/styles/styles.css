@@ -107,8 +107,7 @@ body { font: 13px Helvetica, Arial; }
 .message-sec input:focus, button:focus{outline: none;}
 .message-sec button { width: 50px; background: rgb(52, 189, 235); border: none; padding: 10px; grid-column: 1S; width: 100%;}
 #messages { list-style-type: none; margin: 0; padding: 0;}
-#messages li { padding: 5px 10px; }
-#messages li:nth-child(odd) { background: #eee; }
+#messages li { display: block; padding: 10px; }
 
 .server-btn
 {

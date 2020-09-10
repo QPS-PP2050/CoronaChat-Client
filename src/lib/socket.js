@@ -11,7 +11,7 @@ const CHATEVENT =
 class SocketConnect
 {
     PORT = 8080;
-    URL = "localhost" //"coronachat.xyz";
+    URL = "coronachat.xyz";
     socket;
     win;
 
@@ -25,11 +25,17 @@ class SocketConnect
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
                 this.win.webContents.send('actionreply', {text: data});
-            }); 
+            });
+            this.socket.on('member_list', (list) => {
+                console.log(list);
+                this.win.webContents.send('update_member', list);
+                
+            });
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
             dialog.showErrorBox("Connection Fail", "Connection to server was dropped");
         });
+
     }
 
     //Disconects from Server

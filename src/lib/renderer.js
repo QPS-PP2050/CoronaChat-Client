@@ -38,11 +38,18 @@ $(document).mouseup(function(e){
 //Changes the chat channel
 // $(function(){
 //   $(".channel").on("click", function(e){
-//     chat = $(this).data("id");
+//     chat = $(this).data("id"); 
 //     ipcRenderer.send('change-channel', chat);
 //   });
 // });
 
+ipcRenderer.on('update_member', (event, member) => {
+  $('#mem_list').empty();
+  for(var i = 0; i < member.length; i++)
+  {
+    $('#mem_list').append(`<li><a>${member[i]}</a></li>`);
+  }
+});
 
 //Gets updates from main process when a new message comes through
 ipcRenderer.on('actionreply', (event, data) => {

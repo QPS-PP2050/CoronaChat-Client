@@ -19,7 +19,7 @@ class SocketConnect
     //Deals with connecting to the server
     connect(win)
     {
-        this.socket = io.connect(`http://${this.URL}:${this.PORT}`);
+        this.socket = io.connect(`https://${this.URL}:${this.PORT}`);
         this.win = win;
         this.socket.on(CHATEVENT.CONNECT, (client) => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {

@@ -3,6 +3,11 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 var chat = 0;
 
+const {ClientSocket} = require('./socket');
+const socket = new ClientSocket;
+
+socket.connect(ipcRenderer);
+
 //Submits input form and sends message
 $(function(){
   $("#send-msg").submit(function(e){
@@ -11,7 +16,7 @@ $(function(){
     if($("#message").val().length && $("#message").val().trim().length)
     {
       //Sends message to the server
-      ipcRenderer.send('send-message', $("#message").val());
+      socket.send($("#message").val());
       $("#message").val('');
     }
   });
@@ -42,17 +47,3 @@ $(document).mouseup(function(e){
 //     ipcRenderer.send('change-channel', chat);
 //   });
 // });
-
-ipcRenderer.on('update_member', (event, member) => {
-  $('#mem_list').empty();
-  for(var i = 0; i < member.length; i++)
-  {
-    $('#mem_list').append(`<li><a>${member[i]}</a></li>`);
-  }
-});
-
-//Gets updates from main process when a new message comes through
-ipcRenderer.on('actionreply', (event, data) => {
-  $("#messages").append(`<li>${data.author}<br>${data.text}</li>`);
-  $('#chat-log').scrollTop($('#chat-log')[0].scrollHeight);
-});

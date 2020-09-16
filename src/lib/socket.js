@@ -1,5 +1,7 @@
 const io = require('socket.io-client');
 const { dialog } = require('electron');
+$ = jQuery = require('jquery');
+
 
 const CHATEVENT = 
 {
@@ -8,7 +10,7 @@ const CHATEVENT =
     MESSAGE : 'message'
 }
 
-class SocketConnect
+class ClientSocket
 {
     PORT = 8080;
     URL = "coronachat.xyz";
@@ -19,22 +21,21 @@ class SocketConnect
     //Deals with connecting to the server
     connect(win)
     {
-        this.socket = io.connect(`http://${this.URL}:${this.PORT}`);
+        this.socket = io.connect(`https://${this.URL}:${this.PORT}`, { secure: true });
         this.win = win;
         this.socket.on(CHATEVENT.CONNECT, (client) => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
-                this.win.webContents.send('actionreply', data);
+                this.displayMessage(data);
             });
             this.socket.on('member_list', (list) => {
-                this.win.webContents.send('update_member', list);
-                
+
+                this.updateMemberList(list);
             });
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
             dialog.showErrorBox("Connection Fail", "Connection to server was dropped");
         });
-
     }
 
     //Disconects from Server
@@ -53,6 +54,22 @@ class SocketConnect
         }
     }
 
+    displayMessage(data)
+    {
+        $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
+        $('#chatlog').stop ().animate ({
+            scrollTop: $('#chatlog').height() }, "fast" );
+    }
+
+    updateMemberList(list)
+    {
+        $('#mem_list').empty();
+        for(var i = 0; i < list.length; i++)
+        {
+            $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
+        }
+    }
+
     //Changes channel
     changeChannel(channel)
     {
@@ -62,5 +79,4 @@ class SocketConnect
         }
     }
 }
-
-exports.SocketConnect = SocketConnect;
+module.exports.ClientSocket = ClientSocket;

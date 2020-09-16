@@ -1,12 +1,10 @@
 const { Menu, app, BrowserWindow, ipcMain, ipcRenderer } = require('electron');
-const {SocketConnect} = require('./lib/socket');
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
 
 
 const isMac = process.platform === 'darwin';
-var win = null;
 //Creates Menu Template
 const menuTemplate = [
   ...(isMac ? [{
@@ -26,11 +24,6 @@ const menuTemplate = [
   {
     label: 'File',
     submenu: [
-      { label: "Connect",
-        click() {
-          connectServer();
-        }
-      },
       isMac ? { role: 'close' } : { role: 'quit' }
     ]
   },
@@ -47,16 +40,9 @@ const menuTemplate = [
   }
 ]
 
-const clientSocket = new SocketConnect();
-
 //This is a temp function to bring up dev tools for debugging, final version will have this removed
 function devTools(){
   win.webContents.openDevTools();
-}
-
-//Connect Function for connecting to Server, will be updated later
-function connectServer() {
-  clientSocket.connect(win);
 }
 
 //Creates window
@@ -73,8 +59,7 @@ function createWindow()
     }
   });
   win.loadURL(`file://${__dirname}/html/index.html`);
-  
-  ipc = win.ipcRenderer;
+
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -93,12 +78,4 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
-});
-
-
-// ipcMain.on('change-channel', (event, data) => {
-//   clientSocket.changeChannel(data);
-// });
-ipcMain.on('send-message', (event, data) => {
-  clientSocket.send(data);
 });

@@ -1,76 +1,76 @@
-html {height: 100%; -webkit-user-select:  none;
-background-color:rgba(22, 56, 82, 1);}
+html {height: 100%; -webkit-user-select:  none; background-color: #1F4D73;}
+body {height:100%; margin: 0;}
 
-.menu {
-    overflow: hidden;
-    background-color: #388ED1;
-    position: fixed; 
-    top: 0; 
+.main-content
+{
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) 1fr minmax(15px, 1fr);
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.top 
+{
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    
+}
+.top h1
+{
+    align-self: flex-end;
+    padding-bottom: 20px;
+}
+
+.login-content
+{
+    grid-row: 2;
+    grid-column: 2;
+    display: table;
     width: 100%;
-    border: 0px;
+}
+
+.login 
+{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    width: 80%;
+}
+
+.login input
+{
+    width:  100%;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 20px;
     font-family:Lucida Console;
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
     line-height: 20px;
-  }
-  
-
-h2{
-    text-align: Center;
-    margin-right: 50px;
-    padding-top: 200px;
-    font-family: Lucida Console	;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 64px;
-    color: black; 
-}	
-
-input[type=text]{
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 20%;
-    padding-top: 15px;
-    font-family: Lucida Console;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
+    background-color: #8BC5F4;
     color: #000;
-    background-color: #2B6C9E;
-} 
-
-input[type=text], 
-input[type=password] { 
-    width: 25%; 
-    padding: 12px 20px; 
-    margin: 8px 500px; 
-    display: inline-block; 
+    outline: none;
     border: 1px solid rgba(22, 56, 82, 1); 
-    box-sizing: border-box; 
-    font-family: Lucida Console;
+    padding: 15px;
+}
+
+.login button
+{
+    width: 50%;
+    outline: none;
+    font-family:Lucida Console;
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(22, 56, 82, 1); 
+    background-color: #2F4252;
+    color: white;
+    padding: 15px;
+}
+.login button:hover
+{
+    background-color: #8BC5F4;
     color: black;
-    background-color: #2B6C9E;
-	} 
-	
-
-button { 
-	background-color: #388ED1; 
-    width: 25%; 
-    padding: 12px 20px; 
-    margin: 8px 500px; 
-    display: inline-block; 
-    box-sizing: border-box; 
-    border: 1px solid rgba(22, 56, 82, 1); 
-    font-family: Lucida Console;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    } 
-    
-
-
+}

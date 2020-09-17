@@ -32,6 +32,17 @@ const menuTemplate = [
       },
       isMac ? { role: 'close' } : { role: 'quit' }
     ]
+  },
+  {
+    label: 'Options',
+    submenu: [
+      {
+        label: "Inspect",
+        click(){
+          devTools();
+        }
+      }
+    ]
   }
 ]
 
@@ -43,21 +54,29 @@ function connectServer() {
   clientSocket.connect(win);
 }
 
+function devTools(){
+  win.webContents.openDevTools();
+}
 
 function createWindow() 
 {
    win = new BrowserWindow({
     width: 800,
     height: 600,
+    minHeight: 600,
+    minWidth: 500,
     title: "Corona Chat",
     webPreferences: {
       nodeIntegration: true
     }
   });
-  win.loadURL(`file://${__dirname}/html/index.html`);
-  win.webContents.openDevTools();
+  win.loadURL(`file://${__dirname}/html/login.html`);
   ipc = win.ipcRenderer;
 }
+
+ipcMain.on('register', ()=>{
+  win.loadURL(`file://${__dirname}/html/register.html`);
+});
 
 const menu = Menu.buildFromTemplate(menuTemplate)
 

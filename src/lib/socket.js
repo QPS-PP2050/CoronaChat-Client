@@ -50,15 +50,14 @@ class ClientSocket
     {
         if(this.socket)
         {
-            this.socket.emit(CHATEVENT.MESSAGE, msg);
+            this.socket.emit(CHATEVENT.MESSAGE, {author: this.socket.id, message: msg});
         }
     }
 
     displayMessage(data)
     {
         $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
-        $('#chatlog').stop ().animate ({
-            scrollTop: $('#chatlog').height() }, "fast" );
+        $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
     }
 
     updateMemberList(list)

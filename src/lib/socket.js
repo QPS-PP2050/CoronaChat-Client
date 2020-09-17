@@ -19,11 +19,14 @@ class ClientSocket
 
     constructor(){}
     //Deals with connecting to the server
-    connect(win)
+    connect()
     {
-        this.socket = io.connect(`https://${this.URL}:${this.PORT}`);
+        if(!this.socket)
+        {
+            this.socket = io.connect(`https://${this.URL}:${this.PORT}`);
+        }
         this.win = win;
-        this.socket.on(CHATEVENT.CONNECT, (client) => {
+        this.socket.on(CHATEVENT.CONNECT, () => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
                 this.displayMessage(data);
@@ -54,12 +57,14 @@ class ClientSocket
         }
     }
 
+    //Displays messages on the screen
     displayMessage(data)
     {
         $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
         $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
     }
 
+    //Updates user list in server
     updateMemberList(list)
     {
         $('#mem_list').empty();

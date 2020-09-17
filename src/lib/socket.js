@@ -57,8 +57,7 @@ class ClientSocket
     displayMessage(data)
     {
         $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
-        $('#chatlog').stop ().animate ({
-            scrollTop: $('#chatlog').height() }, "fast" );
+        $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
     }
 
     updateMemberList(list)

@@ -1,12 +1,11 @@
+const { ipcMain } = require('electron');
+
 const ipcRenderer = require('electron').ipcRenderer; 
 var $, jQuery;
 $ = jQuery = require('jquery');
 var chat = 0;
 
-const {ClientSocket} = require('./socket');
-const socket = new ClientSocket;
 
-socket.connect();
 
 //Submits input form and sends message
 $(function(){
@@ -16,7 +15,7 @@ $(function(){
     if($("#message").val().length && $("#message").val().trim().length)
     {
       //Sends message to the server
-      socket.send($("#message").val());
+      ipcRenderer.send('new-message', $("#message").val());
       $("#message").val('');
     }
   });
@@ -34,12 +33,26 @@ $(function(){
   });
 });
 //closes server list
-$(document).mouseup(function(e){
+$(document).on('mouseup', function(e){
   if(!$("#select").is(e.target) && $("#select").has(e.target).length === 0)
   {
     $(".server-list").removeClass("show");
   }
 });
+
+ipcRenderer.on('message', (event, data) => {
+  $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
+  $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
+});
+
+ipcRenderer.on('members', (event, list) => {
+  console.log(list);
+  $('#mem_list').empty();
+  for(var i = 0; i < list.length; i++)
+  {
+      $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
+  }
+})
 //Changes the chat channel
 // $(function(){
 //   $(".channel").on("click", function(e){

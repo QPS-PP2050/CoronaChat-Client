@@ -3,6 +3,11 @@ const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
 
+const {ClientSocket} = require('./lib/socket');
+
+const socket = new ClientSocket;
+
+
 
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
@@ -59,7 +64,7 @@ function createWindow()
     }
   });
   win.loadURL(`file://${__dirname}/html/index.html`);
-
+  socket.connect(win);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -78,4 +83,8 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+ipcMain.on('new-message', (event, data) =>{
+  socket.send(data);
 });

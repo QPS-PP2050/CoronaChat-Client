@@ -19,20 +19,21 @@ class ClientSocket
 
     constructor(){}
     //Deals with connecting to the server
-    connect()
+    connect(win)
     {
         if(!this.socket)
         {
             this.socket = io.connect(`https://${this.URL}:${this.PORT}`, { secure: true });
+            this.win = win;
         }
         this.socket.on(CHATEVENT.CONNECT, () => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
-                this.displayMessage(data);
+                this.win.webContents.send('message', data);
             });
             this.socket.on('member_list', (list) => {
 
-                this.updateMemberList(list);
+                this.win.webContents.send('members', list);
             });
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
@@ -53,23 +54,6 @@ class ClientSocket
         if(this.socket)
         {
             this.socket.emit(CHATEVENT.MESSAGE, {author: this.socket.id, message: msg});
-        }
-    }
-
-    //Displays messages on the screen
-    displayMessage(data)
-    {
-        $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
-        $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
-    }
-
-    //Updates user list in server
-    updateMemberList(list)
-    {
-        $('#mem_list').empty();
-        for(var i = 0; i < list.length; i++)
-        {
-            $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
         }
     }
 

@@ -1,0 +1,140 @@
+html {height: 100%; -webkit-user-select:  none;}
+body {height:100%}
+
+.channel-list ul
+{
+    padding: 0px;
+    margin: 0px;
+}
+.channel-list a:hover
+{
+    cursor: pointer;
+    background-color: #2F4252;
+}
+.channel-list a
+{
+    display: inline-block;
+    padding: 5px;
+    width: 100%;
+}
+
+.side-panel-left
+{
+    background-color: #388ED1;
+    overflow:auto;
+    grid-row: 2;
+    grid-column: 1;
+    height: calc(100vh - 30px);
+}
+
+.side-panel-right
+{
+    overflow: hidden;
+    grid-row: 2;
+    grid-column: 3;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: calc(100vh - 30px);
+}
+.chat-window
+{
+    grid-row: span 2;
+    background-color: #2F4252;
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 15px auto 15px;
+    grid-template-columns: minmax(100px, 150px) 1fr minmax(250px, 150px) ;
+    width: 100%;
+}
+.message-log
+{
+    grid-row: 1;
+    overflow: auto;
+    background-color: #388ED1;
+}
+.chat
+{
+    grid-column: 2;
+    grid-row: 2;
+    height: calc(100vh - 30px);
+    overflow:auto;
+    margin-right: 15px;
+    margin-left: 15px;
+    
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+.member-pan p{
+    text-align: center;
+}
+
+.message-sec
+{
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    margin-top: 15px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; } */
+body { font: 13px Helvetica, Arial; }
+.message-sec input { border: 0; padding: 10px; grid-column: 0; width: 100%; background-color: #8BC5F4;}
+.message-sec input:focus, button:focus{outline: none;}
+.message-sec button { width: 50px; background: rgb(52, 189, 235); border: none; padding: 10px; grid-column: 1S; width: 100%;}
+#messages { list-style-type: none; margin: 0; padding: 0;}
+#messages li { padding: 5px 10px; }
+#messages li:nth-child(odd) { background: #eee; }
+
+.server-btn
+{
+    padding: 12px 16px;
+    height: 50px;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    background-color: #41A3F2;
+    vertical-align: baseline;
+}
+.select-drop
+{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    grid-row: 1;
+    margin-bottom: 15px;
+}
+
+
+.server-list {
+    padding: 0;
+    display: none;
+    position: absolute;
+    float: right;
+    background-color: #8BC5F4;
+    overflow: auto;
+    max-height: 500px;
+    width: 100%;
+}
+
+.server-list a{
+    padding: 15px;
+    width: 100%;
+    display: inline-block;
+}
+
+.server-list a:hover{
+    background: #2F4252;
+    cursor: pointer;
+}
+
+.server-btn:hover{
+    cursor: pointer;
+}
+
+.show {
+    display: block;
+}
+
+.member-pan
+{
+    background-color: #2B6C9E;
+    grid-row: 2;
+}

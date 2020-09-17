@@ -20,9 +20,9 @@
     "socket.io": "^2.3.0"
   },
   "build": {
-      "win": {
-          "target": "portable",
-          "publish": ["github"]
-      }
+    "win": {
+      "target": "portable",
+      "publish": ["github"]
+    }
   }
 }

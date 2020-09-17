@@ -1,0 +1,76 @@
+html {height: 100%; -webkit-user-select:  none;
+background-color:rgba(22, 56, 82, 1);}
+
+.menu {
+    overflow: hidden;
+    background-color: #388ED1;
+    position: fixed; 
+    top: 0; 
+    width: 100%;
+    border: 0px;
+    font-family:Lucida Console;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 20px;
+  }
+  
+
+h2{
+    text-align: Center;
+    margin-right: 50px;
+    padding-top: 200px;
+    font-family: Lucida Console	;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 64px;
+    color: black; 
+}	
+
+input[type=text]{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+    padding-top: 15px;
+    font-family: Lucida Console;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    color: #000;
+    background-color: #2B6C9E;
+} 
+
+input[type=text], 
+input[type=password] { 
+    width: 25%; 
+    padding: 12px 20px; 
+    margin: 8px 500px; 
+    display: inline-block; 
+    border: 1px solid rgba(22, 56, 82, 1); 
+    box-sizing: border-box; 
+    font-family: Lucida Console;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    color: black;
+    background-color: #2B6C9E;
+	} 
+	
+
+button { 
+	background-color: #388ED1; 
+    width: 25%; 
+    padding: 12px 20px; 
+    margin: 8px 500px; 
+    display: inline-block; 
+    box-sizing: border-box; 
+    border: 1px solid rgba(22, 56, 82, 1); 
+    font-family: Lucida Console;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    } 
+    
+
+

@@ -6,7 +6,7 @@ var chat = 0;
 const {ClientSocket} = require('./socket');
 const socket = new ClientSocket;
 
-socket.connect(ipcRenderer);
+socket.connect();
 
 //Submits input form and sends message
 $(function(){

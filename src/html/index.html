@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Corona Chat</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="../styles/styles.css">
+    
+  </head>
+  <body>
+    <script>
+      require('../lib/renderer');
+    </script>
+    <div class="chat-window">
+        <div class="side-panel-left">
+          <ul class="channel-list" id="channel-list">
+          </ul>
+        </div>
+        <div id="chatlog" class="chat">
+          <div id="chat-window" class="message-log">
+            <ul id="messages"></ul>
+          </div>
+          <form action="" id="send-msg" class="message-sec">
+            <input placeholder="Message" id="message" autocomplete="off"/><button id="sendmsg">Send</button>
+          </form>
+        </div>
+        <div class="side-panel-right">
+          <div id="select" class="select-drop">
+            <a class="server-btn" id="server-drop">Server List</a>
+              <div class="server-list">
+                <a class="init">No Server's Avaliable</a>
+              </div>
+          </div>
+          <div id="member-list" class="member-pan">
+            <p>Member List</p>
+            <ul class="member_list" id="mem_list">
+
+            </ul>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

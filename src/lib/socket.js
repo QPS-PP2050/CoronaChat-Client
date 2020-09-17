@@ -1,5 +1,7 @@
 const io = require('socket.io-client');
 const { dialog } = require('electron');
+$ = jQuery = require('jquery');
+
 
 const CHATEVENT = 
 {
@@ -8,7 +10,7 @@ const CHATEVENT =
     MESSAGE : 'message'
 }
 
-class SocketConnect
+class ClientSocket
 {
     PORT = 8080;
     URL = "coronachat.xyz";
@@ -16,34 +18,68 @@ class SocketConnect
     win;
 
     constructor(){}
-
-    connect(win)
+    //Deals with connecting to the server
+    connect()
     {
-        this.socket = io.connect(`http://${this.URL}:${this.PORT}`);
-        this.win = win;
-        this.socket.on(CHATEVENT.CONNECT, (client) => {
+        if(!this.socket)
+        {
+            this.socket = io.connect(`https://${this.URL}:${this.PORT}`, { secure: true });
+        }
+        this.socket.on(CHATEVENT.CONNECT, () => {
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
-                this.win.webContents.send('actionreply', {text: data});
-            }); 
+                //Everytime a message comes through this function gets used to update the ui
+                this.displayMessage(data);
+            });
+            this.socket.on('member_list', (list) => {
+
+                this.updateMemberList(list);
+            });
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
             dialog.showErrorBox("Connection Fail", "Connection to server was dropped");
         });
     }
 
+    //Disconects from Server
     disconnect()
     {   
         this.socket.emit(CHATEVENT.disconnect);
         this.socket.close();
     }
 
+    //Sends message to the server
     send(msg)
     {
         if(this.socket)
         {
-            this.socket.emit(CHATEVENT.MESSAGE, msg);
+            this.socket.emit(CHATEVENT.MESSAGE, {author: this.socket.id, message: msg});
+        }
+    }
+
+    //Displays messages on the screen
+    displayMessage(data)
+    {
+        $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
+        $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
+    }
+
+    //Updates user list in server
+    updateMemberList(list)
+    {
+        $('#mem_list').empty();
+        for(var i = 0; i < list.length; i++)
+        {
+            $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
+        }
+    }
+
+    //Changes channel
+    changeChannel(channel)
+    {
+        if(this.socket)
+        {
+            this.socket.emit("channel-change", channel);
         }
     }
 }
-
-exports.SocketConnect = SocketConnect;
+module.exports.ClientSocket = ClientSocket;

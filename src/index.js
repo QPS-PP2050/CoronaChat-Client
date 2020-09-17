@@ -1,11 +1,10 @@
 const { Menu, app, BrowserWindow, ipcMain, ipcRenderer } = require('electron');
-const {SocketConnect} = require('./lib/socket');
 const url = require('url');
 const path = require('path');
+const { inspect } = require('util');
 
 
 const isMac = process.platform === 'darwin';
-var win = null;
 //Creates Menu Template
 const menuTemplate = [
   ...(isMac ? [{
@@ -25,11 +24,6 @@ const menuTemplate = [
   {
     label: 'File',
     submenu: [
-      { label: "Connect",
-        click() {
-          connectServer();
-        }
-      },
       isMac ? { role: 'close' } : { role: 'quit' }
     ]
   },
@@ -46,37 +40,27 @@ const menuTemplate = [
   }
 ]
 
-const clientSocket = new SocketConnect();
-
-
-//Connect Function for connecting to Server, will be updated later
-function connectServer() {
-  clientSocket.connect(win);
-}
-
+//This is a temp function to bring up dev tools for debugging, final version will have this removed
 function devTools(){
   win.webContents.openDevTools();
 }
 
+//Creates window
 function createWindow() 
 {
    win = new BrowserWindow({
     width: 800,
     height: 600,
     minHeight: 600,
-    minWidth: 500,
+    minWidth: 800,
     title: "Corona Chat",
     webPreferences: {
       nodeIntegration: true
     }
   });
-  win.loadURL(`file://${__dirname}/html/login.html`);
-  ipc = win.ipcRenderer;
-}
+  win.loadURL(`file://${__dirname}/html/index.html`);
 
-ipcMain.on('register', ()=>{
-  win.loadURL(`file://${__dirname}/html/register.html`);
-});
+}
 
 const menu = Menu.buildFromTemplate(menuTemplate)
 
@@ -86,7 +70,7 @@ app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 })
 
@@ -94,8 +78,4 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
-});
-
-ipcMain.on('send-message', (event, data) => {
-  clientSocket.send(data);
 });

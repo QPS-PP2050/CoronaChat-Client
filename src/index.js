@@ -1,4 +1,4 @@
-const { Menu, app, BrowserWindow, ipcMain, ipcRenderer } = require('electron');
+const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer } = require('electron');
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
@@ -84,6 +84,10 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+ipcMain.on('login', (event, data) => {
+  socket.sendLogin(data);
+})
 
 ipcMain.on('new-message', (event, data) =>{
   socket.send(data);

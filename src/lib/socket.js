@@ -27,10 +27,15 @@ class ClientSocket
             this.win = win;
         }
         this.socket.on(CHATEVENT.CONNECT, () => {
+            //When server sends back login result
+            this.socket.on('login-result', (login) =>{
+
+            });
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
                 this.win.webContents.send('message', data);
             });
+            //Updates UI when a member disconnects and reconnects
             this.socket.on('member_list', (list) => {
 
                 this.win.webContents.send('members', list);
@@ -54,6 +59,16 @@ class ClientSocket
         if(this.socket)
         {
             this.socket.emit(CHATEVENT.MESSAGE, {author: this.socket.id, message: msg});
+        }
+    }
+
+    //Sends login credentials to the server for checking
+    sendLogin(credentials)
+    {
+        console.log(credentials);
+        if(this.socket)
+        {
+            this.socket.send('login', credentials);
         }
     }
 

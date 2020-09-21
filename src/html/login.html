@@ -5,14 +5,16 @@
 </div>
 <body>
   <script>
-    require('../lib/login/renderer.js');
+    require('../lib/login.js');
   </script>
   <div class="main-content">
-    <div class="top"><h1>Corona Chat</h1></div>
+    <div class="top">
+      <h1>Corona Chat</h1>      
+    </div>
     <div class="login-content">
       <div class="login">
         <input type="text" placeholder="Username/Email" id="username" required> 
-        <input type="password" placeholder="Password" name="password" required> 
+        <input type="password" placeholder="Password" id="password" required> 
         <button id="login">Login</button><button id="register">Register</button>
       </div>
     </div>

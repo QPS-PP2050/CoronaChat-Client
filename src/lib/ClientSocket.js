@@ -1,7 +1,5 @@
 const io = require('socket.io-client');
 const { dialog } = require('electron');
-$ = jQuery = require('jquery');
-
 
 const CHATEVENT = 
 {
@@ -10,21 +8,24 @@ const CHATEVENT =
     MESSAGE : 'message'
 }
 
+let window;
+
 class ClientSocket
 {
     PORT = 8080;
     URL = "coronachat.xyz";
     socket;
     win;
-
+    
     constructor(){}
+    
     //Deals with connecting to the server
     connect(win)
     {
         if(!this.socket)
         {
             this.socket = io.connect(`https://${this.URL}:${this.PORT}`, { secure: true });
-            this.win = win;
+            window = win;
         }
         this.socket.on(CHATEVENT.CONNECT, () => {
             //When server sends back login result
@@ -33,12 +34,12 @@ class ClientSocket
             });
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
-                this.win.webContents.send('message', data);
+                window.webContents.send('message', data);
             });
             //Updates UI when a member disconnects and reconnects
             this.socket.on('member_list', (list) => {
 
-                this.win.webContents.send('members', list);
+                window.webContents.send('members', list);
             });
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
@@ -54,11 +55,11 @@ class ClientSocket
     }
 
     //Sends message to the server
-    send(msg)
+    send(data)
     {
         if(this.socket)
         {
-            this.socket.emit(CHATEVENT.MESSAGE, {author: this.socket.id, message: msg});
+            this.socket.emit(CHATEVENT.MESSAGE, {author: data.username, message: data.msg});
         }
     }
 
@@ -71,14 +72,23 @@ class ClientSocket
             this.socket.send('login', credentials);
         }
     }
-
-    //Changes channel
-    changeChannel(channel)
+    
+    connectServer(server_id)
     {
         if(this.socket)
         {
-            this.socket.emit("channel-change", channel);
+            this.socket.emit("join-server", server_id);
+        }
+    }
+
+    //Changes channel
+    changeChannel(channel_id)
+    {
+        if(this.socket)
+        {
+            this.socket.emit("change-chennel", channel_id);
         }
     }
 }
-module.exports.ClientSocket = ClientSocket;
+
+exports.ClientSocket = ClientSocket;

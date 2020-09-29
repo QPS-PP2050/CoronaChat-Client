@@ -5,8 +5,10 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 var chat = 0;
 
+var username = `Test ${Math.round(Math.random() * 1000)}`;
 
 
+console.log(window.mediasoupClient);
 //Submits input form and sends message
 $(function(){
   $("#send-msg").submit(function(e){
@@ -15,14 +17,22 @@ $(function(){
     if($("#message").val().length && $("#message").val().trim().length)
     {
       //Sends message to the server
-      ipcRenderer.send('new-message', $("#message").val());
+      ipcRenderer.send('new-message', {username, msg: $("#message").val()});
       $("#message").val('');
     }
   });
 });
 //Dropsdown and closes server list
 $(function(){
-  $("#select").on("click", function(e){
+  
+  $("#settings").on("click", function(e)
+  {
+    $(".profile-display").show();
+  });
+  $("#settings-close").on("click", function(e){
+    $(".profile-display").hide();
+  });
+  $("#select").on("click", function(e){s
     if(!$(".server-list").hasClass("show"))
     {
       $(".server-list").addClass("show");
@@ -41,7 +51,7 @@ $(document).on('mouseup', function(e){
 });
 
 ipcRenderer.on('message', (event, data) => {
-  $("#messages").append(`<li><b>${data.author}</b><br>${data.message}</li>`);
+  $("#messages").append(`<li><span class="message-content">${data.author}<br>${data.message}</span></li>`);
   $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
 });
 
@@ -50,7 +60,7 @@ ipcRenderer.on('members', (event, list) => {
   $('#mem_list').empty();
   for(var i = 0; i < list.length; i++)
   {
-      $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
+    $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
   }
 })
 //Changes the chat channel

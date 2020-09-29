@@ -2,12 +2,9 @@ const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer } = require('elec
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
+const {ClientSocket} = require('./lib/ClientSocket');
 
-const {ClientSocket} = require('./lib/socket');
-
-const socket = new ClientSocket;
-
-
+const socket = new ClientSocket();
 
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
@@ -43,7 +40,7 @@ const menuTemplate = [
       }
     ]
   }
-]
+];
 
 //This is a temp function to bring up dev tools for debugging, final version will have this removed
 function devTools(){
@@ -87,7 +84,7 @@ app.on('activate', () => {
 
 ipcMain.on('login', (event, data) => {
   socket.sendLogin(data);
-})
+});
 
 ipcMain.on('new-message', (event, data) =>{
   socket.send(data);

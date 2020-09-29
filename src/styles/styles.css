@@ -22,6 +22,79 @@ body {height:100%}
     background-color: #2F4252;
 }
 
+.x-button
+{
+    float: right;
+    color: white;
+    padding: 10px;
+}
+
+.menu-options
+{
+    margin: 0;
+}
+
+.menu-options li 
+{
+    display: block;
+}
+
+.menu-options li a
+{
+    padding: 15px;
+    display: block;
+}
+
+.x-button:hover
+{
+    background-color: #8BC5F4;
+}
+
+.profile-display
+{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #2F4252;
+    z-index: 100;
+}
+
+.top-bubbles span
+{
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    background-color: #8BC5F4;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.top-bubbles img
+{
+    display: block;
+    margin: auto;
+    border-radius: 50%;
+}
+
+.profile-bubble
+{
+    grid-column: 1;
+}
+
+.friends-bubble
+{
+    grid-column: 2;
+}
+
+.top-bubbles
+{
+    display: grid;
+    grid-row: 1;
+    grid-column: 1 / span 3;
+    grid-template-rows: 65px;
+    grid-template-columns: 65px 65px 65px 65px;
+}
 
 .channel-list ul
 {
@@ -71,19 +144,19 @@ body {height:100%}
 {
     background-color: #388ED1;
     overflow:auto;
-    grid-row: 2;
+    grid-row: 3;
     grid-column: 1;
-    height: calc(100vh - 30px);
+    height: calc(100vh - 80px);
 }
 
 .side-panel-right
 {
     overflow: hidden;
-    grid-row: 2;
+    grid-row: 3;
     grid-column: 3;
     display: grid;
     grid-template-rows: auto 1fr;
-    height: calc(100vh - 30px);
+    height: calc(100vh - 80px);
 }
 .chat-window
 {
@@ -91,7 +164,7 @@ body {height:100%}
     background-color: #2F4252;
     display: grid;
     height: 100vh;
-    grid-template-rows: 15px auto 15px;
+    grid-template-rows: 50px 15px auto 15px;
     grid-template-columns: minmax(100px, 150px) 1fr minmax(250px, 150px) ;
     width: 100%;
 }
@@ -104,8 +177,8 @@ body {height:100%}
 .chat
 {
     grid-column: 2;
-    grid-row: 2;
-    height: calc(100vh - 30px);
+    grid-row: 3;
+    height: calc(100vh - 80px);
     overflow:auto;
     margin-right: 15px;
     margin-left: 15px;

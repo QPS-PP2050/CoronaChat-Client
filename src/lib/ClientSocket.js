@@ -82,11 +82,11 @@ class ClientSocket
     }
 
     //Changes channel
-    changeChannel(channel_id)
+    changeChannel(server_id, channel_id)
     {
         if(this.socket)
         {
-            this.socket.emit("change-chennel", channel_id);
+            this.socket.emit("change-chennel", {server: server_id, channel: channel_id});
         }
     }
 }

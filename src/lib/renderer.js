@@ -11,6 +11,8 @@ var username = `Test ${Math.round(Math.random() * 1000)}`;
 console.log(window.mediasoupClient);
 //Submits input form and sends message
 $(function(){
+
+
   $("#send-msg").submit(function(e){
     e.preventDefault();
     //Checks if input is empty and only contains white spaces
@@ -27,12 +29,12 @@ $(function(){
   
   $("#settings").on("click", function(e)
   {
-    $(".profile-display").show();
+    $(".profile-display").visible();
   });
   $("#settings-close").on("click", function(e){
-    $(".profile-display").hide();
+    $(".profile-display").invisible();
   });
-  $("#select").on("click", function(e){s
+  $("#select").on("click", function(e){
     if(!$(".server-list").hasClass("show"))
     {
       $(".server-list").addClass("show");
@@ -70,3 +72,17 @@ ipcRenderer.on('members', (event, list) => {
 //     ipcRenderer.send('change-channel', chat);
 //   });
 // });
+
+
+$(function() {
+    $.fn.invisible = function() {
+        return this.each(function() {
+            $(this).css("visibility", "hidden");
+        });
+    };
+    $.fn.visible = function() {
+        return this.each(function() {
+            $(this).css("visibility", "visible");
+        });
+    };
+}(jQuery));

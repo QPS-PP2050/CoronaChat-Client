@@ -4,6 +4,7 @@ class ClientVoice
 {
     constructor(server_id, channel_id, socket, audio)
     {
+        
         this.socket = socket;
         this.server_id = server_id;
         this.channel_id = channel_id;
@@ -21,6 +22,18 @@ class ClientVoice
         this.isOpen = false;
         this.eventListeners = new Map();
 
+        this.socket.request = function request(type, data = {}) {
+            return new Promise((resolve, reject) => {
+                socket.emit(type, data, (data) => {
+                    if (data.error) {
+                    reject(data.error)
+                    } else {
+                    resolve(data)
+                    }
+                })
+            })
+        }
+
         this.createRoom(server_id, channel_id).then(async function () {
             await this.join(name, room_id)
             this.initSockets()
@@ -30,7 +43,7 @@ class ClientVoice
     }
 
     async createRoom(server_id, channel_id) {
-        await this.socket.emit("createRoom" , {
+        await this.socket.request("createRoom" , {
             server_id, channel_id
         }).catch(err => {
             console.log(err)

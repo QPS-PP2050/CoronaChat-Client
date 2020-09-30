@@ -28,8 +28,13 @@ class ClientSocket
     {
         if(!this.socket)
         {
-            this.socket = io.connect(`https://${this.URL}:${this.PORT}`, { secure: true });
+            this.socket = io.Manager(
+                `https://${this.URL}:${this.PORT}`, 
+                { 
+                    secure: true, autoConnect: true, path: "/admin" },
+                );
             console.log(this.socket);
+            
         }
         
         this.socket.on(CHATEVENT.CONNECT, () => {
@@ -68,12 +73,21 @@ class ClientSocket
         {
             this.socket.emit(CHATEVENT.MESSAGE, {author: data.username, message: data.msg});
         }
+        this.socket.opts.path = data;
+        console.log(this.socket);
     }
     
     connectServer(server_id)
     {
         if(this.socket)
-        {
+        {   
+            this.socket.disconnect();
+            this.socket = io.Manager(
+                `https://${this.URL}:${this.PORT}`, 
+                    { 
+                        secure: true, autoConnect: true, path: `/${server_id}` 
+                    },
+                );
             this.socket.emit("join-server", server_id);
         }
     }

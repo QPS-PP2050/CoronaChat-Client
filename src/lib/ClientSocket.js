@@ -1,5 +1,9 @@
 const io = require('socket.io-client');
 const { dialog } = require('electron');
+const {ClientVoice} = require('./ClientVoice');
+var $, jQuery;
+$ = jQuery = require('jquery');
+
 
 const CHATEVENT = 
 {
@@ -20,26 +24,29 @@ class ClientSocket
     constructor(){}
     
     //Deals with connecting to the server
-    connect(win)
+    connect()
     {
         if(!this.socket)
         {
             this.socket = io.connect(`https://${this.URL}:${this.PORT}`, { secure: true });
-            window = win;
+            console.log(this.socket);
         }
+        
         this.socket.on(CHATEVENT.CONNECT, () => {
-            //When server sends back login result
-            this.socket.on('login-result', (login) =>{
-
-            });
+             
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
-                window.webContents.send('message', data);
+                $("#messages").append(`<li><span class="message-content">${data.author}<br>${data.message}</span></li>`);
+                $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
             });
             //Updates UI when a member disconnects and reconnects
             this.socket.on('member_list', (list) => {
 
-                window.webContents.send('members', list);
+                $('#mem_list').empty();
+                for(var i = 0; i < list.length; i++)
+                {
+                    $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
+                }
             });
         });
         this.socket.on(CHATEVENT.DISCONNECT, function(){
@@ -62,16 +69,6 @@ class ClientSocket
             this.socket.emit(CHATEVENT.MESSAGE, {author: data.username, message: data.msg});
         }
     }
-
-    //Sends login credentials to the server for checking
-    sendLogin(credentials)
-    {
-        console.log(credentials);
-        if(this.socket)
-        {
-            this.socket.send('login', credentials);
-        }
-    }
     
     connectServer(server_id)
     {
@@ -87,6 +84,14 @@ class ClientSocket
         if(this.socket)
         {
             this.socket.emit("change-chennel", {server: server_id, channel: channel_id});
+        }
+    }
+
+    joinVoice(server_id, channel_id, audio)
+    {
+        if(this.socket)
+        {
+            var clientVoice = new ClientVoice(server_id, channel_id, this.socket, audio)
         }
     }
 }

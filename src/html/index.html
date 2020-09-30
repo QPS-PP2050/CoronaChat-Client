@@ -1,70 +1,78 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Corona Chat</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <link rel="stylesheet" href="../styles/styles.css">
-  </head>
-  <body>
-    <script>
-      require('../lib/renderer');
-    </script>
-    <div class="chat-window">
-      <div class="top-bubbles">
-          <span title="Profile" id="settings" class="profile-bubble">
-            <img src="../lib/virus.png" width="40" height="40"/>
-          </span>
-          <span title="Friends" id="settings" class="friends-bubble">
-            <img src="../lib/friend.png" width="40" height="40"/>
-          </span>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Corona Chat</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+
+<body>
+  <script>
+    require('../lib/renderer');
+  </script>
+  <div class="chat-window">
+    <div class="top-bubbles">
+      <span title="Profile" id="settings" class="profile-bubble">
+        <img src="../lib/virus.png" width="40" height="40" />
+      </span>
+      <span title="Friends" id="settings" class="friends-bubble">
+        <img src="../lib/friend.png" width="40" height="40" />
+      </span>
+    </div>
+    <div class="profile-display">
+      <div class="profile-left">
+        <ul class="menu-options">
+          <li>
+            <a id="profile-button">Profile</a>
+          </li>
+          <li>
+            <a id="voice-button">Voice Settings</a>
+          </li>
+        </ul>
       </div>
-        <div class="profile-display">
-          <div class="profile-left">
-            <ul class="menu-options">
-              <li>
-                <a id="profile-button">Profile</a>
-              </li>
-              <li>
-                <a id="voice-button">Voice Settings</a>
-              </li>
-            </ul>
-          </div>
-          <div class="profile-right">
-            <div id="profile">
-              
-            </div>
-            <div id="audio-settings">
-            </div>
-            <span class="x-button" id="settings-close">X</span>
-          </div>
+      <div class="profile-right">
+        <div id="profile">
+
         </div>
-        <div class="side-panel-left">
-          <ul class="channel-list" id="channel-list">
-          </ul>
+        <div id="audio-settings">
         </div>
-        <div id="chatlog" class="chat">
-          <div id="chat-window" class="message-log">
-            <ul id="messages"></ul>
-          </div>
-          <form action="" id="send-msg" class="message-sec">
-            <input placeholder="Message" id="message" autocomplete="off"/><button id="sendmsg">Send</button>
-          </form>
-        </div>
-        <div class="side-panel-right">
-          <div id="select" class="select-drop">
-            <a class="server-btn" id="server-drop">Server List</a>
-              <div class="server-list">
-                <a class="init">No Server's Avaliable</a>
-              </div>
-          </div>
-          <div id="member-list" class="member-pan">
-            <p>Member List</p>
-            <ul class="member_list" id="mem_list"></ul>
-          </div>
-        </div>
-        </div>
+        <span class="x-button" id="settings-close">X</span>
       </div>
     </div>
-  </body>
+    <div class="side-panel-left">
+      <ul class="channel-list" id="channel-list">
+        <li><select id="audio"></select>
+        <li><select id="video"></select>
+        <li><select id="audioout"></select>
+        <li><button id="connect">Test</button></li>
+      </ul>
+      <div id="audio-channel"></div>
+    </div>
+    <div id="chatlog" class="chat">
+      <div id="chat-window" class="message-log">
+        <ul id="messages"></ul>
+      </div>
+      <form action="" id="send-msg" class="message-sec">
+        <input placeholder="Message" id="message" autocomplete="off" /><button id="sendmsg">Send</button>
+      </form>
+    </div>
+    <div class="side-panel-right">
+      <div id="select" class="select-drop">
+        <a class="server-btn" id="server-drop">Server List</a>
+        <div class="server-list">
+          <a class="init">No Server's Avaliable</a>
+        </div>
+      </div>
+      <div id="member-list" class="member-pan">
+        <p>Member List</p>
+        <ul class="member_list" id="mem_list"></ul>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</body>
+
 </html>

@@ -1,6 +1,9 @@
-const { ipcMain } = require('electron');
-
 const ipcRenderer = require('electron').ipcRenderer; 
+const {ClientSocket} = require('./ClientSocket');
+
+let socket = new ClientSocket();
+socket.connect()
+
 var $, jQuery;
 $ = jQuery = require('jquery');
 var chat = 0;
@@ -11,22 +14,22 @@ var username = `Test ${Math.round(Math.random() * 1000)}`;
 console.log(window.mediasoupClient);
 //Submits input form and sends message
 $(function(){
-
-
   $("#send-msg").submit(function(e){
     e.preventDefault();
     //Checks if input is empty and only contains white spaces
     if($("#message").val().length && $("#message").val().trim().length)
     {
       //Sends message to the server
-      ipcRenderer.send('new-message', {username, msg: $("#message").val()});
+      socket.send({username, msg: $("#message").val()})
       $("#message").val('');
     }
   });
 });
 //Dropsdown and closes server list
 $(function(){
-  
+  $("#connect").on("click", function(e){
+    socket.joinVoice(1, 1, $('#audio-channel'));
+  });
   $("#settings").on("click", function(e)
   {
     $(".profile-display").visible();
@@ -52,19 +55,6 @@ $(document).on('mouseup', function(e){
   }
 });
 
-ipcRenderer.on('message', (event, data) => {
-  $("#messages").append(`<li><span class="message-content">${data.author}<br>${data.message}</span></li>`);
-  $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
-});
-
-ipcRenderer.on('members', (event, list) => {
-  console.log(list);
-  $('#mem_list').empty();
-  for(var i = 0; i < list.length; i++)
-  {
-    $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
-  }
-})
 //Changes the chat channel
 // $(function(){
 //   $(".channel").on("click", function(e){
@@ -72,8 +62,6 @@ ipcRenderer.on('members', (event, list) => {
 //     ipcRenderer.send('change-channel', chat);
 //   });
 // });
-
-
 $(function() {
     $.fn.invisible = function() {
         return this.each(function() {

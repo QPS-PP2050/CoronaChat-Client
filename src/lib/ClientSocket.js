@@ -17,45 +17,41 @@ let window;
 class ClientSocket
 {
     PORT = 8080;
-    URL = "coronachat.xyz";
+    URL = "localhost";//"coronachat.xyz";
     socket;
     win;
     
     constructor(){}
     
     //Deals with connecting to the server
-    connect()
+    connect(server)
     {
-        if(!this.socket)
-        {
-            this.socket = io.Manager(
-                `https://${this.URL}:${this.PORT}`, 
-                { 
-                    secure: true, autoConnect: true, path: "/admin" },
-                );
-            console.log(this.socket);
-            
-        }
+        this.socket = io(`ws://${this.URL}:${this.PORT}${server}`, {
+            forceNew: true
+        });
         
+        this.socket.connect();
+
         this.socket.on(CHATEVENT.CONNECT, () => {
              
             this.socket.on(CHATEVENT.MESSAGE, (data) => {
                 //Everytime a message comes through this function gets used to update the ui
+                console.log("Test");
                 $("#messages").append(`<li><span class="message-content">${data.author}<br>${data.message}</span></li>`);
                 $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
             });
             //Updates UI when a member disconnects and reconnects
             this.socket.on('member_list', (list) => {
-
+                
                 $('#mem_list').empty();
                 for(var i = 0; i < list.length; i++)
                 {
                     $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
                 }
             });
-        });
-        this.socket.on(CHATEVENT.DISCONNECT, function(){
-            dialog.showErrorBox("Connection Fail", "Connection to server was dropped");
+            this.socket.on(CHATEVENT.DISCONNECT, function(){
+                this.socket = null;
+            });
         });
     }
 
@@ -68,28 +64,21 @@ class ClientSocket
 
     //Sends message to the server
     send(data)
-    {
+    {  
+        
+        
         if(this.socket)
         {
+            console.log(data);
             this.socket.emit(CHATEVENT.MESSAGE, {author: data.username, message: data.msg});
         }
-        this.socket.opts.path = data;
-        console.log(this.socket);
     }
     
-    connectServer(server_id)
-    {
-        if(this.socket)
-        {   
-            this.socket.disconnect();
-            this.socket = io.Manager(
-                `https://${this.URL}:${this.PORT}`, 
-                    { 
-                        secure: true, autoConnect: true, path: `/${server_id}` 
-                    },
-                );
-            this.socket.emit("join-server", server_id);
-        }
+    connectServer(server)
+    {  
+        //this.socket.emit(CHATEVENT.DISCONNECT);
+        this.socket.close();
+        this.connect(server);
     }
 
     //Changes channel

@@ -2,7 +2,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const {ClientSocket} = require('./ClientSocket');
 
 let socket = new ClientSocket();
-socket.connect(null);
+socket.connect();
 
 var $, jQuery;
 $ = jQuery = require('jquery');
@@ -28,6 +28,7 @@ $(function(){
 //Dropsdown and closes server list
 $(function(){
   $("#server .init").on("click", function(e){
+    console.log($(this).data("server"));
     socket.connectServer($(this).data("server"));
   });
   $("#connect").on("click", function(e){

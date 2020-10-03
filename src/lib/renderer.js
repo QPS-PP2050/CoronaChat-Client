@@ -27,8 +27,10 @@ $(function(){
 });
 //Dropsdown and closes server list
 $(function(){
+  $("#channel-list .join-channel").on("click", function(e){
+    socket.changeChannel($(this).data("channel"));
+  });
   $("#server .init").on("click", function(e){
-    console.log($(this).data("server"));
     socket.connectServer($(this).data("server"));
   });
   $("#connect").on("click", function(e){

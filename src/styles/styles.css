@@ -185,9 +185,17 @@ body {height:100%}
     grid-template-columns: minmax(100px, 150px) 1fr minmax(250px, 150px) ;
     width: 100%;
 }
-.message-log
+
+.chat-name
 {
     grid-row: 1;
+    width: 100%;
+}
+
+.message-log
+{
+    margin-top: 15px;
+    grid-row: 2;
     overflow: auto;
     background-color: #388ED1;
 }
@@ -201,7 +209,7 @@ body {height:100%}
     margin-left: 15px;
     
     display: grid;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto 1fr auto;
 }
 .member-pan p{
     text-align: center;
@@ -209,6 +217,7 @@ body {height:100%}
 
 .message-sec
 {
+    grid-row: 3;
     display: grid;
     grid-template-columns: 1fr 50px;
     margin-top: 15px;

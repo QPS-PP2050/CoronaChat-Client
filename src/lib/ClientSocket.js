@@ -1,6 +1,7 @@
 const io = require('socket.io-client');
 const { dialog } = require('electron');
 const {ClientVoice} = require('./ClientVoice');
+const { timers } = require('jquery');
 var $, jQuery;
 $ = jQuery = require('jquery');
 
@@ -21,17 +22,15 @@ class ClientSocket
     socket;
     serverSocket;
     win;
-    
+    channel = "";
     constructor(){}
     
     //Deals with connecting to the server
     connect(server)
     {
-        this.manager = io.Manager('https://8080-a9e2d50d-4767-49de-8565-844601fd4cdc.ws-us02.gitpod.io/', {reconnect: true});
+        this.manager = io.Manager('http://localhost:8080', {reconnect: true});
         this.socket = this.manager.socket('/');
         this.serverSocket = this.manager.socket('/');
-        
-        console.log(this.socket);
 
         this.socket.on(CHATEVENT.CONNECT, () => {})
     }
@@ -48,18 +47,20 @@ class ClientSocket
     {  
         if(this.serverSocket)
         {
-            this.serverSocket.emit(CHATEVENT.MESSAGE, {author: data.username, message: data.msg});
+            this.serverSocket.emit(CHATEVENT.MESSAGE, {channel: this.channel, author: data.username, message: data.msg});
         }
     }
     
     //Changes the server
     connectServer(server)
     {
+        this.channel = 'general';
+        this.clearMessages();
+        this.serverSocket.close();
         this.serverSocket = this.manager.socket(server);
         this.serverSocket.on(CHATEVENT.CONNECT, () => {
-             
+            
             this.serverSocket.on('message', (data) => {
-                console.log(data);
                 //Everytime a message comes through this function gets used to update the ui
                 $("#messages").append(`<li><span class="message-content">${data.author}<br>${data.message}</span></li>`);
                 $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
@@ -75,18 +76,27 @@ class ClientSocket
         });
     }
 
-    //Changes channel
-    changeChannel(server_id, channel_id)
+    clearMessages()
     {
-        if(this.soc)
+        $("#messages").empty();
+        $('#chat-title').empty();
+        $('#chat-title').append(`<p>${this.channel}</p>`);
+    }
+
+    //Changes channel
+    changeChannel(channel_id)
+    {
+        if(this.serverSocket)
         {
-            this.soc.emit("change-chennel", {server: server_id, channel: channel_id});
+            this.channel = channel_id;
+            this.clearMessages();
+            this.serverSocket.emit("change-channel", channel_id);
         }
     }
 
     joinVoice(channel_id, audio)
     {
-        if(this.soc)
+        if(this.serverSocket)
         {
             var clientVoice = new ClientVoice(server_id, channel_id, this.socket, audio)
         }

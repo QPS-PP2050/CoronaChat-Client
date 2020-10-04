@@ -5,13 +5,9 @@ const { timers } = require('jquery');
 var $, jQuery;
 $ = jQuery = require('jquery');
 
+const events = require('./types/types');
 
-const CHATEVENT = 
-{
-    CONNECT : 'connect',
-    DISCONNECT : 'disconnect',
-    MESSAGE : 'message'
-}
+
 
 let window;
 
@@ -23,22 +19,26 @@ class ClientSocket
     serverSocket;
     win;
     channel = "";
-    constructor(){}
+    ui = {}
+    constructor(ui)
+    {
+        this.ui.messages = $('#messages');
+    }
     
     //Deals with connecting to the server
-    connect(server)
+    connect()
     {
         this.manager = io.Manager('http://localhost:8080', {reconnect: true});
         this.socket = this.manager.socket('/');
         this.serverSocket = this.manager.socket('/');
 
-        this.socket.on(CHATEVENT.CONNECT, () => {})
+        this.socket.on(events.EVENTS.CONNECT, () => {})
     }
 
     //Disconects from Server
     disconnect()
     {   
-        this.soc.emit(CHATEVENT.disconnect);
+        this.soc.emit(events.EVENTS.DISCONNECT);
         this.soc.close();
     }
 
@@ -47,7 +47,7 @@ class ClientSocket
     {  
         if(this.serverSocket)
         {
-            this.serverSocket.emit(CHATEVENT.MESSAGE, {channel: this.channel, author: data.username, message: data.msg});
+            this.serverSocket.emit(events.EVENTS.MESSAGE, {channel: this.channel, author: data.username, message: data.msg});
         }
     }
     
@@ -58,19 +58,30 @@ class ClientSocket
         this.clearMessages();
         this.serverSocket.close();
         this.serverSocket = this.manager.socket(server);
-        this.serverSocket.on(CHATEVENT.CONNECT, () => {
+        this.serverSocket.on(events.EVENTS.CONNECT, () => {
             
             this.serverSocket.on('message', (data) => {
+
                 //Everytime a message comes through this function gets used to update the ui
-                $("#messages").append(`<li><span class="message-content">${data.author}<br>${data.message}</span></li>`);
+                
+                var author = $('<span></span>');
+                var message = $('<span></span>');
+                var parent = $('<li></li>');
+                message.addClass('message-content');
+                author.addClass('author-content');
+                message.append(data.message);
+                author.append(data.author);
+                parent.append(author);
+                parent.append(message);
+                $(events.UI.MESSAGES).append(parent);
                 $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
             });
             //Updates UI when a member disconnects and reconnects
-            this.serverSocket.on('member_list', (list) => {
-                $('#mem_list').empty();
+            this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
+                $(events.UI.MEMBER_LIST).empty();
                 for(var i = 0; i < list.length; i++)
                 {
-                    $('#mem_list').append(`<li><a>${list[i]}</a></li>`);
+                    $(events.UI.MEMBER_LIST).append(`<li><a>${list[i]}</a></li>`);
                 }
             });
         });
@@ -78,7 +89,7 @@ class ClientSocket
 
     clearMessages()
     {
-        $("#messages").empty();
+        $(events.UI.MESSAGES).empty();
         $('#chat-title').empty();
         $('#chat-title').append(`<p>${this.channel}</p>`);
     }
@@ -90,7 +101,7 @@ class ClientSocket
         {
             this.channel = channel_id;
             this.clearMessages();
-            this.serverSocket.emit("change-channel", channel_id);
+            this.serverSocket.emit(events.EVENTS.CHANNEL, channel_id);
         }
     }
 

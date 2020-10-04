@@ -34,6 +34,33 @@ body {height:100%}
     margin: 0;
 }
 
+.chat-log li
+{
+    margin: 15px;
+    border-radius: 15px;
+    background-color: #8BC5F4;
+}
+
+.author-content
+{
+    text-decoration: underline;
+    font-family:Lucida Console;
+    font-style: normal;
+    font-weight: bolder;
+}
+
+.chat-log li span 
+{
+    display: block;
+}
+
+.message-content
+{
+    margin-top: 15px;
+    font-family:Lucida Console;
+    font-style: normal;
+}
+
 .menu-options li 
 {
     display: block;
@@ -227,7 +254,7 @@ body { font: 13px Helvetica, Arial; }
 .message-sec input { border: 0; padding: 10px; grid-column: 0; width: 100%; background-color: #8BC5F4;}
 .message-sec input:focus, button:focus{outline: none;}
 .message-sec button { width: 50px; background: rgb(52, 189, 235); border: none; padding: 10px; grid-column: 1S; width: 100%;}
-#messages { list-style-type: none; margin: 0; padding: 0;}
+#messages { list-style-type: none; margin: 0; padding: 0; word-break:break-all;}
 #messages li { display: block; padding: 10px; }
 
 .server-btn

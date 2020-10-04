@@ -1,12 +1,19 @@
 const ipcRenderer = require('electron').ipcRenderer; 
 const {ClientSocket} = require('./ClientSocket');
-
-let socket = new ClientSocket();
-socket.connect();
-
 var $, jQuery;
 $ = jQuery = require('jquery');
+
+
+var ui = {
+  messages: $('#messages')
+}
+
+let socket = new ClientSocket(ui);
+socket.connect();
+
 var chat = 0;
+
+
 
 var username = `Test ${Math.round(Math.random() * 1000)}`;
 

@@ -13,6 +13,7 @@ let window;
 
 class ClientSocket
 {
+    socketList = [];
     PORT = 8080;
     URL = "localhost";//"coronachat.xyz";
     socket;
@@ -28,11 +29,14 @@ class ClientSocket
     //Deals with connecting to the server
     connect()
     {
-        this.manager = io.Manager('http://localhost:8080', {reconnect: true});
+        this.manager = io.Manager('http://localhost:8080', {reconnect: true, query: {
+            toket: "ABCDEFG"
+        }});
+        
         this.socket = this.manager.socket('/');
         this.serverSocket = this.manager.socket('/');
-
-        this.socket.on(events.EVENTS.CONNECT, () => {})
+        
+        this.socket.on(events.EVENTS.CONNECT, () => {});
     }
 
     //Disconects from Server
@@ -56,8 +60,11 @@ class ClientSocket
     {
         this.channel = 'general';
         this.clearMessages();
+        this.serverSocket.disconnect();
         this.serverSocket.close();
         this.serverSocket = this.manager.socket(server);
+        this.serverSocket.connect();
+
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
             
             this.serverSocket.on('message', (data) => {
@@ -75,6 +82,7 @@ class ClientSocket
                 parent.append(message);
                 $(events.UI.MESSAGES).append(parent);
                 $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
+                console.log(this.serverSocket);
             });
             //Updates UI when a member disconnects and reconnects
             this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
@@ -83,6 +91,9 @@ class ClientSocket
                 {
                     $(events.UI.MEMBER_LIST).append(`<li><a>${list[i]}</a></li>`);
                 }
+            });
+            this.serverSocket.on('disconnect', () =>{
+                this.serverSocket.removeAllListeners();
             });
         });
     }

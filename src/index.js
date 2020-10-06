@@ -2,7 +2,7 @@ const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer } = require('elec
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
-
+const fetch = require('electron-fetch').default;
 
 
 const isMac = process.platform === 'darwin';
@@ -78,4 +78,34 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+ipcMain.on('login-window', (event)=>{
+  win.loadURL(`file://${__dirname}/html/login.html`);
+  win.title = "Login";
+})
+
+ipcMain.on('register-window', (event)=>{
+  win.loadURL(`file://${__dirname}/html/register.html`);
+  win.title = "Register";
+})
+
+ipcMain.on('register', (event, data) => {
+  fetch('https://coronachat.xyz/api/users', { 
+    method: 'POST',
+    body:    JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then(res => res.json())
+  .then(json => console.log(json))
+});
+
+ipcMain.on('login', (event, data) => {
+    fetch('https://coronachat.xyz/api/login', { 
+      method: 'POST',
+      body:    JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(res => res.json())
+    .then(json => console.log(json))
 });

@@ -5,7 +5,7 @@ const { inspect } = require('util');
 const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 
-var session;
+let session;
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
 const menuTemplate = [
@@ -67,6 +67,8 @@ const menu = Menu.buildFromTemplate(menuTemplate)
 
 Menu.setApplicationMenu(menu);
 
+
+
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
@@ -79,6 +81,10 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+ipcMain.on('get-session', (event) => {
+  event.sender.send('session', session);
 });
 
 ipcMain.on('login-window', (event)=>{

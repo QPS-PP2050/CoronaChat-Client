@@ -1,14 +1,22 @@
 const ipcRenderer = require('electron').ipcRenderer; 
+const { session } = require('electron');
 const {ClientSocket} = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
 
+ipcRenderer.send('get-session');
+
+let socket;
+
+ipcRenderer.on('session', (event, sockSess) => {
+  socket = new ClientSocket(sockSess);
+});
 
 var ui = {
   messages: $('#messages')
 }
 
-let socket = new ClientSocket(ui);
+let 
 socket.connect();
 
 var chat = 0;

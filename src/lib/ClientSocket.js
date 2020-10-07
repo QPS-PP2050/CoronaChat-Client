@@ -27,10 +27,10 @@ class ClientSocket
     }
     
     //Deals with connecting to the server
-    connect()
+    connect(session)
     {
         this.manager = io.Manager('http://localhost:8080', {reconnect: true, query: {
-            toket: "ABCDEFG"
+            session = session
         }});
         
         this.socket = this.manager.socket('/');

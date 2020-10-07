@@ -2,9 +2,10 @@ const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer } = require('elec
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
+const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 
-
+var session;
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
 const menuTemplate = [
@@ -59,7 +60,7 @@ function createWindow()
       nodeIntegration: true
     }
   });
-  win.loadURL(`file://${__dirname}/html/index.html`);
+  win.loadURL(`file://${__dirname}/html/login.html`);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -91,7 +92,7 @@ ipcMain.on('register-window', (event)=>{
 })
 
 ipcMain.on('register', (event, data) => {
-  fetch('https://coronachat.xyz/api/users', { 
+  fetch('https://localhost/api/users/register', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -101,11 +102,23 @@ ipcMain.on('register', (event, data) => {
 });
 
 ipcMain.on('login', (event, data) => {
-    fetch('https://coronachat.xyz/api/login', { 
-      method: 'POST',
-      body:    JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' },
-    })
-    .then(res => res.json())
-    .then(json => console.log(json))
+  var error;
+  var temp = fetch('https://localhost/api/users/login', { 
+    method: 'POST',
+    body:    JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  }).then(res => {
+    res.status;
+    if(res.status == 200)
+    {
+      res.json().then(json =>{
+        session = json.session;
+        win.loadURL(`file://${__dirname}/html/index.html`);
+      });
+    }
+    else
+    {
+      dialog.showErrorBox("Login Fail", "Email/Password is incorrect");
+    }
+  });
 });

@@ -41,7 +41,8 @@ $(function(){
     prompt({
         title: 'New Channel',
         label: 'Channel Name',
-        type: 'input'
+        type: 'input',
+        alwaysOnTop: true,
     })
     .then((r) => {
         if(r !== null) {

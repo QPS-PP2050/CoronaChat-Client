@@ -24,7 +24,11 @@ class ClientSocket {
     connect(socksess) {
         this.manager = io.Manager('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io', { 
             reconnect: true, 
-            extraHeaders: { Authorization: `Bearer ${socksess.session.token}` }
+            transportOptions: {
+                polling: {
+                    extraHeaders: { Authorization: `Bearer ${socksess.token}` }
+                }
+            }
         });
 
         this.socket = this.manager.socket('/')

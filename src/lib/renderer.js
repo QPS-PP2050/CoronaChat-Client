@@ -5,7 +5,6 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 const prompt = require('electron-prompt');
 var server_id;
-ipcRenderer.send('get-session');
 
 let socket = new ClientSocket();
 

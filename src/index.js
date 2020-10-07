@@ -60,7 +60,7 @@ function createWindow()
       nodeIntegration: true
     }
   });
-  win.loadURL(`file://${__dirname}/html/index.html`);
+  win.loadURL(`file://${__dirname}/html/login.html`);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -85,7 +85,7 @@ app.on('activate', () => {
 
 ipcMain.on('new-channel', (event, data) =>{
   
-  fetch('https://coronachat.xyz/api/channels', { 
+  fetch('https://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io/api/channels', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -111,7 +111,7 @@ ipcMain.on('register-window', (event)=>{
 })
 
 ipcMain.on('register', (event, data) => {
-  fetch('https://coronachat.xyz/api/users/register', { 
+  fetch('https://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io/api/users/register', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -121,7 +121,7 @@ ipcMain.on('register', (event, data) => {
 });
 
 ipcMain.on('login', (event, data) => {
-  fetch('https://coronachat.xyz/api/users/login', { 
+  fetch('https://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io/api/users/login', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -137,7 +137,9 @@ ipcMain.on('login', (event, data) => {
     else
     {
       dialog.showErrorBox("Login Fail", "Email/Password is incorrect");
+      return;
     }
   });
+  
 });
 

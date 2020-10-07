@@ -30,10 +30,9 @@ class ClientSocket
             session : socksess
         }});
         
-        this.socket = this.manager.socket('/');
         this.serverSocket = this.manager.socket('/');
-        
-        this.socket.on(events.EVENTS.CONNECT, () => {});
+        console.log(socksess);
+        this.serverSocket.on(events.EVENTS.CONNECT, () => {});
     }
 
     //Disconects from Server
@@ -121,5 +120,4 @@ class ClientSocket
         }
     }
 }
-
 exports.ClientSocket = ClientSocket;

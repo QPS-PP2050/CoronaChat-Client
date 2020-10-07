@@ -6,7 +6,6 @@ $ = jQuery = require('jquery');
 
 ipcRenderer.send('get-session');
 
-let socket;
 let socket = new ClientSocket();
 
 ipcRenderer.send('get-session');
@@ -28,7 +27,6 @@ var chat = 0;
 var username = `Test ${Math.round(Math.random() * 1000)}`;
 
 
-console.log(window.mediasoupClient);
 //Submits input form and sends message
 $(function(){
   $("#send-msg").submit(function(e){

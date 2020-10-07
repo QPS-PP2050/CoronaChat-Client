@@ -24,10 +24,10 @@ class ClientSocket
     constructor(){}
     
     //Deals with connecting to the server
-    connect(session)
+    connect(socksess)
     {
         this.manager = io.Manager('http://localhost:8080', {reconnect: true, query: {
-            session = session
+            session : socksess
         }});
         
         this.socket = this.manager.socket('/');

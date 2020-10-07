@@ -5,7 +5,7 @@ const { inspect } = require('util');
 const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 
-let session;
+let session = null;
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
 const menuTemplate = [
@@ -60,7 +60,7 @@ function createWindow()
       nodeIntegration: true
     }
   });
-  win.loadURL(`file://${__dirname}/html/login.html`);
+  win.loadURL(`file://${__dirname}/html/index.html`);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)

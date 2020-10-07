@@ -43,9 +43,9 @@ $(function(){
         type: 'input',
         alwaysOnTop: true,
     })
-    .then((r) => {
-        if(r !== null) {
-           ipcRenderer.send('new-channel', {channel : r, server: server_id});
+    .then((result) => {
+        if(result !== null) {
+           ipcRenderer.send('new-channel', {name : result, server: server_id});
         }
     })
     .catch(console.error);

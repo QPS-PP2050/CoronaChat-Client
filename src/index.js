@@ -85,7 +85,7 @@ app.on('activate', () => {
 
 ipcMain.on('new-channel', (event, data) =>{
   
-  fetch('https://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io/api/channels', { 
+  fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/channels', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -111,7 +111,7 @@ ipcMain.on('register-window', (event)=>{
 })
 
 ipcMain.on('register', (event, data) => {
-  fetch('https://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io/api/users/register', { 
+  fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/users/register', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -121,7 +121,7 @@ ipcMain.on('register', (event, data) => {
 });
 
 ipcMain.on('login', (event, data) => {
-  fetch('https://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io/api/users/login', { 
+  fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/users/login', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },

@@ -106,7 +106,7 @@ class ClientSocket
         {
             this.channel = channel_id;
             this.clearMessages();
-            this.serverSocket.emit(events.EVENTS.CHANNEL, `/${channel_id}`);
+            this.serverSocket.emit(events.EVENTS.CHANNEL, channel_id);
         }
     }
 

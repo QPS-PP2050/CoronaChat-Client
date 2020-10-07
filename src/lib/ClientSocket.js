@@ -31,7 +31,6 @@ class ClientSocket
         }});
         
         this.serverSocket = this.manager.socket('/');
-        console.log(socksess);
         this.serverSocket.on(events.EVENTS.CONNECT, () => {});
     }
 
@@ -57,7 +56,6 @@ class ClientSocket
         this.channel = 'general';
         this.clearMessages();
         this.serverSocket.disconnect();
-        this.serverSocket.close();
         this.serverSocket = this.manager.socket(`/${server}`);
         this.serverSocket.connect();
 

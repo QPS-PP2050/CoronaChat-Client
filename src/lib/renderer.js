@@ -7,17 +7,19 @@ $ = jQuery = require('jquery');
 ipcRenderer.send('get-session');
 
 let socket;
+let socket = new ClientSocket();
 
+ipcRenderer.send('get-session');
 ipcRenderer.on('session', (event, sockSess) => {
-  socket = new ClientSocket(sockSess);
+  socket.connect(sockSess);
 });
 
 var ui = {
   messages: $('#messages')
 }
 
-let 
-socket.connect();
+
+
 
 var chat = 0;
 

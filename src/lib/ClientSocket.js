@@ -21,10 +21,7 @@ class ClientSocket
     win;
     channel = "";
     ui = {}
-    constructor(ui)
-    {
-        this.ui.messages = $('#messages');
-    }
+    constructor(){}
     
     //Deals with connecting to the server
     connect(session)

@@ -26,12 +26,13 @@ class ClientSocket
     //Deals with connecting to the server
     connect(socksess)
     {
-        this.manager = io.Manager('http://localhost:8080', {reconnect: true, query: {
+        this.manager = io.Manager('hhttps://8080-cb1da5d6-9b26-42e4-8d41-85644337886d.ws-us02.gitpod.io', {reconnect: true, query: {
             session : socksess
         }});
         
         this.serverSocket = this.manager.socket('/');
-        this.serverSocket.on(events.EVENTS.CONNECT, () => {});
+        this.socket = this.manager.socket('/');
+        this.socket.on(events.EVENTS.CONNECT, () => {});
     }
 
     //Disconects from Server

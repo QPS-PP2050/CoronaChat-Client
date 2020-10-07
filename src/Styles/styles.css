@@ -1,6 +1,7 @@
-html {height: 100%; -webkit-user-select:  none;}
-body {height:100%}
-
+html {height: 100%; -webkit-user-select:  none; font-family:Lucida Console;}
+body {height:100%;}
+button {font-family:Lucida Console;}
+input {font-family:Lucida Console;}
 ::-webkit-scrollbar
 {
     width: 10px;
@@ -202,6 +203,14 @@ body {height:100%}
     grid-template-rows: auto 1fr;
     height: calc(100vh - 80px);
 }
+
+.side-panel-left button
+{
+    width: 50px; background: #41A3F2; border: none; padding: 10px; grid-column: 1S; width: 100%;
+}
+
+.side-panel-left button:hover { background-color: #2B6A9E; }
+
 .chat-window
 {
     grid-row: span 2;
@@ -253,7 +262,8 @@ body {height:100%}
 body { font: 13px Helvetica, Arial; }
 .message-sec input { border: 0; padding: 10px; grid-column: 0; width: 100%; background-color: #8BC5F4;}
 .message-sec input:focus, button:focus{outline: none;}
-.message-sec button { width: 50px; background: rgb(52, 189, 235); border: none; padding: 10px; grid-column: 1S; width: 100%;}
+.message-sec button { width: 50px; background: #41A3F2; border: none; padding: 10px; grid-column: 1S; width: 100%;}
+.message-sec button:hover { background-color: #2B6A9E; }
 #messages { list-style-type: none; margin: 0; padding: 0; word-break:break-all;}
 #messages li { display: block; padding: 10px; }
 

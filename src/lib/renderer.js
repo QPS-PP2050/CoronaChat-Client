@@ -3,6 +3,7 @@ const { session } = require('electron');
 const {ClientSocket} = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
+const prompt = require('electron-prompt');
 
 ipcRenderer.send('get-session');
 
@@ -17,15 +18,7 @@ var ui = {
   messages: $('#messages')
 }
 
-
-
-
-var chat = 0;
-
-
-
 var username = `Test ${Math.round(Math.random() * 1000)}`;
-
 
 //Submits input form and sends message
 $(function(){
@@ -42,6 +35,22 @@ $(function(){
 });
 //Dropsdown and closes server list
 $(function(){
+  $('#add-channel').on('click', function(){
+    
+
+    prompt({
+        title: 'New Channel',
+        label: 'Channel Name',
+        type: 'input'
+    })
+    .then((r) => {
+        if(r !== null) {
+           ipcRenderer.send('new-channel', {channel : r});
+        }
+    })
+    .catch(console.error);
+    });
+
   $("#channel-list .join-channel").on("click", function(e){
     socket.changeChannel($(this).data("channel"));
   });

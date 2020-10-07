@@ -83,8 +83,21 @@ app.on('activate', () => {
   }
 });
 
+ipcMain.on('new-channel', (event, data) =>{
+  
+  fetch('https://coronachat.xyz/api/channels', { 
+    method: 'POST',
+    body:    JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then(res => res.json())
+  .then(json => console.log(json))
+});
+
+
 ipcMain.on('get-session', (event) => {
   event.sender.send('session', session);
+  
 });
 
 ipcMain.on('login-window', (event)=>{
@@ -98,7 +111,7 @@ ipcMain.on('register-window', (event)=>{
 })
 
 ipcMain.on('register', (event, data) => {
-  fetch('https://localhost/api/users/register', { 
+  fetch('https://coronachat.xyz/api/users/register', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -108,8 +121,7 @@ ipcMain.on('register', (event, data) => {
 });
 
 ipcMain.on('login', (event, data) => {
-  var error;
-  var temp = fetch('https://localhost/api/users/login', { 
+  fetch('https://coronachat.xyz/api/users/login', { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },

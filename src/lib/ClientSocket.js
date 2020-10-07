@@ -59,7 +59,7 @@ class ClientSocket
         this.clearMessages();
         this.serverSocket.disconnect();
         this.serverSocket.close();
-        this.serverSocket = this.manager.socket(server);
+        this.serverSocket = this.manager.socket(`/${server}`);
         this.serverSocket.connect();
 
         this.serverSocket.on(events.EVENTS.CONNECT, () => {

@@ -4,7 +4,7 @@ const {ClientSocket} = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
 const prompt = require('electron-prompt');
-
+var server_id;
 ipcRenderer.send('get-session');
 
 let socket = new ClientSocket();
@@ -36,7 +36,6 @@ $(function(){
 //Dropsdown and closes server list
 $(function(){
   $('#add-channel').on('click', function(){
-    
 
     prompt({
         title: 'New Channel',
@@ -46,14 +45,15 @@ $(function(){
     })
     .then((r) => {
         if(r !== null) {
-           ipcRenderer.send('new-channel', {channel : r});
+           ipcRenderer.send('new-channel', {channel : r, server: server_id});
         }
     })
     .catch(console.error);
-    });
+  });
 
   $("#channel-list .join-channel").on("click", function(e){
-    socket.changeChannel($(this).data("channel"));
+    server_id = $(this).data("channel");
+    socket.changeChannel(server_id);
   });
   $("#server .init").on("click", function(e){
     socket.connectServer($(this).data("server"));
@@ -86,13 +86,6 @@ $(document).on('mouseup', function(e){
   }
 });
 
-//Changes the chat channel
-// $(function(){
-//   $(".channel").on("click", function(e){
-//     chat = $(this).data("id"); 
-//     ipcRenderer.send('change-channel', chat);
-//   });
-// });
 $(function() {
     $.fn.invisible = function() {
         return this.each(function() {

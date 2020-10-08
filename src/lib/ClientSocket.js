@@ -9,7 +9,7 @@ const events = require('./types/types');
 let window;
 
 class ClientSocket {
-    socketList = [];
+    socketList = {};
     PORT = 8080;
     URL = "localhost";//"coronachat.xyz";
     socket;
@@ -21,7 +21,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-e1312097-1677-4de7-874e-e71e1bf36628.ws-us02.gitpod.io', {
+        this.manager = io.Manager('https://8080-e1411f6a-5d9b-4b3f-ae0c-139e5af72474.ws-us02.gitpod.io/', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -31,7 +31,7 @@ class ClientSocket {
         });
 
         this.socket = this.manager.socket('/')
-        this.serverSocket = this.manager.socket('/')
+        // this.serverSocket = this.manager.socket('/')
         // this.socket.on(events.EVENTS.CONNECT, () => { });
     }
 
@@ -50,21 +50,30 @@ class ClientSocket {
 
     //Changes the server
     connectServer(server) {
+        if (!this.socketList[`/${server}`]) {
+            this.socketList[`/${server}`] = this.manager.socket(`/${server}`)
+            this.socketList[`/${server}`].firstConnect = true
+            this.socketList[`/${server}`].ready = false
+        }
+        
         this.channel = 'general';
         this.clearMessages();
 
         if (this.serverSocket) {
+            this.serverSocket.firstConnect = false
             this.serverSocket.close();
         }
+        
+        this.serverSocket = this.socketList[`/${server}`];
 
-        this.serverSocket = this.manager.socket(`/${server}`);
-
-        if (!this.manager.nsps[`/${server}`].connected && this.manager.nsps[`/${server}`].disconnected) {
+        console.log(this.socketList)
+        if (!this.serverSocket.firstConnect && !this.serverSocket.ready) {
             console.log('connecting socket');
             this.serverSocket.connect();
         }
 
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
+            this.serverSocket.ready = true;
         });
 
         this.serverSocket.on('message', (data) => {
@@ -92,6 +101,7 @@ class ClientSocket {
             }
         });
         this.serverSocket.on('disconnect', () => {
+            this.serverSocket.ready = false;
             this.serverSocket.removeAllListeners();
         });
     }

@@ -4,7 +4,6 @@ const { ClientVoice } = require('./ClientVoice');
 const { timers } = require('jquery');
 var $, jQuery;
 $ = jQuery = require('jquery');
-
 const events = require('./types/types');
 
 let window;
@@ -109,9 +108,10 @@ class ClientSocket {
         }
     }
 
-    joinVoice(channel_id, audio) {
+    joinVoice(server_id ,channel_id, audio) {
         if (this.serverSocket) {
-            var clientVoice = new ClientVoice(server_id, channel_id, this.socket, audio)
+            var voicesocket = this.manager.socket()
+            this.clientVoice = new ClientVoice(server_id, `/${channel_id}`, voicesocket, audio);
         }
     }
 }

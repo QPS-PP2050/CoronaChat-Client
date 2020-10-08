@@ -21,8 +21,8 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io', { 
-            reconnect: true, 
+        this.manager = io.Manager('https://8080-e1312097-1677-4de7-874e-e71e1bf36628.ws-us02.gitpod.io', {
+            reconnect: true,
             transportOptions: {
                 polling: {
                     extraHeaders: { Authorization: `Bearer ${socksess.token}` }
@@ -32,13 +32,13 @@ class ClientSocket {
 
         this.socket = this.manager.socket('/')
         // this.serverSocket = this.manager.socket('/')
-        this.socket.on(events.EVENTS.CONNECT, () => { });
+        // this.socket.on(events.EVENTS.CONNECT, () => { });
     }
 
     //Disconects from Server
     disconnect() {
-        this.soc.emit(events.EVENTS.DISCONNECT);
-        this.soc.close();
+        this.socket.emit(events.EVENTS.DISCONNECT);
+        this.socket.close();
     }
 
     //Sends message to the server
@@ -52,44 +52,47 @@ class ClientSocket {
     connectServer(server) {
         this.channel = 'general';
         this.clearMessages();
+
         if (this.serverSocket) {
             this.serverSocket.close();
         }
+
         this.serverSocket = this.manager.socket(`/${server}`);
-        console.log(this.manager);
+
         if (!this.manager.nsps[`/${server}`].connected && this.manager.nsps[`/${server}`].disconnected) {
+            console.log('connecting socket');
             this.serverSocket.connect();
         }
 
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
+        });
 
-            this.serverSocket.on('message', (data) => {
+        this.serverSocket.on('message', (data) => {
+            //Everytime a message comes through this function gets used to update the ui
 
-                //Everytime a message comes through this function gets used to update the ui
+            var author = $('<span></span>');
+            var message = $('<span></span>');
+            var parent = $('<li></li>');
+            message.addClass('message-content');
+            author.addClass('author-content');
+            message.append(data.message);
+            author.append(data.author);
+            parent.append(author);
+            parent.append(message);
+            $(events.UI.MESSAGES).append(parent);
+            $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
+            console.log(this.serverSocket);
+        });
 
-                var author = $('<span></span>');
-                var message = $('<span></span>');
-                var parent = $('<li></li>');
-                message.addClass('message-content');
-                author.addClass('author-content');
-                message.append(data.message);
-                author.append(data.author);
-                parent.append(author);
-                parent.append(message);
-                $(events.UI.MESSAGES).append(parent);
-                $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
-                console.log(this.serverSocket);
-            });
-            //Updates UI when a member disconnects and reconnects
-            this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
-                $(events.UI.MEMBER_LIST).empty();
-                for (var i = 0; i < list.length; i++) {
-                    $(events.UI.MEMBER_LIST).append(`<li><a>${list[i]}</a></li>`);
-                }
-            });
-            this.serverSocket.on('disconnect', () => {
-                this.serverSocket.removeAllListeners();
-            });
+        //Updates UI when a member disconnects and reconnects
+        this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
+            $(events.UI.MEMBER_LIST).empty();
+            for (var i = 0; i < list.length; i++) {
+                $(events.UI.MEMBER_LIST).append(`<li><a>${list[i]}</a></li>`);
+            }
+        });
+        this.serverSocket.on('disconnect', () => {
+            this.serverSocket.removeAllListeners();
         });
     }
 
@@ -104,14 +107,14 @@ class ClientSocket {
         if (this.serverSocket) {
             this.channel = channel_id;
             this.clearMessages();
-            this.serverSocket.emit(events.EVENTS.CHANNEL, `/${channel_id}`);
+            this.serverSocket.emit(events.EVENTS.CHANNEL, `${channel_id}`);
         }
     }
 
-    joinVoice(server_id ,channel_id, audio) {
+    joinVoice(server_id, channel_id, audio) {
         if (this.serverSocket) {
             var voicesocket = this.manager.socket()
-            this.clientVoice = new ClientVoice(server_id, `/${channel_id}`, voicesocket, audio);
+            this.clientVoice = new ClientVoice(server_id, `${channel_id}`, voicesocket, audio);
         }
     }
 }

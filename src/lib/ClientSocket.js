@@ -31,7 +31,7 @@ class ClientSocket {
         });
 
         this.socket = this.manager.socket('/')
-        // this.serverSocket = this.manager.socket('/')
+        this.serverSocket = this.manager.socket('/')
         // this.socket.on(events.EVENTS.CONNECT, () => { });
     }
 

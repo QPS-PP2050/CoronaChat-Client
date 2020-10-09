@@ -38,8 +38,11 @@ class ClientSocket {
     disconnect() {
         if(this.socket)
             this.socket.disconnect();
-        if(this.serverSocket)
-            this.serverSocket.disconnect();
+        if(this.socketList.length > 0)
+        {
+            for(var socket in this.socketList)
+                socket.disconnect();
+        }
     }
 
     //Sends message to the server

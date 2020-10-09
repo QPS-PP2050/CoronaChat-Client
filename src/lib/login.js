@@ -2,6 +2,9 @@ $ = jQuery = require('jquery');
 const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer; 
 
+// if(window.localStorage.getItem('login') === true)
+//     ipcRenderer.send('auto-login');
+
 $(function(){
     $('#register').on('click', function(){
         ipcRenderer.send('register-window');
@@ -11,8 +14,9 @@ $(function(){
         var email = $('#username').val();
         var password = $('#password').val();
 
-        var check = $('#keep-login').checked ? true : false;
-
+        var check = $('#keep-login').checked ? false : true;
+        console.log(check);
+        window.localStorage.setItem('login', check);
         if(email.trim().length && password.trim().length)
         {
             //sends username and password to the socket

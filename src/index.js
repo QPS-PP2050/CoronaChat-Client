@@ -1,4 +1,4 @@
-const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer } = require('electron');
+const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer, LocalStorage } = require('electron');
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
@@ -66,11 +66,10 @@ function createWindow()
   });
   if(store.get('login') == true)
   {
-    session = store.get('token');
     win.loadURL(`file://${__dirname}/html/index.html`);
   }
   else
-    win.loadURL(`file://${__dirname}/html/index.html`);
+    win.loadURL(`file://${__dirname}/html/login.html`);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -111,9 +110,8 @@ ipcMain.on('logout', (event) =>{
   win.loadURL(`file://${__dirname}/html/login.html`);
 })
 
-ipcMain.on('get-session', (event) => {
-  event.sender.send('session', session);
-  
+ipcMain.on('auto-login', (event) => {
+  win.loadURL(`file://${__dirname}/html/index.html`);
 });
 
 ipcMain.on('login-window', (event)=>{
@@ -141,7 +139,7 @@ ipcMain.on('login', (event, data) => {
     email : data.email,
     password : data.password
   }
-  fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/users/login', { 
+  fetch('https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io/api/users/login', { 
     method: 'POST',
     body:    JSON.stringify(cred),
     headers: { 'Content-Type': 'application/json' },
@@ -150,12 +148,8 @@ ipcMain.on('login', (event, data) => {
     if(res.status == 200)
     {
       res.json().then(json =>{
-        session = json.session;
-        if(data.login)
-        {
-          store.set('login', true);
-          store.set('token', session);
-        }
+        store.set('login', data.login);
+        store.set('token', json.session);
         win.loadURL(`file://${__dirname}/html/index.html`);
       });
     }

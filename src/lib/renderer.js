@@ -7,11 +7,12 @@ const prompt = require('electron-prompt');
 var server_id;
 
 let socket = new ClientSocket();
+socket.connect(window.localStorage.getItem('token'));
+  
 
-ipcRenderer.send('get-session');
-ipcRenderer.on('session', (event, sockSess) => {
-  socket.connect(sockSess);
-});
+
+
+
 
 var ui = {
   messages: $('#messages')

@@ -4,6 +4,10 @@ const path = require('path');
 const { inspect } = require('util');
 const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
+const settings = require('electron-settings');
+const Store = require('electron-store');
+
+const store = new Store();
 
 let session = null;
 const isMac = process.platform === 'darwin';
@@ -60,7 +64,13 @@ function createWindow()
       nodeIntegration: true
     }
   });
-  win.loadURL(`file://${__dirname}/html/login.html`);
+  if(store.get('login') == true)
+  {
+    session = store.get('token');
+    win.loadURL(`file://${__dirname}/html/index.html`);
+  }
+  else
+    win.loadURL(`file://${__dirname}/html/login.html`);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -121,9 +131,15 @@ ipcMain.on('register', (event, data) => {
 });
 
 ipcMain.on('login', (event, data) => {
+  
+  cred = {
+    email : data.email,
+    password : data.password
+  }
+
   fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/users/login', { 
     method: 'POST',
-    body:    JSON.stringify(data),
+    body:    JSON.stringify(cred),
     headers: { 'Content-Type': 'application/json' },
   }).then(res => {
     res.status;
@@ -131,6 +147,12 @@ ipcMain.on('login', (event, data) => {
     {
       res.json().then(json =>{
         session = json.session;
+        if(data.login)
+        {
+          store.set('login', true);
+          store.set('token', session);
+        }
+        
         win.loadURL(`file://${__dirname}/html/index.html`);
       });
     }

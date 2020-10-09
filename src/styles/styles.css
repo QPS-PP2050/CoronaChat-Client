@@ -25,7 +25,8 @@ input {font-family:Lucida Console;}
 
 .x-button
 {
-    float: right;
+    position: absolute;
+    right: 0;
     color: white;
     padding: 10px;
 }
@@ -83,12 +84,33 @@ input {font-family:Lucida Console;}
     background-color: #8BC5F4;
 }
 
-.profile-left
+.user-info
+{
+    grid-row: 2;
+    grid-column: 2;
+}
+
+.profile-image
+{
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.profile-setting
+{
+    margin-top: 15px;
+    margin-left: 20px;
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 1fr 1fr;
+    grid-template-rows: 100px 1fr 1fr 1fr 1fr;
+}
+
+.setting-left
 {
     grid-column: 1;
 }
 
-.profile-right
+.setting-right
 {
     grid-column: 2;
 }

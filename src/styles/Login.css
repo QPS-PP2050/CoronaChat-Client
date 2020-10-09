@@ -1,5 +1,7 @@
 html {height: 100%; -webkit-user-select:  none; background-color: #1F4D73;}
-body {height:100%; margin: 0;}
+body {height:100%; margin: 0; font-family:Lucida Console;}
+button {font-family:Lucida Console;}
+input {font-family:Lucida Console;}
 
 .main-content
 {
@@ -38,7 +40,7 @@ body {height:100%; margin: 0;}
     width: 80%;
 }
 
-.login input
+.login input[type=text], input[type=password]
 {
     width:  100%;
     display: block;
@@ -54,6 +56,19 @@ body {height:100%; margin: 0;}
     outline: none;
     border: 1px solid rgba(22, 56, 82, 1); 
     padding: 15px;
+}
+
+.lower-login label
+{
+    margin-right: 15px;
+}
+
+
+.lower-login
+{
+    margin-top: 15px;
+    display: block;
+    text-align: left;
 }
 
 .login button

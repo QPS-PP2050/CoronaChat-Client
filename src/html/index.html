@@ -17,24 +17,39 @@
       <span title="Profile" id="settings" class="profile-bubble">
         <img src="../lib/virus.png" width="40" height="40" />
       </span>
-      <span title="Friends" id="settings" class="friends-bubble">
-        <img src="../lib/friend.png" width="40" height="40" />
+      <span title="Friends" id="friend" class="friends-bubble">
+        <img src="../lib/friend.png" width="40" height="40"/>
       </span>
     </div>
     <div class="profile-display">
-      <div class="profile-left">
+      
+      <div class="setting-left">
         <ul class="menu-options">
           <li>
-            <a>Profile</a>
+            <a id="profile">Profile</a>
+          </li>
+          <li>
+            <a>Settings</a>
           </li>
         </ul>
       </div>
-      <div class="profile-right">
-        <div id="profile">
-        </div>
-        <div id="audio-settings">
-        </div>
+      <div class="setting-right">
         <span class="x-button" id="settings-close">X</span>
+        <div id="profile-panel">
+          <div class="profile-setting">
+            <img id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100"/>
+            <div class="user-info">
+              <span id="username">Test User</span>
+              <button id="change-username">Change Username</button>
+              <button id="change-password">Change Password</button>
+              <button style="background-color: red;" id="change-password">Delete Accoint</button>
+            </div>
+          </div>
+        </div>
+        <div id="settings-panel">
+          <div class="main-setting"></div>
+        </div>
+        
       </div>
     </div>
     <div class="side-panel-left">

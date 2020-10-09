@@ -32,6 +32,7 @@ $(function(){
     }
   });
 });
+
 //Dropsdown and closes server list
 $(function(){
   $('#add-channel').on('click', function(){
@@ -77,6 +78,7 @@ $(function(){
     }
   });
 });
+
 //closes server list
 $(document).on('mouseup', function(e){
   if(!$("#select").is(e.target) && $("#select").has(e.target).length === 0)

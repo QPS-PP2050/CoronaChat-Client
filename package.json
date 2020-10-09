@@ -19,6 +19,8 @@
   "dependencies": {
     "electron-fetch": "^1.7.1",
     "electron-prompt": "^1.6.0",
+    "electron-settings": "^4.0.2",
+    "electron-store": "^6.0.1",
     "i": "^0.3.6",
     "jquery": "^3.5.1",
     "mediasoup-client": "^3.6.15",

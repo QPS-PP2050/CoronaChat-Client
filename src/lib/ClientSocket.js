@@ -51,9 +51,10 @@ class ClientSocket {
     //Changes the server
     connectServer(server) {
         if (!this.socketList[`/${server}`]) {
-            this.socketList[`/${server}`] = this.manager.socket(`/${server}`)
-            this.socketList[`/${server}`].firstConnect = true
-            this.socketList[`/${server}`].ready = false
+            this.socketList[`/${server}`] = this.manager.socket(`/${server}`, {
+                firstConnect: true,
+                ready: false
+            });
         }
         
         this.channel = 'general';

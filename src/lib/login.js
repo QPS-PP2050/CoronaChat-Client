@@ -15,8 +15,6 @@ $(function(){
         var password = $('#password').val();
 
         var check = $('#keep-login').checked ? false : true;
-        console.log(check);
-        window.localStorage.setItem('login', check);
         if(email.trim().length && password.trim().length)
         {
             //sends username and password to the socket

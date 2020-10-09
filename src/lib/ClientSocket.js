@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-e1411f6a-5d9b-4b3f-ae0c-139e5af72474.ws-us02.gitpod.io/', {
+        this.manager = io.Manager('https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io', {
             reconnect: true,
             transportOptions: {
                 polling: {

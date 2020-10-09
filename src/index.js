@@ -10,6 +10,9 @@ const Store = require('electron-store');
 const store = new Store();
 
 let session = null;
+const baseURL = 'https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io'
+
+
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
 const menuTemplate = [
@@ -61,7 +64,8 @@ function createWindow()
     minWidth: 800,
     title: "Corona Chat",
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true
     }
   });
   if(store.get('login') == true)
@@ -92,7 +96,7 @@ app.on('activate', () => {
 
 ipcMain.on('new-channel', (event, data) =>{
   
-  fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/channels', { 
+  fetch(`${baseURL}/api/channels`, { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -125,7 +129,7 @@ ipcMain.on('register-window', (event)=>{
 })
 
 ipcMain.on('register', (event, data) => {
-  fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/users/register', { 
+  fetch(`${baseURL}/api/users/register`, { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -139,7 +143,7 @@ ipcMain.on('login', (event, data) => {
     email : data.email,
     password : data.password
   }
-  fetch('https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io/api/users/login', { 
+  fetch(`${baseURL}/api/users/login`, { 
     method: 'POST',
     body:    JSON.stringify(cred),
     headers: { 'Content-Type': 'application/json' },

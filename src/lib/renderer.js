@@ -1,18 +1,14 @@
-const ipcRenderer = require('electron').ipcRenderer; 
+const ipcRenderer = require('electron').ipcRenderer;
 const dialog = require('electron').remote.dialog;
 const {ClientSocket} = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
 const prompt = require('electron-prompt');
 var server_id;
-
+const Store = require('electron-store');
+const store = new Store();
 let socket = new ClientSocket();
-socket.connect(window.localStorage.getItem('token'));
-  
-
-
-
-
+socket.connect(store.get('token'));
 
 var ui = {
   messages: $('#messages')

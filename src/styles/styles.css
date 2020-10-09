@@ -90,11 +90,35 @@ input {font-family:Lucida Console;}
     grid-column: 2;
 }
 
+.setting-menu li a:hover
+{
+    background-color: #2B6A9E;
+}
+
+.setting-menu li a
+{
+    display: block;
+    padding: 15px;
+}
+
+.setting-menu
+{
+    top: 50px;
+    left: 15px;
+    margin: 0;
+    margin-top: 15px;
+    list-style-type: none;
+    position: absolute;
+    display: none;
+    background-color: #1F4D73;
+}
+
 .profile-image
 {
     grid-row: 1;
     grid-column: 1;
 }
+
 
 .profile-setting
 {

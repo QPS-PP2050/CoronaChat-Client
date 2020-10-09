@@ -70,14 +70,12 @@ function createWindow()
     win.loadURL(`file://${__dirname}/html/index.html`);
   }
   else
-    win.loadURL(`file://${__dirname}/html/login.html`);
+    win.loadURL(`file://${__dirname}/html/index.html`);
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
 
 Menu.setApplicationMenu(menu);
-
-
 
 app.whenReady().then(createWindow);
 
@@ -104,6 +102,14 @@ ipcMain.on('new-channel', (event, data) =>{
   .then(json => console.log(json))
 });
 
+ipcMain.on('logout', (event) =>{
+  if(store.get('login') == true)
+  {
+    store.delete('login');
+    store.delete('token');
+  }
+  win.loadURL(`file://${__dirname}/html/login.html`);
+})
 
 ipcMain.on('get-session', (event) => {
   event.sender.send('session', session);
@@ -131,12 +137,10 @@ ipcMain.on('register', (event, data) => {
 });
 
 ipcMain.on('login', (event, data) => {
-  
   cred = {
     email : data.email,
     password : data.password
   }
-
   fetch('https://8080-c8f61820-eb99-43d3-917e-7aa7ee178db5.ws-us02.gitpod.io/api/users/login', { 
     method: 'POST',
     body:    JSON.stringify(cred),
@@ -152,7 +156,6 @@ ipcMain.on('login', (event, data) => {
           store.set('login', true);
           store.set('token', session);
         }
-        
         win.loadURL(`file://${__dirname}/html/index.html`);
       });
     }
@@ -162,6 +165,5 @@ ipcMain.on('login', (event, data) => {
       return;
     }
   });
-  
 });
 

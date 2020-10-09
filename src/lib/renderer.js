@@ -1,5 +1,5 @@
 const ipcRenderer = require('electron').ipcRenderer; 
-const { session } = require('electron');
+const dialog = require('electron').remote.dialog;
 const {ClientSocket} = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
@@ -36,7 +36,6 @@ $(function(){
 //Dropsdown and closes server list
 $(function(){
   $('#add-channel').on('click', function(){
-
     prompt({
         title: 'New Channel',
         label: 'Channel Name',
@@ -63,6 +62,28 @@ $(function(){
   });
   $("#settings").on("click", function(e)
   {
+    if($(".setting-menu").hasClass("show"))
+    {
+      $(".setting-menu").removeClass("show");
+    }
+    else
+    {
+      $(".setting-menu").addClass("show");
+    }
+  });
+  $("#logout-button").on("click", function(e){
+    var result = dialog.showMessageBoxSync({
+      type: "warning",
+      buttons: ["Yes", "No"],
+      title: "Logout",
+      message: "Are you sure you want to logout?"
+    }) == 0 ? true : false;
+    if(result)
+    {
+      ipcRenderer.send('logout');
+    }
+  });
+  $("#setting-button").on("click", function(e){
     $(".profile-display").visible();
   });
   $("#settings-close").on("click", function(e){
@@ -84,6 +105,10 @@ $(document).on('mouseup', function(e){
   if(!$("#select").is(e.target) && $("#select").has(e.target).length === 0)
   {
     $(".server-list").removeClass("show");
+  }
+  if(!$('#settings').is(e.target) && $("#settings").has(e.target).length === 0)
+  {
+    $('.setting-menu').removeClass('show');
   }
 });
 

@@ -16,7 +16,6 @@ class ClientSocket {
     serverSocket;
     win;
     channel = "";
-    ui = {}
     constructor() { }
 
     //Deals with connecting to the server
@@ -37,8 +36,10 @@ class ClientSocket {
 
     //Disconects from Server
     disconnect() {
-        this.socket.emit(events.EVENTS.DISCONNECT);
-        this.socket.close();
+        if(this.socket)
+            this.socket.disconnect();
+        if(this.serverSocket)
+            this.serverSocket.disconnect();
     }
 
     //Sends message to the server

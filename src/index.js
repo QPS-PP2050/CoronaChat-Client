@@ -10,9 +10,10 @@ const Store = require('electron-store');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io'
+const baseURL = 'https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io';
 
 
+var win;
 const isMac = process.platform === 'darwin';
 //Creates Menu Template
 const menuTemplate = [
@@ -57,9 +58,16 @@ function devTools(){
 //Creates window
 function createWindow() 
 {
+  var height = 600;
+  var width = 800;
+  if(store.has('width') && store.has('height'))
+  {
+    height = store.get('height');
+    width = store.get('width');
+  }
    win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: width,
+    height: height,
     minHeight: 600,
     minWidth: 800,
     title: "Corona Chat",
@@ -74,6 +82,10 @@ function createWindow()
   }
   else
     win.loadURL(`file://${__dirname}/html/login.html`);
+  win.on('close', () =>{
+    store.set('width', win.getBounds().width);
+    store.set('height', win.getBounds().height);
+  })
 }
 
 const menu = Menu.buildFromTemplate(menuTemplate)
@@ -83,6 +95,7 @@ Menu.setApplicationMenu(menu);
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
+  
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -113,10 +126,6 @@ ipcMain.on('logout', (event) =>{
   }
   win.loadURL(`file://${__dirname}/html/login.html`);
 })
-
-ipcMain.on('auto-login', (event) => {
-  win.loadURL(`file://${__dirname}/html/index.html`);
-});
 
 ipcMain.on('login-window', (event)=>{
   win.loadURL(`file://${__dirname}/html/login.html`);

@@ -35,9 +35,9 @@ class ClientSocket {
         {
             this.socket.on(events.EVENTS.SERVER, (data) => {
                 $('#server').empty();
-                for(var server in data)
+                for(var server of data)
                 {
-                    $('#server').append(`<a class="init" data-server="${server.id}">${server.nane}</a>`);
+                    $('#server').append(`<a class="init" data-server="${server.id}">${server.name}</a>`);
                 }
             });
         });
@@ -91,7 +91,7 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.CHANNELS, (data))
         {
             $('#channel-list').empty();
-            for(var channel in data)
+            for(var channel of data)
             {
                 $('#channel-list').append(`<li><a class="join-channel" data-type="${data.type}" data-channel="${data.id}">${data.name}</a></li>`)
             }

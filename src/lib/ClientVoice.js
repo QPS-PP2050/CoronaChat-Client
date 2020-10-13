@@ -16,7 +16,7 @@ const _EVENTS = {
 
 class RoomClient {
 
-    constructor(remoteAudioEl, mediasoupClient, socket, room_id, name, successCallback) {
+    constructor(remoteAudioEl, mediasoupClient, socket, room_id, name) {
         this.name = name
         this.remoteAudioEl = remoteAudioEl
         this.mediasoupClient = mediasoupClient
@@ -46,7 +46,6 @@ class RoomClient {
             await this.join(name, room_id)
             this.initSockets()
             this._isOpen = true
-            successCallback()
         }.bind(this))
     }
 
@@ -369,13 +368,13 @@ class RoomClient {
 
             this.consumers.set(consumer.id, consumer)
 
-            let elem;
             elem = document.createElement('audio')
+
             elem.srcObject = stream
             elem.id = consumer.id
             elem.playsinline = false
             elem.autoplay = true
-            this.remoteAudioEl.appendChild(elem)
+            this.remoteAudioEl.append(`<audio src='${stream}' autoplay playsinline='false'/>`);
 
             consumer.on('trackended', function () {
                 this.removeConsumer(consumer.id)

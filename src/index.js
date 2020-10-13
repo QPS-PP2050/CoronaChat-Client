@@ -81,7 +81,7 @@ function createWindow()
     win.loadURL(`file://${__dirname}/html/index.html`);
   }
   else
-    win.loadURL(`file://${__dirname}/html/index.html`);
+    win.loadURL(`file://${__dirname}/html/login.html`);
   win.on('close', () =>{
     store.set('width', win.getBounds().width);
     store.set('height', win.getBounds().height);

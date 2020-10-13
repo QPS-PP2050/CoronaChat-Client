@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const { dialog } = require('electron');
-const { ClientVoice } = require('./ClientVoice');
+const ClientVoice = require('./ClientVoice');
 const { timers } = require('jquery');
 var $, jQuery;
 $ = jQuery = require('jquery');
@@ -124,10 +124,10 @@ class ClientSocket {
         }
     }
 
-    joinVoice(server_id, channel_id, audio) {
+    joinVoice(server_id, channel_id, audio, mediasoupClient) {
         if (this.serverSocket) {
-            var voicesocket = this.manager.socket()
-            this.clientVoice = new ClientVoice(server_id, `${channel_id}`, voicesocket, audio);
+            this.voicesocket = this.manager.socket(`/${server_id}`)
+            this.clientVoice = new ClientVoice(audio, mediasoupClient, this.serverSocket, channel_id, name);
         }
     }
 }

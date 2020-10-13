@@ -41,7 +41,6 @@
         </ul>
       </div>
       <div class="setting-right">
-        
         <span id="profile-panel" style="position: absolute;">
           <div class="profile-setting">
             <img id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100" />
@@ -78,22 +77,27 @@
             <span class="output-setting">
               <label for="audio-level">Audio Level: </label><p id="level"></p>
               <input class="slider" value="100" min="0" max="100" type="range" id="audio-level"/>
+              <select id="mic-setting"></select>
               <button id="apply-volume">Apply</button>
             </span>
-            
           </div>
         </div>
       </span>
     </div>
     <div class="side-panel-left">
-      <button id="add-channel">New Channel</button>
-      <ul class="channel-list" id="channel-list">
-        <li><a class="join-channel" data-channel="general">general</a></li>
-        <li><a class="join-channel" data-channel="test">test</a></li>
-        <li><a class="join-channel" id="#join-voice">Voice</a></li>
-      </ul>
-      <div id="audio-channel"></div>
-    </div>
+      <div class="top-panel">
+        <button id="add-channel">New Channel</button>
+        <ul class="channel-list" id="channel-list">
+          <li><a class="join-channel" data-channel="general">general</a></li>
+          <li><a class="join-channel" data-channel="test">test</a></li>
+          <li><a class="join-channel" id="join-voice">Voice</a></li>
+        </ul>
+      </div>
+      <div id="remote-audio"></div>
+      <div class="bottom-panel">
+        <button id="disconnect-voice" style="visibility: hidden;">Disconnect</button>
+      </div>
+    </div>  
     <div id="chatlog" class="chat">
       <div class="chat-name" id="chat-title">
       </div>

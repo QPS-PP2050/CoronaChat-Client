@@ -112,10 +112,11 @@ $(function () {
   });
 
   $("#channel-list .join-channel").on("click", function (e) {
+    
     server_id = $(this).data("channel");
     socket.changeChannel(server_id);
   });
-  $("#server .init").on("click", function (e) {
+  $("#server").on("click", ".init", function (e) {
     socket.connectServer($(this).data("server"));
   });
   $('#join-voice').on('click', function(){

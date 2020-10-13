@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-ada70416-d50b-4159-9c56-4f8523f5b99b.ws-us02.gitpod.io', {
+        this.manager = io.Manager('https://8080-bacf873d-5771-49a9-a3e5-e599ef547c22.ws-us02.gitpod.io', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -34,6 +34,7 @@ class ClientSocket {
         this.socket.on(events.EVENTS.CONNECT, () => 
         {
             this.socket.on(events.EVENTS.SERVER, (data) => {
+                console.log(data);
                 $('#server').empty();
                 for(var server of data)
                 {
@@ -88,14 +89,13 @@ class ClientSocket {
             this.serverSocket.ready = true;
         });
 
-        this.serverSocket.on(events.EVENTS.CHANNELS, (data))
-        {
+        this.serverSocket.on(events.EVENTS.CHANNELS, (data) => { 
             $('#channel-list').empty();
             for(var channel of data)
             {
                 $('#channel-list').append(`<li><a class="join-channel" data-type="${data.type}" data-channel="${data.id}">${data.name}</a></li>`)
             }
-        }
+        });
 
         this.serverSocket.on('message', (data) => {
             //Everytime a message comes through this function gets used to update the ui

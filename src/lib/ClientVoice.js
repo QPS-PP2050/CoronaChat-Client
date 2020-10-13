@@ -1,3 +1,6 @@
+const Store = require('electron-store');
+const store = new Store();
+
 const mediaType = {
     audio: 'audioType',
     video: 'videoType',
@@ -13,6 +16,7 @@ const _EVENTS = {
     startScreen: 'startScreen',
     stopScreen: 'stopScreen'
 }
+
 
 class RoomClient {
 
@@ -368,14 +372,10 @@ class RoomClient {
 
             this.consumers.set(consumer.id, consumer)
 
-            elem = document.createElement('audio')
-
-            elem.srcObject = stream
-            elem.id = consumer.id
-            elem.playsinline = false
-            elem.autoplay = true
-            this.remoteAudioEl.append(`<audio src='${stream}' autoplay playsinline='false'/>`);
-
+            var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
+            audio.prop('volume', store.get('volume'));
+            this.remoteAudioEl.append(audio);
+            
             consumer.on('trackended', function () {
                 this.removeConsumer(consumer.id)
             }.bind(this))

@@ -125,9 +125,26 @@ class ClientSocket {
     }
 
     joinVoice(server_id, channel_id, audio, mediasoupClient) {
-        if (this.serverSocket) {
+        if (this.manager) {
             this.voicesocket = this.manager.socket(`/${server_id}`)
             this.clientVoice = new ClientVoice(audio, mediasoupClient, this.serverSocket, channel_id, name);
+        }
+    }
+
+    startVoice()
+    {
+        if(this.clientVoice)
+        {
+            this.clientVoice.produce('startAudio', store.get('mic'));
+        }
+    }
+    
+    stopVoice()
+    {
+        if(this.clientVoice)
+        {
+            this.clientVoice.closeProducer('stopAudio');
+            this.clientVoice.exit();
         }
     }
 }

@@ -125,9 +125,11 @@ $(function () {
   });
   $('#join-voice').on('click', function(){
     $('#disconnect-voice').visible();
-    socket.joinVoice($(this).data('server'), 'voice', $('#remote-audio'), mediaSoup)
+    socket.joinVoice($(this).data('server'), 'voice', $('#remote-audio'), mediaSoup);
+    socket.startVoice();
   });
   $('#disconnect-voice').on('click', function(){
+    socket.stopVoice();
     $(this).invisible();
   });
   $("#connect").on("click", function (e) {

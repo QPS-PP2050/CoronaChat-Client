@@ -57,7 +57,7 @@ class ClientSocket {
     //Sends message to the server
     send(data) {
         if (this.serverSocket) {
-            this.serverSocket.emit(events.EVENTS.MESSAGE, { channel: this.channel, author: data.username, message: data.msg });
+            this.serverSocket.emit(events.EVENTS.MESSAGE, { channel: this.chanel_id, author: data.username, message: data.msg });
         }
     }
 
@@ -138,6 +138,7 @@ class ClientSocket {
         if (this.serverSocket) {
             this.channel = channel.name;
             this.clearMessages();
+            this.chanel_id = channel.id;
             this.serverSocket.emit(events.EVENTS.CHANNEL, `${channel.id}`);
         }
     }

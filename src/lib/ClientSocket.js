@@ -31,7 +31,16 @@ class ClientSocket {
 
         this.socket = this.manager.socket('/')
         // this.serverSocket = this.manager.socket('/')
-        // this.socket.on(events.EVENTS.CONNECT, () => { });
+        this.socket.on(events.EVENTS.CONNECT, () => 
+        {
+            this.socket.on(events.EVENTS.SERVER, (data) => {
+                $('#server').empty();
+                for(var server in data)
+                {
+                    $('#server').append(`<a class="init" data-server="${server.id}">${server.nane}</a>`);
+                }
+            });
+        });
     }
 
     //Disconects from Server
@@ -78,6 +87,15 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
             this.serverSocket.ready = true;
         });
+
+        this.serverSocket.on(events.EVENTS.CHANNELS, (data))
+        {
+            $('#channel-list').empty();
+            for(var channel in data)
+            {
+                $('#channel-list').append(`<li><a class="join-channel" data-channel="${data.id}">${data.name}</a></li>`)
+            }
+        }
 
         this.serverSocket.on('message', (data) => {
             //Everytime a message comes through this function gets used to update the ui

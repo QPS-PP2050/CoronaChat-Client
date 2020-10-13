@@ -1,8 +1,6 @@
 html {height: 100%; -webkit-user-select:  none; font-family:Lucida Console;}
 body {height:100%;}
-button, input, select {font-family:Lucida Console;}
-button:focus {outline: none;}
-input:focus {outline: none;}
+button, input, select {font-family:Lucida Console;outline: none;}
 ::-webkit-scrollbar
 {
     width: 10px;

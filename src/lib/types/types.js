@@ -2,7 +2,9 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 
 const EVENTS = {
+    CHANNELS : 'channels',
     CONNECT : 'connect',
+    SERVER: 'servers',
     DISCONNECT : 'disconnect',
     MESSAGE : 'message',
     CHANNEL : 'change-channel',

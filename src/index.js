@@ -133,7 +133,7 @@ ipcMain.on('delete-account', (event, data) => {
 
 ipcMain.on('new-channel', (event, data) =>{
   
-  fetch(`${baseURL}/api/channels`, { 
+  fetch(`${baseURL}/api/servers/${data.server_id}/channels/`, { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },

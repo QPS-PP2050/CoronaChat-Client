@@ -93,7 +93,7 @@ class ClientSocket {
             $('#channel-list').empty();
             for(var channel of data)
             {
-                $('#channel-list').append(`<li><a class="join-channel" data-type="${channel.type}" data-channel="${channel.id}">${channel.name}</a></li>`);
+                $('#channel-list').append(`<li><a class="join-channel" data-name="${channel.name}" data-type="${channel.type}" data-channel="${channel.id}">${channel.name}</a></li>`);
             }
         });
 
@@ -134,11 +134,11 @@ class ClientSocket {
     }
 
     //Changes channel
-    changeChannel(channel_id) {
+    changeChannel(channel) {
         if (this.serverSocket) {
-            this.channel = channel_id;
+            this.channel = channel.name;
             this.clearMessages();
-            this.serverSocket.emit(events.EVENTS.CHANNEL, `${channel_id}`);
+            this.serverSocket.emit(events.EVENTS.CHANNEL, `${channel.id}`);
         }
     }
 

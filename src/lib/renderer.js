@@ -105,16 +105,18 @@ $(function () {
     })
       .then((result) => {
         if (result !== null) {
-          ipcRenderer.send('new-channel', { name: result, server: server_id });
+          ipcRenderer.send('new-channel', { name: result, server: server_id, type: "text" });
         }
       })
       .catch(console.error);
   });
 
   $("#channel-list").on("click",".join-channel" , function (e) {
-    
-    server_id = $(this).data("channel");
-    socket.changeChannel(server_id);
+    var data = {
+      name : $(this).data('name'),
+      id : $(this).data('channel'),
+    };
+    socket.changeChannel(data);
   });
   $("#server").on("click", ".init", function (e) {
     socket.connectServer($(this).data("server"));

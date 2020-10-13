@@ -116,12 +116,7 @@ $(function () {
     socket.changeChannel(server_id);
   });
   $("#server .init").on("click", function (e) {
-    console.log("Test");
-    //socket.connectServer($(this).data("server"));
-    var temp = $(this).data("server");
-    console.log(temp);
-    $('#channel-list').empty();
-    $('#channel-list').append(`<li><a id='join-voice' data-server='${temp}'>voice</a></li>`);
+    socket.connectServer($(this).data("server"));
   });
   $('#join-voice').on('click', function(){
     $('#disconnect-voice').visible();

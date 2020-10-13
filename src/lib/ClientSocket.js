@@ -93,7 +93,7 @@ class ClientSocket {
             $('#channel-list').empty();
             for(var channel in data)
             {
-                $('#channel-list').append(`<li><a class="join-channel" data-channel="${data.id}">${data.name}</a></li>`)
+                $('#channel-list').append(`<li><a class="join-channel" data-type="${data.type}" data-channel="${data.id}">${data.name}</a></li>`)
             }
         }
 

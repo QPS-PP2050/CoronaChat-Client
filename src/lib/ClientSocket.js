@@ -36,11 +36,10 @@ class ClientSocket {
 
     //Disconects from Server
     disconnect() {
-        if(this.socket)
+        if (this.socket)
             this.socket.disconnect();
-        if(this.socketList.length > 0)
-        {
-            for(var socket in this.socketList)
+        if (this.socketList.length > 0) {
+            for (var socket in this.socketList)
                 socket.disconnect();
         }
     }
@@ -59,7 +58,7 @@ class ClientSocket {
             this.socketList[`/${server}`].firstConnect = true;
             this.socketList[`/${server}`].ready = false;
         }
-        
+
         this.channel = 'general';
         this.clearMessages();
 
@@ -67,7 +66,7 @@ class ClientSocket {
             this.serverSocket.firstConnect = false
             this.serverSocket.close();
         }
-        
+
         this.serverSocket = this.socketList[`/${server}`];
 
         console.log(this.socketList)

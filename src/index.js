@@ -64,7 +64,7 @@ function createWindow()
   {
     height = store.get('height');
     width = store.get('width');
-  }
+  } 
    win = new BrowserWindow({
     width: width,
     height: height,
@@ -81,7 +81,7 @@ function createWindow()
     win.loadURL(`file://${__dirname}/html/index.html`);
   }
   else
-    win.loadURL(`file://${__dirname}/html/login.html`);
+    win.loadURL(`file://${__dirname}/html/index.html`);
   win.on('close', () =>{
     store.set('width', win.getBounds().width);
     store.set('height', win.getBounds().height);
@@ -105,6 +105,30 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+ipcMain.on('change-username', (event, data) =>{
+  fetch(`${baseURL}/api/users/username`, { 
+    method: 'POST',
+    body:    JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then(res => res.json())
+  .then(json => console.log(json))
+});
+
+ipcMain.on('change-password', (event, data) =>{
+  fetch(`${baseURL}/api/users/password`, { 
+    method: 'POST',
+    body:    JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  })
+  .then(res => res.json())
+  .then(json => console.log(json))
+});
+
+ipcMain.on('delete-account', (event, data) => {
+
 });
 
 ipcMain.on('new-channel', (event, data) =>{

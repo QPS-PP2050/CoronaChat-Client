@@ -7,7 +7,7 @@ input {font-family:Lucida Console;}
 {
     height: 100%;
     display: grid;
-    grid-template-columns: minmax(150px, 1fr) 1fr minmax(15px, 1fr);
+    grid-template-columns: minmax(100px, 1fr) minmax(100px, 600px) minmax(100px, 1fr);
     grid-template-rows: 1fr 1fr 1fr;
 }
 
@@ -30,6 +30,7 @@ input {font-family:Lucida Console;}
     grid-column: 2;
     display: table;
     width: 100%;
+    
 }
 
 .login 
@@ -37,7 +38,7 @@ input {font-family:Lucida Console;}
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-    width: 80%;
+    max-width: 600px;
 }
 
 .login input[type=text], input[type=password]

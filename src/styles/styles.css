@@ -2,6 +2,8 @@ html {height: 100%; -webkit-user-select:  none; font-family:Lucida Console;}
 body {height:100%;}
 button {font-family:Lucida Console;}
 input {font-family:Lucida Console;}
+button:focus {outline: none;}
+input:focus {outline: none;}
 ::-webkit-scrollbar
 {
     width: 10px;
@@ -101,6 +103,51 @@ input {font-family:Lucida Console;}
     padding: 15px;
 }
 
+.main-setting button
+{
+    background-color: #8BC5F4;
+    border: none;
+    margin: 10px 0px;
+    width: 100px;
+    padding: 15px;
+    font-size: 16px;
+    display: block;
+    border-radius: 15px;
+}
+
+.main-setting button:hover
+{
+    background-color: #41A3F2;
+}
+
+.user-info button:hover
+{
+    background-color: #41A3F2;
+}
+
+.user-info button
+{
+    background-color: #8BC5F4;
+    border: none;
+    margin: 10px 0px;
+    width: 200px;
+    padding: 15px;
+    font-size: 16px;
+    display: block;
+    border-radius: 15px;
+}
+
+.delete-btn:hover
+{
+    background-color: #f55f5f !important;
+}
+
+.delete-btn
+{
+    
+    background-color: #de0404 !important;
+}
+
 .setting-menu
 {
     top: 50px;
@@ -119,23 +166,127 @@ input {font-family:Lucida Console;}
     grid-column: 1;
 }
 
+.username-display span
+{
+    display: block;
+    width: 100%;
+    background-color: #8BC5F4;
+    padding: 16px;
+    border-radius: 15px;
+}
+
+.username-display
+{
+    display: flex;
+    grid-column: 2;
+    justify-content:left;
+    align-items: center;
+}
+
+.input-pane input[type=password], input[type=text]
+{
+    padding: 5px;
+    font-size: 15px;
+    width: 100%;
+
+}
+
+.input-pane::after
+{
+    clear: both;
+}
+
+.input-pane label
+{
+    display: block;
+    margin: 10px 0px;
+}
+
+.input-pane button:hover
+{
+    background-color: #41A3F2;
+}
+
+.input-pane button
+{
+    background-color: #8BC5F4;
+    border: none;
+    border-radius: 15px;
+    margin: 10px 0px;
+    padding: 16px;
+    margin: 5px 5px;
+}
+
+.input-pane
+{
+    min-width: 100%;
+    grid-row: 2;
+    grid-column: 3;
+    display: none;
+}
+
+.output-setting
+{
+    grid-row: 2;
+    grid-column: 2;
+}
+
+.slider 
+{
+    margin: 10px 0px;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 16px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover 
+{
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb 
+{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #41A3F2;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.main-setting
+{
+    display: grid;
+    grid-template-columns: 100px 300px auto auto;
+    grid-template-rows: 100px auto auto auto;
+}
 
 .profile-setting
 {
+    grid-gap: 15px;
+    height: calc(100vh - 75px);
     margin-top: 15px;
     margin-left: 20px;
     display: grid;
-    grid-template-columns: 100px 1fr 1fr 1fr 1fr;
+    grid-template-columns: 100px minmax(100px, 300px) minmax(100px, 300px) auto auto;
     grid-template-rows: 100px 1fr 1fr 1fr 1fr;
 }
 
 .setting-left
 {
+    height: calc(100vh - 80px);
     grid-column: 1;
 }
 
 .setting-right
 {
+    height: calc(100vh - 80px);
     grid-column: 2;
 }
 
@@ -259,10 +410,10 @@ input {font-family:Lucida Console;}
 
 .chat-window
 {
+    overflow: auto;
     grid-row: span 2;
     background-color: #2F4252;
     display: grid;
-    height: 100vh;
     grid-template-rows: 50px 15px auto 15px;
     grid-template-columns: minmax(100px, 150px) 1fr minmax(150px, 250px) ;
     width: 100%;
@@ -289,7 +440,6 @@ input {font-family:Lucida Console;}
     overflow:auto;
     margin-right: 15px;
     margin-left: 15px;
-    
     display: grid;
     grid-template-rows: auto 1fr auto;
 }

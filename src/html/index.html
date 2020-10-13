@@ -16,14 +16,14 @@
     <div class="top-bubbles">
       <span title="Profile" class="profile-bubble">
         <img id="settings" src="../lib/virus.png" width="40" height="40" />
-        
+
       </span>
       <ul class="setting-menu">
         <li id="setting-button"><a>Settings</a></li>
         <li id="logout-button"><a>Logout</a></li>
       </ul>
       <span title="Friends" id="friend" class="friends-bubble">
-        <img src="../lib/friend.png" width="40" height="40"/>
+        <img src="../lib/friend.png" width="40" height="40" />
       </span>
     </div>
     <div class="profile-display">
@@ -33,34 +33,64 @@
             <a id="profile">Profile</a>
           </li>
           <li>
-            <a>Settings</a>
+            <a id="audio">Audio</a>
+          </li>
+          <li>
+            <a id="settings-close">Close</a>
           </li>
         </ul>
       </div>
       <div class="setting-right">
-        <span class="x-button" id="settings-close">X</span>
-        <div id="profile-panel">
+        
+        <span id="profile-panel" style="position: absolute;">
           <div class="profile-setting">
-            <img id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100"/>
+            <img id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100" />
+            <div class="username-display"><span>
+                <p>Username:</p>
+                <p id="username">Test User</p>
+            </div>
             <div class="user-info">
-              <span id="username">Test User</span>
+              <button id="change-avatar">Change Avatar</button>
               <button id="change-username">Change Username</button>
               <button id="change-password">Change Password</button>
-              <button style="background-color: red;" id="change-password">Delete Accoint</button>
+              <button class="delete-btn" id="delete-account">Delete Accoint</button>
+            </div>
+            <div class="input-pane" id="change-password-pane">
+              <div class="password-input">
+                <label for="current-password">Current Password</label>
+                <input type="password" id="current-password" />
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" />
+                <button id="password-change">Change</button><button class="cancel">Cancel</button>
+              </div>
+            </div>
+            <div class="input-pane" id="change-username-pane">
+              <label for="new-username">New Username</label>
+              <input type="text" id="new-username" required />
+              <label for="user-password">Password</label>
+              <input type="password" id="current-password"/>
+              <button id="username-change">Change</button><button class="cancel">Cancel</button>
             </div>
           </div>
+        </span>
+        <span id="audio-settings" style="visibility: hidden; position: absolute;">
+          <div class="main-setting">
+            <span class="output-setting">
+              <label for="audio-level">Audio Level: </label><p id="level"></p>
+              <input class="slider" value="100" min="0" max="100" type="range" id="audio-level"/>
+              <button id="apply-volume">Apply</button>
+            </span>
+            
+          </div>
         </div>
-        <div id="settings-panel">
-          <div class="main-setting"></div>
-        </div>
-        
-      </div>
+      </span>
     </div>
     <div class="side-panel-left">
       <button id="add-channel">New Channel</button>
       <ul class="channel-list" id="channel-list">
         <li><a class="join-channel" data-channel="general">general</a></li>
         <li><a class="join-channel" data-channel="test">test</a></li>
+        <li><a class="join-channel" id="#join-voice">Voice</a></li>
       </ul>
       <div id="audio-channel"></div>
     </div>
@@ -92,4 +122,5 @@
   </div>
   </div>
 </body>
+
 </html>

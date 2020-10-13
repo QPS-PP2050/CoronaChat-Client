@@ -111,7 +111,7 @@ $(function () {
       .catch(console.error);
   });
 
-  $("#channel-list .join-channel").on("click", function (e) {
+  $("#channel-list").on("click",".join-channel" , function (e) {
     
     server_id = $(this).data("channel");
     socket.changeChannel(server_id);

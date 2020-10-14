@@ -98,10 +98,13 @@ class ClientSocket {
             this.serverSocket.ready = true;
         });
 
-        this.serverSocket.on(events.EVENTS.CHANNELS, (data) => { 
+        this.serverSocket.on(events.EVENTS.CHANNELS, (data) => {
             $('#channel-list').empty();
             for(var channel of data)
             {
+                if (channel.name === 'general') {
+                    this.chanel_id = channel.id
+                }
                 $('#channel-list').append(`<li><a class="join-channel" data-name="${channel.name}" data-type="${channel.type}" data-channel="${channel.id}">${channel.name}</a></li>`);
             }
         });

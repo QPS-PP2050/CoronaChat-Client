@@ -2,6 +2,8 @@ $ = jQuery = require('jquery');
 const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer; 
 
+
+
 $(function(){
     $("#back").on('click', function(){
         ipcRenderer.send('login-window');
@@ -11,10 +13,12 @@ $(function(){
         var email = $('#email').val();
         var password = $('#password').val();
         
+        console.log(email);
+        console.log(password);
         if(email.trim().length && password.trim().length)
         {
             //sends username and password to the socket
-            ipcRenderer.send('login', {email, password});
+            ipcRenderer.send('register', {email, password});
         }
         else
         {

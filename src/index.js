@@ -108,20 +108,26 @@ app.on('activate', () => {
 });
 
 ipcMain.on('change-username', (event, data) =>{
-  fetch(`${baseURL}/api/users`, { 
+  fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
     method: 'POST',
     body:    JSON.stringify(data),
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.get('token').token}`
+    }
   })
   .then(res => res.json())
   .then(json => console.log(json))
 });
 
 ipcMain.on('change-password', (event, data) =>{
-  fetch(`${baseURL}/api/users`, { 
+  fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
     method: 'POST',
     body:    JSON.stringify(data),
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.get('token').token}`
+    }
   })
   .then(res => res.json())
   .then(json => console.log(json))

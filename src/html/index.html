@@ -1,45 +1,125 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Corona Chat</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <link rel="stylesheet" href="../styles/styles.css">
-    
-  </head>
-  <body>
-    <script>
-      require('../lib/renderer');
-    </script>
-    <div class="chat-window">
-        <div class="side-panel-left">
-          <ul class="channel-list" id="channel-list">
-          </ul>
-        </div>
-        <div id="chat-log" class="chat">
-          <div class="message-log">
-            <ul id="messages"></ul>
-          </div>
-          <form action="" id="send-msg" class="message-sec">
-            <input placeholder="Message" id="message" autocomplete="off"/><button id="sendmsg">Send</button>
-          </form>
-        </div>
-        <div class="side-panel-right">
-          <div id="select" class="select-drop">
-            <a class="server-btn" id="server-drop">Server List</a>
-              <div class="server-list">
-                <a class="init">No Server's Avaliable</a>
-              </div>
-          </div>
-          <div id="member-list" class="member-pan">
-            <p>Member List</p>
-            <ul class="member_list" id="mem_list">
 
-            </ul>
+<head>
+  <meta charset="UTF-8">
+  <title>Corona Chat</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+
+<body>
+  <script>
+    require('../lib/renderer');
+  </script>
+  <div class="chat-window">
+    <div class="top-bubbles">
+      <span title="Profile" class="profile-bubble">
+        <img id="settings" src="../lib/virus.png" width="40" height="40" />
+
+      </span>
+      <ul class="setting-menu">
+        <li id="setting-button"><a>Settings</a></li>
+        <li id="logout-button"><a>Logout</a></li>
+      </ul>
+      <span title="Friends" id="friend" class="friends-bubble">
+        <img src="../lib/friend.png" width="40" height="40" />
+      </span>
+    </div>
+    <div class="profile-display">
+      <div class="setting-left">
+        <ul class="menu-options">
+          <li>
+            <a id="profile">Profile</a>
+          </li>
+          <li>
+            <a id="audio">Audio</a>
+          </li>
+          <li>
+            <a id="settings-close">Close</a>
+          </li>
+        </ul>
+      </div>
+      <div class="setting-right">
+        <span id="profile-panel" style="position: absolute;">
+          <div class="profile-setting">
+            <img id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100" />
+            <div class="username-display"><span>
+                <p>Username:</p>
+                <p id="username"></p>
+            </div>
+            <div class="user-info">
+              <button id="change-avatar">Change Avatar</button>
+              <button id="change-username">Change Username</button>
+              <button id="change-password">Change Password</button>
+              <button class="delete-btn" id="delete-account">Delete Account</button>
+            </div>
+            <div class="input-pane" id="change-password-pane">
+              <div class="password-input">
+                <label for="current-password">Current Password</label>
+                <input type="password" id="current-password" />
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" />
+                <button id="password-change">Change</button><button class="cancel">Cancel</button>
+              </div>
+            </div>
+            <div class="input-pane" id="change-username-pane">
+              <label for="new-username">New Username</label>
+              <input type="text" id="new-username" required />
+              <label for="user-password">Password</label>
+              <input type="password" id="current-password"/>
+              <button id="username-change">Change</button><button class="cancel">Cancel</button>
+            </div>
+          </div>
+        </span>
+        <span id="audio-settings" style="visibility: hidden; position: absolute;">
+          <div class="main-setting">
+            <span class="output-setting">
+              <label for="audio-level">Audio Level: </label><p id="level"></p>
+              <input class="slider" value="100" min="0" max="100" type="range" id="audio-level"/>
+              <select id="mic-setting"></select>
+              <button id="apply-volume">Apply</button>
+            </span>
           </div>
         </div>
+      </span>
+    </div>
+    <div class="side-panel-left">
+      <div class="top-panel">
+        <button id="add-channel">New Channel</button>
+        <ul class="channel-list" id="channel-list">
+        </ul>
+      </div>
+      <div id="remote-audio"></div>
+      <div class="bottom-panel">
+        <button id="disconnect-voice" style="visibility: hidden;">Disconnect</button>
+      </div>
+    </div>  
+    <div id="chatlog" class="chat">
+      <div class="chat-name" id="chat-title">
+      </div>
+      <div id="chat-window" class="message-log">
+        <ul id="messages" class="chat-log"></ul>
+      </div>
+      <form action="" id="send-msg" class="message-sec">
+        <input placeholder="Message" id="message" autocomplete="off" /><button id="sendmsg">Send</button>
+      </form>
+    </div>
+    <div class="side-panel-right">
+      <div id="select" class="select-drop">
+        <a class="server-btn" id="server-drop">Server List</a>
+        <div id="server" class="server-list">
         </div>
       </div>
+      <div id="member-list" class="member-pan">
+        <p>Member List</p>
+        <ul class="member_list" id="mem_list">
+        </ul>
+      </div>
     </div>
-  </body>
+  </div>
+  </div>
+  </div>
+</body>
+
 </html>

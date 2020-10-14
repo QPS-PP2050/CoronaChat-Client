@@ -118,7 +118,12 @@ ipcMain.on('change-username', (event, data) =>{
   })
   .then(res => res.json())
   .then(json => {
-    dialog.showMessageBox("Username", `${json.reason}`);
+    dialog.showMessageBox({
+      type: "info",
+      buttons: ["Ok"],
+      title: "Username",
+      message: json.reason
+    });
   })
 });
 
@@ -133,7 +138,12 @@ ipcMain.on('change-password', (event, data) =>{
   })
   .then(res => res.json())
   .then(json => {
-    dialog.showMessageBox("Password", `${json.reason}`);
+    dialog.showMessageBox({
+      type: "info",
+      buttons: ["Ok"],
+      title: "Password",
+      message: json.reason
+    });
   })
 });
 

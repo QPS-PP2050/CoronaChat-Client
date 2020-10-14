@@ -1,4 +1,4 @@
-const io = require('socket.io-client');
+const io = require('socket.io-client/dist/socket.io');
 const { dialog } = require('electron');
 const ClientVoice = require('./ClientVoice');
 const { timers } = require('jquery');
@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-a8e62690-8f82-46fa-b1a6-57ed61fa1970.ws-us02.gitpod.io', {
+        this.manager = io.Manager('https://coronachat.xyz', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -28,11 +28,10 @@ class ClientSocket {
                 }
             }
         });
-        this.socket = this.manager.socket('/')
+        this.socket = this.manager.socket('/');
         // this.serverSocket = this.manager.socket('/')
         this.socket.on(events.EVENTS.CONNECT, () => 
         {
-            
             this.socket.on(events.EVENTS.SERVER, (data) => {
                 
                 $('#server').empty();

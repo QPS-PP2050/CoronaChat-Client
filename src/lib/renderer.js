@@ -20,7 +20,6 @@ if (!store.has('mic'))
 }
 if(store.has('token'))
 {
-  
   socket.connect(store.get('token'));
 }
 

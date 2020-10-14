@@ -167,8 +167,19 @@ ipcMain.on('register', (event, data) => {
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
   })
-  .then(res => res.json())
-  .then(json => console.log(json))
+  .then(res => {
+    res.status;
+    if(res.status == 201)
+    {
+      win.loadURL(`file://${__dirname}/html/login.html`);
+    }
+    else
+    {
+      res.json().then(json =>{
+        dialog.showErrorBox("Login Fail", `Reason: ${json.reason}`);
+      });
+    }
+  });
 });
 
 ipcMain.on('login', (event, data) => {

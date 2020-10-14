@@ -64,6 +64,12 @@ class ClientSocket {
         }
     }
 
+    push(event, data) {
+        if (this.socket) {
+            this.socket.emit(event, data);
+        }
+    }
+
     //Changes the server
     connectServer(server) {
         if (!this.socketList[`/${server}`]) {

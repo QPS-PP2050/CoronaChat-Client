@@ -118,6 +118,7 @@ ipcMain.on('change-username', (event, data) =>{
   })
   .then(res => res.json())
   .then(json => {
+    store.set('token') = json.session;
     dialog.showMessageBox({
       type: "info",
       buttons: ["Ok"],
@@ -146,6 +147,18 @@ ipcMain.on('change-password', (event, data) =>{
     });
   })
 });
+
+ipcMain.on('invite-user', (event, data) => {
+  console.log(data)
+  fetch(`${baseURL}/api/servers/${data.server}/members`, {
+    method: 'PUT',
+    body: JSON.stringify({username: data.username}),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.get('token').token}`
+    }
+  })
+})
 
 ipcMain.on('delete-account', (event, data) => {
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 

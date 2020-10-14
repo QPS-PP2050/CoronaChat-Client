@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-a8e62690-8f82-46fa-b1a6-57ed61fa1970.ws-us02.gitpod.io', {
+        this.manager = io.Manager('https://coronachat.xyz:8080', {
             reconnect: true,
             transportOptions: {
                 polling: {

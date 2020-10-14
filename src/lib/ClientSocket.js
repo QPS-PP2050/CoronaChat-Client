@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://8080-bacf873d-5771-49a9-a3e5-e599ef547c22.ws-us02.gitpod.io', {
+        this.manager = io.Manager('https://8080-a8e62690-8f82-46fa-b1a6-57ed61fa1970.ws-us02.gitpod.io', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -28,11 +28,11 @@ class ClientSocket {
                 }
             }
         });
-
         this.socket = this.manager.socket('/')
         // this.serverSocket = this.manager.socket('/')
         this.socket.on(events.EVENTS.CONNECT, () => 
         {
+            
             this.socket.on(events.EVENTS.SERVER, (data) => {
                 console.log(data);
                 $('#server').empty();

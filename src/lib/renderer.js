@@ -20,12 +20,13 @@ if (!store.has('mic'))
 }
 if(store.has('token'))
 {
+  
   socket.connect(store.get('token'));
 }
 
 //Submits input form and sends message
 $(function () {
-  $('#username').val(store.get('token').username);
+  
   $("#send-msg").submit(function (e) {
     e.preventDefault();
     //Checks if input is empty and only contains white spaces
@@ -139,6 +140,7 @@ $(function () {
   $("#settings").on("click", function (e) {
     hasShow($(".setting-menu"));
     audioSetup($('#mic-setting'));
+    $('#username').text(store.get('token').username);
     $('#level').empty();
     $('#level').append(store.get('volume'));
     $('#audio-level').val(store.get('volume'));

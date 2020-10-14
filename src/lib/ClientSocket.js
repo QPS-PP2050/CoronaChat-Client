@@ -34,7 +34,7 @@ class ClientSocket {
         {
             
             this.socket.on(events.EVENTS.SERVER, (data) => {
-                console.log(data);
+                
                 $('#server').empty();
                 for(var server of data)
                 {

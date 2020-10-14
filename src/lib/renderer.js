@@ -70,7 +70,7 @@ $(function () {
   });
   $('#password-change').on('click', function () {
     var current_password = $('#current-password').val();
-    var new_password = $('#new-password').val();
+    var password = $('#new-password').val();
     ipcRenderer.send('change-password', { password });
   });
   $('#username-change').on('click', function () {

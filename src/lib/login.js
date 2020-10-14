@@ -14,7 +14,7 @@ $(function(){
         var email = $('#username').val();
         var password = $('#password').val();
 
-        var check = $('#keep-login').checked ? false : true;
+        var check = $('#keep-login').checked ? true : false;
         if(email.trim().length && password.trim().length)
         {
             //sends username and password to the socket

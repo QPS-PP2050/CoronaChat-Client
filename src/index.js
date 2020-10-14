@@ -76,7 +76,7 @@ function createWindow()
       enableRemoteModule: true
     }
   });
-  if(store.get('login') == true)
+  if(store.get('login') === true)
   {
     win.loadURL(`file://${__dirname}/html/index.html`);
   }
@@ -137,13 +137,14 @@ ipcMain.on('new-channel', (event, data) =>{
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
+    Authorization: `Bearer ${store.get('token').token}`
   })
   .then(res => res.json())
   .then(json => console.log(json))
 });
 
 ipcMain.on('logout', (event) =>{
-  if(store.get('login') == true)
+  if(store.get('login') === true)
   {
     store.delete('login');
     store.delete('token');

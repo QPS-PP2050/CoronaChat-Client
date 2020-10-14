@@ -10,7 +10,6 @@ const store = new Store();
 let socket = new ClientSocket();
 
 const mediaSoup = require('mediasoup-client');
-console.log(store.get('volume'));
 
 if (!store.has('volume')) {
   store.set('volume', 100);
@@ -19,14 +18,9 @@ if (!store.has('mic'))
 {
   store.set('mic', 'default');
 }
-
-
-
-socket.connect(store.get('token'));
-
-
-var ui = {
-  messages: $('#messages')
+if(store.has('token'))
+{ 
+  socket.connect(store.get('token'));
 }
 
 var username = `Test ${Math.round(Math.random() * 1000)}`;
@@ -112,19 +106,29 @@ $(function () {
   });
 
   $("#channel-list").on("click",".join-channel" , function (e) {
-    var data = {
-      name : $(this).data('name'),
-      id : $(this).data('channel'),
-    };
-    socket.changeChannel(data);
+    console.log($(this).data('type'));
+    if($(this).data('type') === 'text')
+    {
+      var data = {
+        name : $(this).data('name'),
+        id : $(this).data('channel'),
+      };
+      socket.changeChannel(data);
+      console.log(data);
+    }
+    else
+    {
+      $('#disconnect-voice').visible();
+      socket.joinVoice(server_id, $(this).data('channel'), $('#remote-audio'), mediaSoup);
+      socket.startVoice();
+    }
   });
   $("#server").on("click", ".init", function (e) {
-    socket.connectServer($(this).data("server"));
+    server_id = $(this).data("server");
+    socket.connectServer(server_id);
   });
   $('#join-voice').on('click', function(){
-    $('#disconnect-voice').visible();
-    socket.joinVoice($(this).data('server'), 'voice', $('#remote-audio'), mediaSoup);
-    socket.startVoice();
+    
   });
   $('#disconnect-voice').on('click', function(){
     socket.stopVoice();

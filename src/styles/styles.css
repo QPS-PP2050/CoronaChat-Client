@@ -382,7 +382,7 @@ button, input, select {font-family:Lucida Console;outline: none;}
     margin-top: 15px;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    word-break: break-all;
 }
 
 .member_list li
@@ -469,6 +469,7 @@ button, input, select {font-family:Lucida Console;outline: none;}
 }
 .member-pan p{
     text-align: center;
+    word-wrap: break-word;
 }
 
 .message-sec

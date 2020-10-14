@@ -41,6 +41,9 @@ class ClientSocket {
                     $('#server').append(`<a class="init" data-server="${server.id}">${server.name}</a>`);
                 }
             });
+            this.socket.on('username', (data) =>{
+                
+            });
         });
     }
 

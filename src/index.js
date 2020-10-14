@@ -162,7 +162,7 @@ ipcMain.on('register-window', (event)=>{
 })
 
 ipcMain.on('register', (event, data) => {
-  fetch(`${baseURL}/api/users/register`, { 
+  fetch(`${baseURL}/api/users`, {
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },

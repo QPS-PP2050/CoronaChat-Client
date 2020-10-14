@@ -108,7 +108,7 @@ app.on('activate', () => {
 });
 
 ipcMain.on('change-username', (event, data) =>{
-  fetch(`${baseURL}/api/users/username`, { 
+  fetch(`${baseURL}/api/users`, { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -118,7 +118,7 @@ ipcMain.on('change-username', (event, data) =>{
 });
 
 ipcMain.on('change-password', (event, data) =>{
-  fetch(`${baseURL}/api/users/password`, { 
+  fetch(`${baseURL}/api/users`, { 
     method: 'POST',
     body:    JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -128,7 +128,16 @@ ipcMain.on('change-password', (event, data) =>{
 });
 
 ipcMain.on('delete-account', (event, data) => {
-
+  fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
+    method: 'POST',
+    body:    JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.get('token').token}`
+    }
+  })
+  .then(res => res.json())
+  .then(json => console.log(json))
 });
 
 ipcMain.on('new-channel', (event, data) =>{

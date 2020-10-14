@@ -19,20 +19,19 @@ if (!store.has('mic'))
   store.set('mic', 'default');
 }
 if(store.has('token'))
-{ 
+{
   socket.connect(store.get('token'));
 }
 
-var username = `Test ${Math.round(Math.random() * 1000)}`;
-
 //Submits input form and sends message
 $(function () {
+  $('#username').val(store.get('token').username);
   $("#send-msg").submit(function (e) {
     e.preventDefault();
     //Checks if input is empty and only contains white spaces
     if ($("#message").val().length && $("#message").val().trim().length) {
       //Sends message to the server
-      socket.send({ username, msg: $("#message").val() })
+      socket.send({ username: store.get('token').username, msg: $("#message").val() })
       $("#message").val('');
     }
   });
@@ -48,7 +47,7 @@ $(function () {
       message: "Are you sure you want to delete your account?"
     }) == 0 ? true : false;
     if (result) {
-      ipcRenderer.send('delete-account', $("#username").data('id'));
+      ipcRenderer.send('delete-account', store.get('token').id);
       ipcRenderer.send('logout');
     }
   });
@@ -71,12 +70,12 @@ $(function () {
   $('#password-change').on('click', function () {
     var current_password = $('#current-password').val();
     var new_password = $('#new-password').val();
-    ipcRenderer.send('change-password', { current_password, new_password });
+    ipcRenderer.send('change-password', { password });
   });
   $('#username-change').on('click', function () {
     var username = $('#new-username').val();
     var password = $('#user-password').val();
-    ipcRenderer.send('change-username', { username, password });
+    ipcRenderer.send('change-username', { username });
   });
   $('#profile-panel .cancel').on('click', function () {
     $('#change-username-pane').removeClass('show');

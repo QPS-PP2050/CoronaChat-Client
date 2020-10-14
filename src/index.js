@@ -136,8 +136,10 @@ ipcMain.on('new-channel', (event, data) =>{
   fetch(`${baseURL}/api/servers/${data.server}/channels/`, { 
     method: 'POST',
     body:    JSON.stringify(data),
-    headers: { 'Content-Type': 'application/json' },
-    Authorization: `Bearer ${store.get('token').token}`
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.get('token').token}`
+    }
   })
   .then(res => res.json())
   .then(json => console.log(json))

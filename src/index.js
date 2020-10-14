@@ -109,7 +109,7 @@ app.on('activate', () => {
 
 ipcMain.on('change-username', (event, data) =>{
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
-    method: 'POST',
+    method: 'PATCH',
     body:    JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ ipcMain.on('change-username', (event, data) =>{
 
 ipcMain.on('change-password', (event, data) =>{
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
-    method: 'POST',
+    method: 'PATCH',
     body:    JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ ipcMain.on('change-password', (event, data) =>{
 
 ipcMain.on('delete-account', (event, data) => {
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
-    method: 'POST',
+    method: 'DELETE',
     body:    JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',

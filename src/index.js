@@ -117,7 +117,9 @@ ipcMain.on('change-username', (event, data) =>{
     }
   })
   .then(res => res.json())
-  .then(json => console.log(json))
+  .then(json => {
+    dialog.showErrorBox("Username", `${json.reason}`);
+  })
 });
 
 ipcMain.on('change-password', (event, data) =>{
@@ -130,7 +132,9 @@ ipcMain.on('change-password', (event, data) =>{
     }
   })
   .then(res => res.json())
-  .then(json => console.log(json))
+  .then(json => {
+    dialog.showErrorBox("Password", `${json.reason}`);
+  })
 });
 
 ipcMain.on('delete-account', (event, data) => {

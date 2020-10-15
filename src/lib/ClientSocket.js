@@ -1,4 +1,4 @@
-const io = require('socket.io-client');
+const io = require('socket.io-client/dist/socket.io');
 const { dialog } = require('electron');
 const ClientVoice = require('./ClientVoice');
 const { timers } = require('jquery');
@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://coronachat.xyz:8080', {
+        this.manager = io.Manager('https://coronachat.xyz', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -28,18 +28,16 @@ class ClientSocket {
                 }
             }
         });
-        this.socket = this.manager.socket('/')
+        this.socket = this.manager.socket('/');
         // this.serverSocket = this.manager.socket('/')
         this.socket.on(events.EVENTS.CONNECT, () => 
         {
-            
             this.socket.on(events.EVENTS.SERVER, (data) => {
                 
                 $('#server').empty();
-                for(var server of data)
-                {
-                    $('#server').append(`<a class="init" data-server="${server.id}">${server.name}</a>`);
-                }
+                data.forEach(item => {
+                    $('#server').append(`<a class="init" data-name="${item.name}" data-server="${item.id}">${item.name}</a>`);
+                });
             });
             this.socket.on('username', (data) =>{
                 
@@ -72,21 +70,21 @@ class ClientSocket {
 
     //Changes the server
     connectServer(server) {
-        if (!this.socketList[`/${server}`]) {
-            this.socketList[`/${server}`] = this.manager.socket(`/${server}`);
-            this.socketList[`/${server}`].firstConnect = true;
-            this.socketList[`/${server}`].ready = false;
+        console.log(server.id);
+        if (!this.socketList[`/${server.id}`]) {
+            this.socketList[`/${server.id}`] = this.manager.socket(`/${server.id}`);
+            this.socketList[`/${server.id}`].firstConnect = true;
+            this.socketList[`/${server.id}`].ready = false;
         }
+        
 
-        this.channel = 'general';
-        this.clearMessages();
 
         if (this.serverSocket) {
             this.serverSocket.firstConnect = false
             this.serverSocket.close();
         }
 
-        this.serverSocket = this.socketList[`/${server}`];
+        this.serverSocket = this.socketList[`/${server.id}`];
 
         console.log(this.socketList)
         if (!this.serverSocket.firstConnect && !this.serverSocket.ready) {
@@ -96,17 +94,18 @@ class ClientSocket {
 
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
             this.serverSocket.ready = true;
+            $('#server-name').text(`${server.name}`);
         });
 
         this.serverSocket.on(events.EVENTS.CHANNELS, (data) => {
             $('#channel-list').empty();
-            for(var channel of data)
-            {
+            data.forEach(channel =>{
                 if (channel.name === 'general') {
-                    this.chanel_id = channel.id
+                    this.clearMessages();
+                    this.changeChannel(channel)
                 }
                 $('#channel-list').append(`<li><a class="join-channel" data-name="${channel.name}" data-type="${channel.type}" data-channel="${channel.id}">${channel.name}</a></li>`);
-            }
+            });
         });
 
         this.serverSocket.on('message', (data) => {
@@ -157,7 +156,7 @@ class ClientSocket {
 
     joinVoice(server_id, channel_id, audio, mediasoupClient) {
         if (this.manager) {
-            this.voicesocket = this.manager.socket(`/${server_id}`)
+            this.voicesocket = this.manager.socket(`/${server_id}`);
             this.clientVoice = new ClientVoice(audio, mediasoupClient, this.serverSocket, channel_id, name);
         }
     }

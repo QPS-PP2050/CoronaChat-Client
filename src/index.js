@@ -10,7 +10,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://coronachat.xyz:8080';
+const baseURL = 'https://coronachat.xyz';
 
 
 var win;
@@ -116,16 +116,31 @@ ipcMain.on('change-username', (event, data) =>{
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => {
-    store.set('token') = json.session;
-    dialog.showMessageBox({
-      type: "info",
-      buttons: ["Ok"],
-      title: "Username",
-      message: json.reason
-    });
-  })
+  .then(res => {
+    
+    res.json().then(json => {
+      if(res.status == 201)
+      {
+        store.set('token', json.session);
+        ipcMain.send("update-username");
+        dialog.showMessageBox({
+          type: "info",
+          buttons: ["Ok"],
+          title: "Username",
+          message: json.reason
+        });
+      }
+      else
+      {
+        dialog.showMessageBox({
+          type: "warning",
+          buttons: ["Ok"],
+          title: "Username",
+          message: json.reason
+        });
+      }
+    })
+  });
 });
 
 ipcMain.on('change-password', (event, data) =>{

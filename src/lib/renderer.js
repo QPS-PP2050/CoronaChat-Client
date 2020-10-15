@@ -10,6 +10,11 @@ const store = new Store();
 let socket = new ClientSocket();
 
 const mediaSoup = require('mediasoup-client');
+const { ipcMain } = require('electron');
+
+ipcRenderer.on('update-username', () => {
+  $('#username').text(store.get('token').username);
+}); 
 
 if (!store.has('volume')) {
   store.set('volume', 100);
@@ -128,8 +133,12 @@ $(function () {
     }
   });
   $("#server").on("click", ".init", function (e) {
-    server_id = $(this).data("server");
-    socket.connectServer(server_id);
+    server = {
+      id: $(this).data("server"),
+      name: $(this).data("name")
+    }
+
+    socket.connectServer(server);
   });
   $('#join-voice').on('click', function(){
     

@@ -20,7 +20,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://coronachat.xyz', {
+        this.manager = io.Manager('https://coronachat.xyz:8080', {
             reconnect: true,
             transportOptions: {
                 polling: {

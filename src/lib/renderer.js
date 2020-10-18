@@ -5,6 +5,7 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 const prompt = require('electron-prompt');
 var server_id;
+var server;
 const Store = require('electron-store');
 const store = new Store();
 let socket = new ClientSocket();
@@ -38,8 +39,8 @@ $(function () {
       //Sends message to the server
       if ($("#message").val().startsWith('/invite')) {
         const username = $("#message").val().split(' ')[1];
-        ipcRenderer.send('invite-user', { server: server_id, username });
-        socket.push('invite-user', { server: server_id, username })
+        ipcRenderer.send('invite-user', { server: server.id, username });
+        socket.push('invite-user', { server: server.id, username })
       }
       socket.send({ username: store.get('token').username, msg: $("#message").val() })
       $("#message").val('');
@@ -57,7 +58,7 @@ $(function () {
       message: "Are you sure you want to delete your account?"
     }) == 0 ? true : false;
     if (result) {
-      ipcRenderer.send('delete-account', store.get('token').id);
+      ipcRenderer.send('delete-account', { userID: store.get('token').id });
       ipcRenderer.send('logout');
     }
   });
@@ -108,7 +109,7 @@ $(function () {
     })
       .then((result) => {
         if (result !== null) {
-          ipcRenderer.send('new-channel', { name: result, server: server_id, type: "text" });
+          ipcRenderer.send('new-channel', { name: result, server: server.id, type: "text" });
         }
       })
       .catch(console.error);

@@ -14,7 +14,9 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^9.3.1",
-    "electron-builder": "^22.8.0"
+    "electron-builder": "^22.8.0",
+    "mocha": "^8.2.0",
+    "spectron": "^12.0.0"
   },
   "dependencies": {
     "electron-fetch": "^1.7.1",

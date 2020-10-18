@@ -26,13 +26,12 @@ describe('Application launch', function () {
   
         // The following line tells spectron to look and use the main.js file
         // and the package.json located 1 level above.
-        args: [path.join(__dirname, '../src/index.js')]
+        args: [path.join(__dirname, '..')]
       })
       return this.app.start()
     })
   
     afterEach(function () {
-        console.log(this.app)
       if (this.app && this.app.isRunning()) {
         return this.app.stop()
       }

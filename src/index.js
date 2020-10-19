@@ -1,4 +1,4 @@
-const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer, LocalStorage } = require('electron');
+const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer, LocalStorage, Renderer } = require('electron');
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
@@ -117,12 +117,11 @@ ipcMain.on('change-username', (event, data) =>{
     }
   })
   .then(res => {
-    
     res.json().then(json => {
       if(res.status == 201)
       {
         store.set('token', json.session);
-        ipcMain.send("update-username");
+        ipcRenderer.send("update-username");
         dialog.showMessageBox({
           type: "info",
           buttons: ["Ok"],
@@ -152,19 +151,32 @@ ipcMain.on('change-password', (event, data) =>{
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => {
-    dialog.showMessageBox({
-      type: "info",
-      buttons: ["Ok"],
-      title: "Password",
-      message: json.reason
+  .then((res) => {
+    res.json().then(json => {
+      if(res.status == 201)
+      {
+        dialog.showMessageBox({
+          type: "info",
+          buttons: ["Ok"],
+          title: "Password",
+          message: json.reason
+        });
+        
+      }
+      else
+      {
+        dialog.showMessageBox({
+          type: "warning",
+          buttons: ["Ok"],
+          title: "Password",
+          message: json.reason
+        });
+      }
     });
   })
 });
 
 ipcMain.on('invite-user', (event, data) => {
-  console.log(data)
   fetch(`${baseURL}/api/servers/${data.server}/members`, {
     method: 'PUT',
     body: JSON.stringify({username: data.username}),
@@ -184,12 +196,33 @@ ipcMain.on('delete-account', (event, data) => {
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => console.log(json))
+  .then((res) => {
+    res.json().then(json => {
+      if(res.status == 200)
+      {
+        dialog.showMessageBoxSync({
+          type: "info",
+          buttons: ["Ok"],
+          title: "Delete Account",
+          message: "Success on deletion of account"
+        });
+        event.reply('delete-account', {result:true})
+      }
+      else
+      {
+        dialog.showMessageBoxSync({
+          type: "warning",
+          buttons: ["Ok"],
+          title: "Delete Account",
+          message: json.reason
+        });
+        event.reply('delete-account', {result:false})
+      }
+    });
+  })
 });
 
 ipcMain.on('new-channel', (event, data) =>{
-  
   fetch(`${baseURL}/api/servers/${data.server}/channels/`, { 
     method: 'POST',
     body:    JSON.stringify(data),
@@ -198,8 +231,26 @@ ipcMain.on('new-channel', (event, data) =>{
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => console.log(json))
+  .then(res => {
+    if(res.status == 201)
+    {
+      dialog.showMessageBoxSync({
+        type: "info",
+        buttons: ["Ok"],
+        title: "New Channel",
+        message: "New channel was created"
+      });
+    }
+    else
+    {
+      dialog.showMessageBoxSync({
+        type: "warning",
+        buttons: ["Ok"],
+        title: "New Channel",
+        message: json.reason
+      });
+    }
+  });
 });
 
 ipcMain.on('logout', (event) =>{

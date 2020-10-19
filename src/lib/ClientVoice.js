@@ -18,7 +18,7 @@ const _EVENTS = {
 }
 
 
-class RoomClient {
+class ClientVoice {
 
     constructor(remoteAudioEl, mediasoupClient, socket, room_id, name) {
         this.name = name
@@ -26,6 +26,19 @@ class RoomClient {
         this.mediasoupClient = mediasoupClient
 
         this.socket = socket
+
+        this.socket.request = function request(type, data = {}) {
+            return new Promise((resolve, reject) => {
+                socket.emit(type, data, (data) => {
+                    if (data.error) {
+                        reject(data.error)
+                    } else {
+                        resolve(data)
+                    }
+                })
+            })
+        }
+        
         this.producerTransport = null
         this.consumerTransport = null
         this.device = null
@@ -537,3 +550,5 @@ class RoomClient {
         return _EVENTS
     }
 }
+
+exports.ClientVoice = ClientVoice;

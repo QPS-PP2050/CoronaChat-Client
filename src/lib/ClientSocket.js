@@ -1,10 +1,13 @@
 const io = require('socket.io-client/dist/socket.io');
 const { dialog } = require('electron');
-const ClientVoice = require('./ClientVoice');
+const {ClientVoice} = require('./ClientVoice');
 const { timers } = require('jquery');
 var $, jQuery;
 $ = jQuery = require('jquery');
 const events = require('./types/types');
+const Store = require('electron-store');
+
+const store = new Store();
 
 let window;
 
@@ -43,6 +46,14 @@ class ClientSocket {
                 
             });
         });
+    }
+
+    updateChannel()
+    {
+        if(this.serverSocket)
+        {
+            this.serverSocket.emit('update-channels');
+        }
     }
 
     //Disconects from Server

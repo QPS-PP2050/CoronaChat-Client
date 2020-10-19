@@ -13,6 +13,13 @@ let socket = new ClientSocket();
 const mediaSoup = require('mediasoup-client');
 const { ipcMain } = require('electron');
 
+ipcRenderer.on('delete-account', (event, data) => {
+  if(data.result)
+  {
+    ipcRenderer.send('logout');
+  }
+});
+
 ipcRenderer.on('update-username', () => {
   $('#username').text(store.get('token').username);
 }); 
@@ -59,7 +66,6 @@ $(function () {
     }) == 0 ? true : false;
     if (result) {
       ipcRenderer.send('delete-account', { userID: store.get('token').id });
-      ipcRenderer.send('logout');
     }
   });
   $('#apply-volume').on('click', function () {
@@ -109,7 +115,9 @@ $(function () {
     })
       .then((result) => {
         if (result !== null) {
+          
           ipcRenderer.send('new-channel', { name: result, server: server.id, type: "text" });
+          socket.updateChannel();
         }
       })
       .catch(console.error);

@@ -36,14 +36,10 @@ class ClientSocket {
         this.socket.on(events.EVENTS.CONNECT, () => 
         {
             this.socket.on(events.EVENTS.SERVER, (data) => {
-                
                 $('#server').empty();
                 data.forEach(item => {
                     $('#server').append(`<a class="init" data-name="${item.name}" data-server="${item.id}">${item.name}</a>`);
                 });
-            });
-            this.socket.on('username', (data) =>{
-                
             });
         });
     }
@@ -81,7 +77,10 @@ class ClientSocket {
 
     //Changes the server
     connectServer(server) {
-        console.log(server.id);
+        //checks if ueser is already in the server  
+        if(this.server_id == server.id)
+            return;
+
         if (!this.socketList[`/${server.id}`]) {
             this.socketList[`/${server.id}`] = this.manager.socket(`/${server.id}`);
             this.socketList[`/${server.id}`].firstConnect = true;
@@ -108,6 +107,7 @@ class ClientSocket {
             $('#server-name').text(`${server.name}`);
         });
 
+        //Updates the channel list
         this.serverSocket.on(events.EVENTS.CHANNELS, (data) => {
             $('#channel-list').empty();
             data.forEach(channel =>{
@@ -133,7 +133,6 @@ class ClientSocket {
             parent.append(message);
             $(events.UI.MESSAGES).append(parent);
             $('#chat-window').scrollTop($('#chat-window').prop("scrollHeight"));
-            console.log(this.serverSocket);
         });
 
         //Updates UI when a member disconnects and reconnects
@@ -158,6 +157,8 @@ class ClientSocket {
     //Changes channel
     changeChannel(channel) {
         if (this.serverSocket) {
+            if(channel.id == this.chanel_id)
+                return;
             this.channel = channel.name;
             this.clearMessages();
             this.chanel_id = channel.id;

@@ -1,47 +1,53 @@
 const Application = require('spectron').Application
 const assert = require('assert')
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
+const { contains } = require('jquery')
 const path = require('path')
 
 describe('Application launch', function () {
     this.timeout(10000)
-  
+
+    const app = new Application({
+      path: electronPath,
+      args: [path.join(__dirname, '..')]
+    })
+
     beforeEach(function () {
-      this.app = new Application({
-        // Your electron path can be any binary
-        // i.e for OSX an example path could be '/Applications/MyApp.app/Contents/MacOS/MyApp'
-        // But for the sake of the example we fetch it from our node_modules.
-        path: electronPath,
-  
-        // Assuming you have the following directory structure
-  
-        //  |__ my project
-        //     |__ ...
-        //     |__ main.js
-        //     |__ package.json
-        //     |__ index.html
-        //     |__ ...
-        //     |__ test
-        //        |__ spec.js  <- You are here! ~ Well you should be.
-  
-        // The following line tells spectron to look and use the main.js file
-        // and the package.json located 1 level above.
-        args: [path.join(__dirname, '..')]
-      })
-      return this.app.start()
+      return app.start()
     })
   
     afterEach(function () {
-      if (this.app && this.app.isRunning()) {
-        return this.app.stop()
+      if (app && app.isRunning()) {
+        return app.stop()
       }
     })
   
     it('shows an initial window', function () {
-      return this.app.client.getWindowCount().then(function (count) {
+      return app.client.getWindowCount().then(function (count) {
         assert.equal(count, 1)
-        // Please note that getWindowCount() will return 2 if `dev tools` are opened.
-        // assert.equal(count, 2)
       })
+    })
+
+    it('test', async() => {
+      var email = (await app.client.$('#username'));
+      var password = (await app.client.$('#password'));
+      var keep = (await app.client.$('#keep-login'));
+
+      await email.setValue('test@test.org');
+      await password.setValue("testing");
+      
+      await keep.click();
+
+      await keep.getValue().then((val) => {
+        assert.equal(val, 'on');
+      });
+
+      await email.getValue().then((val) => {
+        assert.equal(val, 'test@test.org');
+      });
+
+      await password.getValue().then((val) => {
+        assert.equal(val, 'testing');
+      });
     })
   })

@@ -8,7 +8,7 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
   "author": "QPS-PP2050",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "electron": "^9.3.1",
     "electron-builder": "^22.8.0",
     "mocha": "^8.2.0",
-    "spectron": "11"
+    "spectron": "^11.0.0"
   },
   "dependencies": {
     "electron-fetch": "^1.7.1",

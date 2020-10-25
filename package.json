@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "electron-builder -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "QPS-PP2050",

@@ -250,7 +250,7 @@ function setup() {
   if (store.has('token')) {
     socket.connect(store.get('token'));
   }
-  audioSetup();
+  audioSetup($('#mic-setting'));
   $('#username').text(store.get('token').username);
   $('#level').append(store.get('volume'));
   $('#audio-level').val(store.get('volume'));

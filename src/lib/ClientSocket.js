@@ -1,6 +1,6 @@
 const io = require('socket.io-client/dist/socket.io');
 const { dialog } = require('electron');
-const {ClientVoice} = require('./ClientVoice');
+const { ClientVoice } = require('./ClientVoice');
 const { timers } = require('jquery');
 var $, jQuery;
 $ = jQuery = require('jquery');
@@ -33,8 +33,13 @@ class ClientSocket {
         });
         this.socket = this.manager.socket('/');
         // this.serverSocket = this.manager.socket('/')
-        this.socket.on(events.EVENTS.CONNECT, () => 
-        {
+        this.socket.on(events.EVENTS.CONNECT, () => {
+
+            this.socket.on('profile', (data) => {
+                // data directly provides profile URL
+                console.log(data)
+            })
+
             this.socket.on(events.EVENTS.SERVER, (data) => {
                 $('#server').empty();
                 data.forEach(item => {
@@ -44,10 +49,8 @@ class ClientSocket {
         });
     }
 
-    updateChannel()
-    {
-        if(this.serverSocket)
-        {
+    updateChannel() {
+        if (this.serverSocket) {
             this.serverSocket.emit('update-channels');
         }
     }
@@ -78,7 +81,7 @@ class ClientSocket {
     //Changes the server
     connectServer(server) {
         //checks if ueser is already in the server  
-        if(this.server_id == server.id)
+        if (this.server_id == server.id)
             return;
 
         if (!this.socketList[`/${server.id}`]) {
@@ -86,7 +89,7 @@ class ClientSocket {
             this.socketList[`/${server.id}`].firstConnect = true;
             this.socketList[`/${server.id}`].ready = false;
         }
-        
+
 
 
         if (this.serverSocket) {
@@ -110,7 +113,7 @@ class ClientSocket {
         //Updates the channel list
         this.serverSocket.on(events.EVENTS.CHANNELS, (data) => {
             $('#channel-list').empty();
-            data.forEach(channel =>{
+            data.forEach(channel => {
                 if (channel.name === 'general') {
                     this.clearMessages();
                     this.changeChannel(channel)
@@ -158,7 +161,7 @@ class ClientSocket {
     //Changes channel
     changeChannel(channel) {
         if (this.serverSocket) {
-            if(channel.id == this.chanel_id)
+            if (channel.id == this.chanel_id)
                 return;
             this.channel = channel.name;
             this.clearMessages();
@@ -174,18 +177,14 @@ class ClientSocket {
         }
     }
 
-    startVoice()
-    {
-        if(this.clientVoice)
-        {
+    startVoice() {
+        if (this.clientVoice) {
             this.clientVoice.produce('startAudio', store.get('mic'));
         }
     }
-    
-    stopVoice()
-    {
-        if(this.clientVoice)
-        {
+
+    stopVoice() {
+        if (this.clientVoice) {
             this.clientVoice.closeProducer('stopAudio');
             this.clientVoice.exit();
         }

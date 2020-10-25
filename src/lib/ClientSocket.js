@@ -139,7 +139,8 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
             $(events.UI.MEMBER_LIST).empty();
             for (var i = 0; i < list.length; i++) {
-                $(events.UI.MEMBER_LIST).append(`<li><a>${list[i]}</a></li>`);
+                // do something with list[i].avatarURL
+                $(events.UI.MEMBER_LIST).append(`<li><a>${list[i].username}</a></li>`);
             }
         });
         this.serverSocket.on('disconnect', () => {

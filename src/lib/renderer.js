@@ -57,6 +57,7 @@ $(function () {
   $('#password-change').on('click', function () {
     var current_password = $('#current-password').val();
     var password = $('#new-password').val();
+    console.log(password)
     ipcRenderer.send('change-password', { password });
   });
   $('#username-change').on('click', function () {

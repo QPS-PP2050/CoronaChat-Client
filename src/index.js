@@ -10,7 +10,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://coronachat.xyz:8080';
+const baseURL = 'https://8080-f528b2c8-77cb-4464-bb57-bbbb77706c2e.ws-us02.gitpod.io';
 
 
 var win;
@@ -118,6 +118,8 @@ ipcMain.on('change-username', (event, data) =>{
   })
   .then(res => {
     res.json().then(json => {
+      console.log(res.status);
+      console.log(json)
       if(res.status == 201)
       {
         store.set('token', json.session);
@@ -143,6 +145,7 @@ ipcMain.on('change-username', (event, data) =>{
 });
 
 ipcMain.on('change-password', (event, data) =>{
+  console.log(data)
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
     method: 'PATCH',
     body:    JSON.stringify(data),

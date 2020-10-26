@@ -105,6 +105,7 @@ class ClientSocket {
             this.serverSocket.connect();
         }
 
+        //When connection to server is established, shows the server name
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
             this.serverSocket.ready = true;
             $('#server-name').text(`${server.name}`);
@@ -123,8 +124,8 @@ class ClientSocket {
         });
 
         this.serverSocket.on('message', (data) => {
-            //Everytime a message comes through this function gets used to update the ui
 
+            //Everytime a message comes through this function gets used to update the ui
             var author = $('<span></span>');
             var message = $('<span></span>');
             var parent = $('<li></li>');
@@ -141,17 +142,18 @@ class ClientSocket {
         //Updates UI when a member disconnects and reconnects
         this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
             $(events.UI.MEMBER_LIST).empty();
-            for (var i = 0; i < list.length; i++) {
-                // do something with list[i].avatarURL
-                $(events.UI.MEMBER_LIST).append(`<li><a>${list[i].username}</a></li>`);
-            }
+            list.forEach(member => {
+                $(events.UI.MEMBER_LIST).append(`<li><span><img src="${member.avatarURL}"><a>${member.username}</a></span></li>`);
+            });
         });
+        //Deals with clearing the socket when disconnecting
         this.serverSocket.on('disconnect', () => {
             this.serverSocket.ready = false;
             this.serverSocket.removeAllListeners();
         });
     }
 
+    //Clears messages on the screen
     clearMessages() {
         $(events.UI.MESSAGES).empty();
         $('#chat-title').empty();
@@ -169,20 +171,24 @@ class ClientSocket {
             this.serverSocket.emit(events.EVENTS.CHANNEL, `${channel.id}`);
         }
     }
-
+    
+    //Deals with creating the voice connection with the ClientVoice
     joinVoice(server_id, channel_id, audio, mediasoupClient) {
         if (this.manager) {
             this.voicesocket = this.manager.socket(`/${server_id}`);
+            //Modified version of PeerRoom from https://github.com/Dirvann/mediasoup-sfu-webrtc-video-rooms, All credit belongs to Dirvann
             this.clientVoice = new ClientVoice(audio, mediasoupClient, this.serverSocket, channel_id, name);
         }
     }
 
+    //Starts the voice connection
     startVoice() {
         if (this.clientVoice) {
             this.clientVoice.produce('startAudio', store.get('mic'));
         }
     }
 
+    //Stops the voice connection
     stopVoice() {
         if (this.clientVoice) {
             this.clientVoice.closeProducer('stopAudio');

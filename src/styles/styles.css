@@ -389,15 +389,26 @@ button, input, select {font-family:Lucida Console;outline: none;}
 {
     display: block;
 }
-
 .member_list a
 {
-    width: 100%;
-    padding: 15px;
-    display: block;
+    display: inline-block;
+    padding: 15px 8px;
+}
+.member_list span img
+{
+    width: 48px;
+    height: 48px;
 }
 
-.member_list li a:hover
+.member_list span
+{
+    align-items: center;
+    width: 100%;
+    display: flex;
+    justify-items: center;
+}
+
+.member_list li span:hover
 {
     background-color: #41A3F2;
     cursor: pointer;

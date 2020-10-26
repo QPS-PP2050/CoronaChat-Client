@@ -6,6 +6,7 @@ const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 const settings = require('electron-settings');
 const Store = require('electron-store');
+const { post } = require('jquery');
 
 const store = new Store();
 
@@ -53,6 +54,16 @@ const menuTemplate = [
 //This is a temp function to bring up dev tools for debugging, final version will have this removed
 function devTools(){
   win.webContents.openDevTools();
+}
+
+function messageBox(title, message, type)
+{
+  dialog.showMessageBox({
+    type: type,
+    buttons: ["Ok"],
+    title: title,
+    message: message
+  });
 }
 
 //Creates window
@@ -123,23 +134,11 @@ ipcMain.on('change-username', (event, data) =>{
       if(res.status == 201)
       {
         store.set('token', json.session);
-        ipcRenderer.send("update-username");
-        dialog.showMessageBox({
-          type: "info",
-          buttons: ["Ok"],
-          title: "Username",
-          message: json.reason
-        });
+        event.sender.send("update-username");
+        messageBox("Username", json.reason, "info");
       }
       else
-      {
-        dialog.showMessageBox({
-          type: "warning",
-          buttons: ["Ok"],
-          title: "Username",
-          message: json.reason
-        });
-      }
+        messageBox("Username", json.reason, "warning");
     })
   });
 });
@@ -157,24 +156,9 @@ ipcMain.on('change-password', (event, data) =>{
   .then((res) => {
     res.json().then(json => {
       if(res.status == 201)
-      {
-        dialog.showMessageBox({
-          type: "info",
-          buttons: ["Ok"],
-          title: "Password",
-          message: json.reason
-        });
-        
-      }
+        messageBox("Password", json.reason, "info");
       else
-      {
-        dialog.showMessageBox({
-          type: "warning",
-          buttons: ["Ok"],
-          title: "Password",
-          message: json.reason
-        });
-      }
+        messageBox("Password", json.reason, "warning");
     });
   })
 });
@@ -203,22 +187,12 @@ ipcMain.on('delete-account', (event, data) => {
     res.json().then(json => {
       if(res.status == 200)
       {
-        dialog.showMessageBoxSync({
-          type: "info",
-          buttons: ["Ok"],
-          title: "Delete Account",
-          message: "Success on deletion of account"
-        });
+        messageBox("Delete Account", "Success on deletion of account", "info");
         event.reply('delete-account', {result:true})
       }
       else
       {
-        dialog.showMessageBoxSync({
-          type: "warning",
-          buttons: ["Ok"],
-          title: "Delete Account",
-          message: json.reason
-        });
+        messageBox("Delete Account", json.reason, "warning");
         event.reply('delete-account', {result:false})
       }
     });
@@ -236,23 +210,9 @@ ipcMain.on('new-channel', (event, data) =>{
   })
   .then(res => {
     if(res.status == 201)
-    {
-      dialog.showMessageBoxSync({
-        type: "info",
-        buttons: ["Ok"],
-        title: "New Channel",
-        message: "New channel was created"
-      });
-    }
+      messageBox("New Channel", "New channel was created", "info");
     else
-    {
-      dialog.showMessageBoxSync({
-        type: "warning",
-        buttons: ["Ok"],
-        title: "New Channel",
-        message: json.reason
-      });
-    }
+      messageBox("New Channel", json.reason, "warning");
   });
 });
 
@@ -301,6 +261,9 @@ ipcMain.on('login', (event, data) => {
     email : data.email,
     password : data.password
   }
+
+  post()
+
   fetch(`${baseURL}/api/users/login`, { 
     method: 'POST',
     body:    JSON.stringify(cred),
@@ -322,4 +285,3 @@ ipcMain.on('login', (event, data) => {
     }
   });
 });
-

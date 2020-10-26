@@ -6,7 +6,6 @@ const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 const settings = require('electron-settings');
 const Store = require('electron-store');
-const { post } = require('jquery');
 
 const store = new Store();
 
@@ -261,8 +260,6 @@ ipcMain.on('login', (event, data) => {
     email : data.email,
     password : data.password
   }
-
-  post()
 
   fetch(`${baseURL}/api/users/login`, { 
     method: 'POST',

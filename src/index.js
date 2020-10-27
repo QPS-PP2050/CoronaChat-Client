@@ -117,6 +117,10 @@ app.on('activate', () => {
   }
 });
 
+ipcMain.on('add-friend', (event, username) => {
+  
+});
+
 ipcMain.on('change-username', (event, data) =>{
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
     method: 'PATCH',

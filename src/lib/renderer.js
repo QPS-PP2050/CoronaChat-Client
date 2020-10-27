@@ -26,7 +26,7 @@ ipcRenderer.on('update-username', () => {
 //Submits input form and sends message
 $(function () {
   $("#send-msg").submit(function(e){
-    sendMessage(e);
+      (e);
   });
 });
 
@@ -135,6 +135,9 @@ $(function () {
     $('#level').empty();
 
   });
+  $("#friend").on("click", function(e){
+    hasShow($(".friends-menu"));
+  });
   $("#logout-button").on("click", function (e) {
     var result = messagePrompt("Logout", "Are you sure you want to logout?");
     if (result) {
@@ -168,6 +171,9 @@ $(document).on('mouseup', function (e) {
   }
   if (!$('#settings').is(e.target) && $("#settings").has(e.target).length === 0) {
     $('.setting-menu').removeClass('show');
+  }
+  if (!$('#friend').is(e.target) && $("#friend").has(e.target).length === 0) {
+    $('.friends-menu').removeClass('show');
   }
 });
 

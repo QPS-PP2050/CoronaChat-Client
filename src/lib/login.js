@@ -2,8 +2,6 @@ $ = jQuery = require('jquery');
 const { dialog } = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer; 
 
-// if(window.localStorage.getItem('login') === true)
-//     ipcRenderer.send('auto-login');
 
 $(function(){
     //When login button is clicked, checks if the username and password fields are empty
@@ -19,6 +17,4 @@ $(function(){
     $('#register').on('click', function(){
         ipcRenderer.send('register-window');
     });
-    
 });
-

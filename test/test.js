@@ -76,4 +76,8 @@ describe('Application launch', function () {
       });
       await send.click();
     });
+
+    it('Show Profile Test', async() =>{
+      
+    });
   })

@@ -28,7 +28,7 @@ ipcRenderer.on('update-username', () => {
 //Submits input form and sends message
 $(function () {
   $("#send-msg").submit(function(e){
-      (e);
+      sendMessage(e);
   });
 });
 

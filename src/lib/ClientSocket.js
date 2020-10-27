@@ -46,6 +46,9 @@ class ClientSocket {
                     $('#server').append(`<a class="init" data-name="${item.name}" data-server="${item.id}">${item.name}</a>`);
                 });
             });
+            this.socket.on('private-message', (data) => {
+                
+            });
         });
     }
 
@@ -144,7 +147,7 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
             $(events.UI.MEMBER_LIST).empty();
             list.forEach(member => {
-                $(events.UI.MEMBER_LIST).append(`<li><span><img src="${member.avatarURL}"><a data-user="${member.username}">${member.username}</a></span></li>`);
+                $(events.UI.MEMBER_LIST).append(`<li><span class="member"><img src="${member.avatarURL}"><a data-user="${member.username}">${member.username}</a></span></li>`);
             });
         });
         //Deals with clearing the socket when disconnecting

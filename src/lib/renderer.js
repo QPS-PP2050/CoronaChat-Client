@@ -1,5 +1,7 @@
 const ipcRenderer = require('electron').ipcRenderer;
 const dialog = require('electron').remote.dialog;
+const { remote, Renderer } = require('electron')
+const { Menu, MenuItem } = remote
 const { ClientSocket } = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
@@ -32,11 +34,23 @@ $(function () {
 
 //Dropsdown and closes server list
 $(function () {
+  $('#send-pm').on('submit', function(e){
+    e.preventDefault();
+  });
+
+  $('#close-chat').on('click', function(e){
+    $('#pm-chat').invisible();
+  });
   $('#delete-account').on('click', function (e) {
     var result = messagePrompt("Delete", "Are you sure you want to delete your account?");
     if (result) {
       ipcRenderer.send('delete-account', { userID: store.get('token').id });
     }
+  });
+  $('#mem_list').on('contextmenu', '.member', function(e){
+    const menu = new Menu();
+    menu.append(new MenuItem({label: "Message", click() { $('#pm-chat').visible() } }));
+    menu.popup({window: remote.getCurrentWindow() }, false);
   });
   $('#apply-volume').on('click', function () {
     store.set('volume', $('#audio-level').val());

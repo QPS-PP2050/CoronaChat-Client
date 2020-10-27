@@ -55,6 +55,27 @@ button, input, select {font-family:Lucida Console;outline: none;}
     display: block;
 }
 
+.close-button:hover
+{
+    background-color: #41A3F2;
+}
+
+.close-button
+{
+    position: absolute;
+    float: left;
+    padding: 5px;
+}
+
+.user-chat
+{
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #2B6A9E;
+}
+
 .message-content
 {
     margin-top: 15px;
@@ -438,6 +459,7 @@ button, input, select {font-family:Lucida Console;outline: none;}
     display: grid;
     grid-template-rows: auto 1fr;
     height: calc(100vh - 80px);
+    width: 100%;
 }
 
 .side-panel-left button

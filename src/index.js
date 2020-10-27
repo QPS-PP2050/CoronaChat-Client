@@ -286,3 +286,21 @@ ipcMain.on('login', (event, data) => {
     }
   });
 });
+
+ipcMain.on('message-window', (event, data) =>{
+  console.log('test');
+  const secondary = new BrowserWindow({
+    width: width,
+    height: height,
+    minHeight: 600,
+    minWidth: 800,
+    title: "Corona Chat",
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true
+    }
+  });
+  secondary.loadFile(`file://${__dirname}/html/index.html`);
+
+  secondary.webContents.send('socket', )
+});

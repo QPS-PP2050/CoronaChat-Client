@@ -120,8 +120,8 @@ $(function () {
     }
     else {
       $('#disconnect-voice').visible();
-      socket.joinVoice(server_id, $(this).data('channel'), $('#remote-audio'), mediaSoup);
-      socket.startVoice();
+      socket.joinVoice($(this).data("server"), $(this).data('channel'), $('#remote-audio'), mediaSoup);
+      // socket.startVoice();
     }
   });
   $("#server").on("click", ".init", function (e) {

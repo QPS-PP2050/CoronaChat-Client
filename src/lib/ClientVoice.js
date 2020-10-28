@@ -28,16 +28,8 @@ class ClientVoice {
         this.socket = socket
 
         this.socket.request = function request(type, data = {}) {
-            return new Promise((resolve, reject) => {
-                socket.emit(type, data, (data) => {
-                    if (data.error) {
-                        reject(data.error)
-                    } else {
-                        resolve(data)
-                    }
-                })
-            })
-        }
+            this.socket.emit(type, data);
+        }.bind(this)
         
         this.producerTransport = null
         this.consumerTransport = null
@@ -71,14 +63,12 @@ class ClientVoice {
     async createRoom(room_id) {
         await this.socket.request('createRoom', {
             room_id
-        }).catch(err => {
-            console.log(err)
         })
     }
 
     async join(name, room_id) {
 
-        socket.request('join-voice', {
+        this.socket.request('join-voice', {
             name,
             room_id
         }).then(async function (e) {
@@ -206,7 +196,7 @@ class ClientVoice {
 
                     case 'connected':
                         //remoteVideo.srcObject = await stream;
-                        //await socket.request('resume');
+                        //await this.socket.request('resume');
                         break;
 
                     case 'failed':
@@ -519,7 +509,7 @@ class ClientVoice {
     ///////  HELPERS //////////
 
     async roomInfo() {
-        let info = await socket.request('getMyRoomInfo')
+        let info = await this.socket.request('getMyRoomInfo')
         return info
     }
 

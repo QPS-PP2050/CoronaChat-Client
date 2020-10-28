@@ -17,13 +17,15 @@ class ClientSocket {
     URL = "localhost";//"coronachat.xyz";
     socket;
     serverSocket;
+    server_id;
+    voicesocket
     win;
     channel = "";
     constructor() { }
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://coronachat.xyz:8080', {
+        this.manager = io.Manager('https://8080-a267f3be-b59d-4e47-8173-6c50efaa5ee6.ws-us02.gitpod.io', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -102,6 +104,7 @@ class ClientSocket {
         }
 
         this.serverSocket = this.socketList[`/${server.id}`];
+        this.server_id = server.id
 
         console.log(this.socketList)
         if (!this.serverSocket.firstConnect && !this.serverSocket.ready) {
@@ -179,23 +182,24 @@ class ClientSocket {
     //Deals with creating the voice connection with the ClientVoice
     joinVoice(server_id, channel_id, audio, mediasoupClient) {
         if (this.manager) {
-            var voicesocket = this.manager.socket(`/${server_id}`);
+            this.voicesocket = this.manager.socket(`/voice`);
             //Modified version of PeerRoom from https://github.com/Dirvann/mediasoup-sfu-webrtc-video-rooms, All credit belongs to Dirvann
-            this.clientVoice = new ClientVoice(audio, mediasoupClient, voicesocket, channel_id, name);
+            this.clientVoice = new ClientVoice(audio, mediasoupClient, this.voicesocket, channel_id, name);
         }
     }
 
     //Starts the voice connection
     startVoice() {
         if (this.clientVoice) {
-            this.clientVoice.produce('startAudio', store.get('mic'));
+            console.log(this.clientVoice)
+            this.clientVoice.produce('audioType', store.get('mic'));
         }
     }
 
     //Stops the voice connection
     stopVoice() {
         if (this.clientVoice) {
-            this.clientVoice.closeProducer('stopAudio');
+            this.clientVoice.closeProducer('audioType');
             this.clientVoice.exit();
         }
     }

@@ -10,7 +10,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://coronachat.xyz:8080';
+const baseURL = 'https://8080-a267f3be-b59d-4e47-8173-6c50efaa5ee6.ws-us02.gitpod.io';
 
 
 var win;

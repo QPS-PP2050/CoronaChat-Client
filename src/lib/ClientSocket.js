@@ -179,9 +179,9 @@ class ClientSocket {
     //Deals with creating the voice connection with the ClientVoice
     joinVoice(server_id, channel_id, audio, mediasoupClient) {
         if (this.manager) {
-            this.voicesocket = this.manager.socket(`/${server_id}`);
+            var voicesocket = this.manager.socket(`/${server_id}`);
             //Modified version of PeerRoom from https://github.com/Dirvann/mediasoup-sfu-webrtc-video-rooms, All credit belongs to Dirvann
-            this.clientVoice = new ClientVoice(audio, mediasoupClient, this.serverSocket, channel_id, name);
+            this.clientVoice = new ClientVoice(audio, mediasoupClient, voicesocket, channel_id, name);
         }
     }
 

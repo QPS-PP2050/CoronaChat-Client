@@ -53,7 +53,6 @@ describe('Application launch', function () {
       });
 
       await login.click();
-      console.log('Login Successful');
     })
 
     it('Send Message Test', async() =>{
@@ -75,9 +74,5 @@ describe('Application launch', function () {
         assert.equal(val, "Hello");
       });
       await send.click();
-    });
-
-    it('Show Profile Test', async() =>{
-      
     });
   })

@@ -8,7 +8,9 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "test": "mocha test"
+    "testcase-login": "mocha test/testcase-login.js",
+    "testcase-register": "mocha test/testcase-register.js",
+    "testcase-message": "mocha test/testcase-message.js"
   },
   "author": "QPS-PP2050",
   "license": "MIT",

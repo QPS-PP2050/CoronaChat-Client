@@ -27,9 +27,17 @@ class ClientVoice {
 
         this.socket = socket
 
-        this.socket.request = function request(type, data = {}) {
-            this.socket.emit(type, data);
-        }.bind(this)
+        this.socket.request = async (type, data = {}) => {
+            return new Promise((resolve, reject) => {
+                this.socket.emit(type, data, (data) => {
+                    if (data.error) {
+                        reject(data.error)
+                    } else {
+                        resolve(data)
+                    }
+                })
+            })
+        }
         
         this.producerTransport = null
         this.consumerTransport = null
@@ -51,7 +59,8 @@ class ClientVoice {
         }.bind(this))
 
 
-        this.createRoom(room_id).then(async function () {
+        this.createRoom(room_id).then(async function (e) {
+            console.log(e)
             await this.join(name, room_id)
             this.initSockets()
             this._isOpen = true
@@ -61,13 +70,13 @@ class ClientVoice {
     ////////// INIT /////////
 
     async createRoom(room_id) {
-        await this.socket.request('createRoom', {
+        return this.socket.request('createRoom', {
             room_id
         })
     }
 
     async join(name, room_id) {
-
+        console.log('join')
         this.socket.request('join-voice', {
             name,
             room_id
@@ -114,6 +123,8 @@ class ClientVoice {
             }
 
             this.producerTransport = device.createSendTransport(data);
+            console.log(data)
+            console.log(this.producerTransport)
 
             this.producerTransport.on('connect', async function ({
                 dtlsParameters

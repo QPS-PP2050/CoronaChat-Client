@@ -10,7 +10,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://8080-a267f3be-b59d-4e47-8173-6c50efaa5ee6.ws-us02.gitpod.io';
+const baseURL = 'https://8080-b317a80e-09f4-4e16-aacd-2d32c6439f8b.ws-us02.gitpod.io';
 
 
 var win;
@@ -246,7 +246,7 @@ ipcMain.on('register', (event, data) => {
   })
   .then(res => {
     res.status;
-    if(res.status == 201)
+    if(res.status == 202)
     {
       win.loadURL(`file://${__dirname}/html/login.html`);
     }

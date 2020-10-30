@@ -91,22 +91,7 @@ $(function () {
     $('#change-password-pane').removeClass('show');
     hasShow($('#change-username-pane'));
   });
-  $('#add-channel').on('click', function () {
-    prompt({
-      title: 'New Channel',
-      label: 'Channel Name',
-      type: 'input',
-      alwaysOnTop: true,
-    })
-      .then((result) => {
-        if (result !== null) {
-
-          ipcRenderer.send('new-channel', { name: result, server: server.id, type: "text" });
-          socket.updateChannel();
-        }
-      })
-      .catch(console.error);
-  });
+  
 
   $("#channel-list").on("click", ".join-channel", function (e) {
     console.log($(this).data('type'));
@@ -175,6 +160,11 @@ $(function () {
     else {
       $(".server-list").removeClass("show");
     }
+  });
+  $('#add-channel').on('click', function () {
+    var channel = windowPrompt('New Channel', 'Channel Name');
+    ipcRenderer.send('new-channel', { name: channel, server: server.id, type: "text" });
+    socket.updateChannel();
   });
 });
 
@@ -275,4 +265,21 @@ function setup() {
   $('#username').text(store.get('token').username);
   $('#level').append(store.get('volume'));
   $('#audio-level').val(store.get('volume'));
+}
+
+function windowPrompt(title, message)
+{
+  prompt({
+    title: title,
+    label: message,
+    type: 'input',
+    alwaysOnTop: true,
+  })
+    .then((result) => {
+      if (result !== null) {
+        return result;
+        
+      }
+    })
+    .catch(console.error);
 }

@@ -9,6 +9,7 @@ $(function(){
         ipcRenderer.send('login-window');
     });
     $('#register-form').on('submit', function(e){
+        e.preventDefault();
         var email = $('#email').val();
         var username = $('#username').val();
         var password = $('#password').val();

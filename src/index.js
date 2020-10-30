@@ -238,6 +238,7 @@ ipcMain.on('register-window', (event)=>{
   win.title = "Register";
 })
 
+//This deals with sending the user details to the server via post
 ipcMain.on('register', (event, data) => {
   fetch(`${baseURL}/api/users`, {
     method: 'POST',
@@ -248,6 +249,7 @@ ipcMain.on('register', (event, data) => {
     res.status;
     if(res.status == 201)
     {
+      //if user is registered it will return the user to the login
       win.loadURL(`file://${__dirname}/html/login.html`);
     }
     else
@@ -259,7 +261,11 @@ ipcMain.on('register', (event, data) => {
   });
 });
 
+
+
+//When client sends register, this sends a post request to the server to see if user is valid
 ipcMain.on('login', (event, data) => {
+
   cred = {
     email : data.email,
     password : data.password
@@ -270,9 +276,9 @@ ipcMain.on('login', (event, data) => {
     body:    JSON.stringify(cred),
     headers: { 'Content-Type': 'application/json' },
   }).then(res => {
-    res.status;
     if(res.status == 200)
     {
+      //If the user is valid, the client then stores the session to the store for the main page to use
       res.json().then(json =>{
         store.set('login', data.login);
         store.set('token', json.session);
@@ -285,22 +291,4 @@ ipcMain.on('login', (event, data) => {
       return;
     }
   });
-});
-
-ipcMain.on('message-window', (event, data) =>{
-  console.log('test');
-  const secondary = new BrowserWindow({
-    width: width,
-    height: height,
-    minHeight: 600,
-    minWidth: 800,
-    title: "Corona Chat",
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true
-    }
-  });
-  secondary.loadFile(`file://${__dirname}/html/index.html`);
-
-  secondary.webContents.send('socket', )
 });

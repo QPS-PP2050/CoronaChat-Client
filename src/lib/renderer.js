@@ -27,18 +27,18 @@ ipcRenderer.on('update-username', () => {
 
 //Submits input form and sends message
 $(function () {
-  $("#send-msg").submit(function(e){
-      sendMessage(e);
+  $("#send-msg").submit(function (e) {
+    sendMessage(e);
   });
 });
 
 //Dropsdown and closes server list
 $(function () {
-  $('#send-pm').on('submit', function(e){
+  $('#send-pm').on('submit', function (e) {
     e.preventDefault();
   });
 
-  $('#close-chat').on('click', function(e){
+  $('#close-chat').on('click', function (e) {
     $('#pm-chat').invisible();
   });
   $('#delete-account').on('click', function (e) {
@@ -47,10 +47,10 @@ $(function () {
       ipcRenderer.send('delete-account', { userID: store.get('token').id });
     }
   });
-  $('#mem_list').on('contextmenu', '.member', function(e){
+  $('#mem_list').on('contextmenu', '.member', function (e) {
     const menu = new Menu();
-    menu.append(new MenuItem({label: "Message", click() { $('#pm-chat').visible() } }));
-    menu.popup({window: remote.getCurrentWindow() }, false);
+    menu.append(new MenuItem({ label: "Message", click() { $('#pm-chat').visible() } }));
+    menu.popup({ window: remote.getCurrentWindow() }, false);
   });
   $('#apply-volume').on('click', function () {
     store.set('volume', $('#audio-level').val());
@@ -91,7 +91,7 @@ $(function () {
     $('#change-password-pane').removeClass('show');
     hasShow($('#change-username-pane'));
   });
-  
+
 
   $("#channel-list").on("click", ".join-channel", function (e) {
     console.log($(this).data('type'));
@@ -114,7 +114,7 @@ $(function () {
       id: $(this).data("server"),
       name: $(this).data("name")
     }
-
+    console.log(server);
     socket.connectServer(server);
   });
   $('#join-voice').on('click', function () {
@@ -134,7 +134,7 @@ $(function () {
     $('#level').empty();
 
   });
-  $("#friend").on("click", function(e){
+  $("#friend").on("click", function (e) {
     hasShow($(".friends-menu"));
   });
   $("#logout-button").on("click", function (e) {
@@ -162,13 +162,21 @@ $(function () {
     }
   });
   $('#add-channel').on('click', function () {
-    var channel = windowPrompt('New Channel', 'Channel Name');
-    ipcRenderer.send('new-channel', { name: channel, server: server.id, type: "text" });
-    socket.updateChannel();
+    prompt({
+      title: 'New Channel',
+      label: 'Channel Name',
+      type: 'input',
+      alwaysOnTop: true,
+    }).then((result) => {
+      if (result !== null) {
+        ipcRenderer.send('new-channel', { name: result, server: server.id, type: "text" });
+        socket.updateChannel();
+      }
+    }).catch(console.error);
   });
 });
 
-//closes server list
+//closes server list, Settings list, friends list
 $(document).on('mouseup', function (e) {
   if (!$("#select").is(e.target) && $("#select").has(e.target).length === 0) {
     $(".server-list").removeClass("show");
@@ -219,8 +227,7 @@ $(function () {
 
 
 //Shows Message prompt, yes or no
-function messagePrompt(title, message)
-{
+function messagePrompt(title, message) {
   return dialog.showMessageBoxSync({
     type: "warning",
     buttons: ["Yes", "No"],
@@ -230,8 +237,7 @@ function messagePrompt(title, message)
 }
 
 //Sends message to the server
-function sendMessage(e)
-{
+function sendMessage(e) {
   e.preventDefault();
   //Checks if input is empty and only contains white spaces
   if ($("#message").val().length && $("#message").val().trim().length) {
@@ -267,19 +273,6 @@ function setup() {
   $('#audio-level').val(store.get('volume'));
 }
 
-function windowPrompt(title, message)
-{
-  prompt({
-    title: title,
-    label: message,
-    type: 'input',
-    alwaysOnTop: true,
-  })
-    .then((result) => {
-      if (result !== null) {
-        return result;
-        
-      }
-    })
-    .catch(console.error);
+function windowPrompt(title, message) {
+
 }

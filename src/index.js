@@ -6,11 +6,11 @@ const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 const settings = require('electron-settings');
 const Store = require('electron-store');
-
+app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://coronachat.xyz:8080';
+const baseURL = 'https://192.168.20.200:8080';
 
 
 var win;

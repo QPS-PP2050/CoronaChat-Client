@@ -25,7 +25,7 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
-        this.manager = io.Manager('https://coronachat.xyz:8080', {
+        this.manager = io.Manager('https://192.168.20.200:8080', {
             reconnect: true,
             transportOptions: {
                 polling: {
@@ -112,14 +112,15 @@ class ClientSocket {
             this.serverSocket.connect();
         }
 
+        this.voicesocket = this.manager.socket(`/voice`);
+        this.clientVoice = new ClientVoice($('remote-audio'), mediaSoup, this.voicesocket, server.id, store.get('token').username);
+
+        console.log(this.clientVoice)
         //When connection to server is established, shows the server name
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
             this.serverSocket.ready = true;
             $('#server-name').text(`${server.name}`);
-
-            this.voicesocket = this.manager.socket(`/${server.id}`);
-            
-            this.clientVoice = new ClientVoice($('remote-audio'), mediaSoup, this.voicesocket, 'voice', store.get('token').username);
+        
         });
 
         //Updates the channel list

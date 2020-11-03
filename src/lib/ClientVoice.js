@@ -1,4 +1,6 @@
 const Store = require('electron-store');
+var $, jQuery;
+$ = jQuery = require('jquery');
 const store = new Store();
 
 const mediaType = {
@@ -38,7 +40,7 @@ class ClientVoice {
                 })
             })
         }
-        
+
         this.producerTransport = null
         this.consumerTransport = null
         this.device = null
@@ -130,9 +132,9 @@ class ClientVoice {
                 dtlsParameters
             }, callback, errback) {
                 this.socket.request('connectTransport', {
-                        dtlsParameters,
-                        transport_id: data.id
-                    })
+                    dtlsParameters,
+                    transport_id: data.id
+                })
                     .then(callback)
                     .catch(errback)
             }.bind(this));
@@ -193,9 +195,9 @@ class ClientVoice {
                 dtlsParameters
             }, callback, errback) {
                 this.socket.request('connectTransport', {
-                        transport_id: this.consumerTransport.id,
-                        dtlsParameters
-                    })
+                    transport_id: this.consumerTransport.id,
+                    dtlsParameters
+                })
                     .then(callback)
                     .catch(errback);
             }.bind(this));
@@ -239,8 +241,8 @@ class ClientVoice {
         this.socket.on('newProducers', async function (data) {
             console.log('new producers', data)
             for (let {
-                    producer_id
-                } of data) {
+                producer_id
+            } of data) {
                 await this.consume(producer_id)
             }
         }.bind(this))
@@ -281,40 +283,42 @@ class ClientVoice {
             console.log('producer already exists for this type ' + type)
             return
         }
-        console.log('mediacontraints:',mediaConstraints)
+        console.log('mediacontraints:', mediaConstraints)
         let stream;
         try {
             stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints)
             console.log(navigator.mediaDevices.getSupportedConstraints())
 
-
+            console.log(stream)
+            console.log(stream.getAudioTracks()[0])
             const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
             const params = {
                 track
             };
             if (!audio && !screen) {
                 params.encodings = [{
-                        rid: 'r0',
-                        maxBitrate: 100000,
-                        //scaleResolutionDownBy: 10.0,
-                        scalabilityMode: 'S1T3'
-                    },
-                    {
-                        rid: 'r1',
-                        maxBitrate: 300000,
-                        scalabilityMode: 'S1T3'
-                    },
-                    {
-                        rid: 'r2',
-                        maxBitrate: 900000,
-                        scalabilityMode: 'S1T3'
-                    }
+                    rid: 'r0',
+                    maxBitrate: 100000,
+                    //scaleResolutionDownBy: 10.0,
+                    scalabilityMode: 'S1T3'
+                },
+                {
+                    rid: 'r1',
+                    maxBitrate: 300000,
+                    scalabilityMode: 'S1T3'
+                },
+                {
+                    rid: 'r2',
+                    maxBitrate: 900000,
+                    scalabilityMode: 'S1T3'
+                }
                 ];
                 params.codecOptions = {
                     videoGoogleStartBitrate: 1000
                 };
             }
-            producer = await this.producerTransport.produce(params)
+
+            let producer = await this.producerTransport.produce(params)
 
             console.log('producer', producer)
 
@@ -360,6 +364,7 @@ class ClientVoice {
             })
 
             this.producerLabel.set(type, producer.id)
+            await this.consume(producer.id)
 
             switch (type) {
                 case mediaType.audio:
@@ -386,10 +391,15 @@ class ClientVoice {
 
             this.consumers.set(consumer.id, consumer)
 
-            var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
-            audio.prop('volume', store.get('volume'));
-            this.remoteAudioEl.append(audio);
-            
+            let elem = document.createElement('audio')
+            elem.srcObject = stream
+            elem.id = consumer.id
+            elem.playsinline = false
+            elem.autoplay = true
+            //var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
+            //audio.prop('volume', (store.get('volume') / 100));
+            this.remoteAudioEl.append(elem);
+
             consumer.on('trackended', function () {
                 this.removeConsumer(consumer.id)
             }.bind(this))

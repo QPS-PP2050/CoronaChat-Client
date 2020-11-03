@@ -6,7 +6,7 @@ var $, jQuery;
 $ = jQuery = require('jquery');
 const events = require('./types/types');
 const Store = require('electron-store');
-
+const mediaSoup = require('mediasoup-client');
 const store = new Store();
 
 let window;
@@ -116,6 +116,10 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
             this.serverSocket.ready = true;
             $('#server-name').text(`${server.name}`);
+
+            this.voicesocket = this.manager.socket(`/${server.id}`);
+            
+            this.clientVoice = new ClientVoice($('remote-audio'), mediaSoup, this.voicesocket, 'voice', store.get('token').username);
         });
 
         //Updates the channel list

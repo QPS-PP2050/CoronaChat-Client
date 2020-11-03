@@ -11,7 +11,7 @@ var server;
 const Store = require('electron-store');
 const store = new Store();
 let socket = null;
-const mediaSoup = require('mediasoup-client');
+
 
 setup();
 
@@ -105,8 +105,7 @@ $(function () {
     }
     else {
       $('#disconnect-voice').visible();
-      socket.joinVoice($(this).data("server"), $(this).data('channel'), $('#remote-audio'), mediaSoup);
-      // socket.startVoice();
+      socket.startVoice();
     }
   });
   $("#server").on("click", ".init", function (e) {
@@ -200,7 +199,6 @@ function audioSetup(element) {
   element.empty();
   navigator.mediaDevices.enumerateDevices().then(devices =>
     devices.forEach(device => {
-      let el = null
       if ('audioinput' === device.kind) {
         element.append(`<option value='${device.deviceId}'>${device.label}</option>`);
         if (device.deviceId === store.get('mic')) {
@@ -271,8 +269,4 @@ function setup() {
   $('#username').text(store.get('token').username);
   $('#level').append(store.get('volume'));
   $('#audio-level').val(store.get('volume'));
-}
-
-function windowPrompt(title, message) {
-
 }

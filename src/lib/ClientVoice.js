@@ -19,6 +19,9 @@ const _EVENTS = {
     stopScreen: 'stopScreen'
 }
 
+var $, jQuery;
+$ = jQuery = require('jquery');
+const store = new Store();
 
 class ClientVoice {
 

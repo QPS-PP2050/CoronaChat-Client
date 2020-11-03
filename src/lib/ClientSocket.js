@@ -118,6 +118,7 @@ class ClientSocket {
         console.log(this.clientVoice)
         //When connection to server is established, shows the server name
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
+            this.server_id = server.id;
             this.serverSocket.ready = true;
             $('#server-name').text(`${server.name}`);
         
@@ -164,7 +165,7 @@ class ClientSocket {
             this.serverSocket.removeAllListeners();
         });
     }
-
+ 
     //Clears messages on the screen
     clearMessages() {
         $(events.UI.MESSAGES).empty();
@@ -206,6 +207,7 @@ class ClientSocket {
         if (this.clientVoice) {
             this.clientVoice.closeProducer('audioType');
             this.clientVoice.exit();
+            this.voiceSocket();
         }
     }
 }

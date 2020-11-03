@@ -17,6 +17,9 @@ const _EVENTS = {
     stopScreen: 'stopScreen'
 }
 
+var $, jQuery;
+$ = jQuery = require('jquery');
+const store = new Store();
 
 class ClientVoice {
 
@@ -386,9 +389,12 @@ class ClientVoice {
 
             this.consumers.set(consumer.id, consumer)
 
-            var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
-            audio.prop('volume', store.get('volume'));
-            this.remoteAudioEl.append(audio);
+            let audio = $("<audio></audio>").attr({
+                'src':'audio/something.mp3',
+                'volume': store.get('volume'),
+                'autoplay':'autoplay'
+            });
+            audio.appendTo(elem);
             
             consumer.on('trackended', function () {
                 this.removeConsumer(consumer.id)

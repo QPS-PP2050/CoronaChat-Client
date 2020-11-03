@@ -114,12 +114,10 @@ class ClientSocket {
 
         //When connection to server is established, shows the server name
         this.serverSocket.on(events.EVENTS.CONNECT, () => {
+            this.server_id = server.id;
             this.serverSocket.ready = true;
             $('#server-name').text(`${server.name}`);
-
-            this.voicesocket = this.manager.socket(`/${server.id}`);
-            
-            this.clientVoice = new ClientVoice($('remote-audio'), mediaSoup, this.voicesocket, 'voice', store.get('token').username);
+            this.voiceSocket();
         });
 
         //Updates the channel list
@@ -164,6 +162,13 @@ class ClientSocket {
         });
     }
 
+    voiceSocket()
+    {
+        this.voicesocket = this.manager.socket(`/${this.server_id}`);
+        this.clientVoice = new ClientVoice($('remote-audio'), mediaSoup, this.voicesocket, 'voice', store.get('token').username);
+    }
+    
+
     //Clears messages on the screen
     clearMessages() {
         $(events.UI.MESSAGES).empty();
@@ -205,6 +210,7 @@ class ClientSocket {
         if (this.clientVoice) {
             this.clientVoice.closeProducer('audioType');
             this.clientVoice.exit();
+            this.voiceSocket();
         }
     }
 }

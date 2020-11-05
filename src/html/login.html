@@ -1,8 +1,13 @@
 <!DOCTYPE html> 
-<html> 
-<link rel="stylesheet" href="../styles/Login.css">
-		
-</div>
+<html lang="en">
+   
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="stylesheet" href="../styles/Login.css" />
+  <title>Login</title>
+</head>
+
 <body>
   <script>
     require('../lib/login.js');
@@ -13,13 +18,14 @@
     </div>
     <div class="login-content">
       <div class="login">
-        <input type="text" placeholder="Username/Email" id="username" required> 
-        <input type="password" placeholder="Password" id="password" required> 
-        <button id="login">Login</button><button id="register">Register</button>
-        <span class="lower-login">
-          <label for="keep-login">Auto Login</label><input title="Keep Me Logged In" type="checkbox" id="keep-login"/>
-        </span>
-        
+        <form id="login-form">
+          <input type="email" placeholder="Email" id="username" required> 
+          <input type="password" placeholder="Password" id="password" required> 
+          <button id="login">Login</button><button id="register">Register</button>
+          <span class="lower-login">
+            <label for="keep-login">Auto Login</label><input title="Keep Me Logged In" type="checkbox" id="keep-login"/>
+          </span>
+        </form>
       </div>
     </div>
   </div> 

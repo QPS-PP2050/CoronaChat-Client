@@ -1,65 +1,56 @@
 const ipcRenderer = require('electron').ipcRenderer;
 const dialog = require('electron').remote.dialog;
+const { remote, Renderer } = require('electron')
+const { Menu, MenuItem } = remote
 const { ClientSocket } = require('./ClientSocket');
 var $, jQuery;
 $ = jQuery = require('jquery');
 const prompt = require('electron-prompt');
 var server_id;
+var server;
 const Store = require('electron-store');
 const store = new Store();
-let socket = new ClientSocket();
+let socket = null;
 
-const mediaSoup = require('mediasoup-client');
-const { ipcMain } = require('electron');
+
+setup();
+
+ipcRenderer.on('delete-account', (event, data) => {
+  if (data.result) {
+    ipcRenderer.send('logout');
+  }
+});
 
 ipcRenderer.on('update-username', () => {
   $('#username').text(store.get('token').username);
-}); 
-
-if (!store.has('volume')) {
-  store.set('volume', 100);
-}
-if (!store.has('mic'))
-{
-  store.set('mic', 'default');
-}
-if(store.has('token'))
-{
-  socket.connect(store.get('token'));
-}
+});
 
 //Submits input form and sends message
 $(function () {
-  
   $("#send-msg").submit(function (e) {
-    e.preventDefault();
-    //Checks if input is empty and only contains white spaces
-    if ($("#message").val().length && $("#message").val().trim().length) {
-      //Sends message to the server
-      if ($("#message").val().startsWith('/invite')) {
-        const username = $("#message").val().split(' ')[1];
-        ipcRenderer.send('invite-user', { server: server_id, username });
-        socket.push('invite-user', { server: server_id, username })
-      }
-      socket.send({ username: store.get('token').username, msg: $("#message").val() })
-      $("#message").val('');
-    }
+    sendMessage(e);
   });
 });
 
 //Dropsdown and closes server list
 $(function () {
+  $('#send-pm').on('submit', function (e) {
+    e.preventDefault();
+  });
+
+  $('#close-chat').on('click', function (e) {
+    $('#pm-chat').invisible();
+  });
   $('#delete-account').on('click', function (e) {
-    var result = dialog.showMessageBoxSync({
-      type: "warning",
-      buttons: ["Yes", "No"],
-      title: "Delete",
-      message: "Are you sure you want to delete your account?"
-    }) == 0 ? true : false;
+    var result = messagePrompt("Delete", "Are you sure you want to delete your account?");
     if (result) {
-      ipcRenderer.send('delete-account', store.get('token').id);
-      ipcRenderer.send('logout');
+      ipcRenderer.send('delete-account', { userID: store.get('token').id });
     }
+  });
+  $('#mem_list').on('contextmenu', '.member', function (e) {
+    const menu = new Menu();
+    menu.append(new MenuItem({ label: "Message", click() { $('#pm-chat').visible() } }));
+    menu.popup({ window: remote.getCurrentWindow() }, false);
   });
   $('#apply-volume').on('click', function () {
     store.set('volume', $('#audio-level').val());
@@ -80,6 +71,7 @@ $(function () {
   $('#password-change').on('click', function () {
     var current_password = $('#current-password').val();
     var password = $('#new-password').val();
+    console.log(password)
     ipcRenderer.send('change-password', { password });
   });
   $('#username-change').on('click', function () {
@@ -99,36 +91,20 @@ $(function () {
     $('#change-password-pane').removeClass('show');
     hasShow($('#change-username-pane'));
   });
-  $('#add-channel').on('click', function () {
-    prompt({
-      title: 'New Channel',
-      label: 'Channel Name',
-      type: 'input',
-      alwaysOnTop: true,
-    })
-      .then((result) => {
-        if (result !== null) {
-          ipcRenderer.send('new-channel', { name: result, server: server_id, type: "text" });
-        }
-      })
-      .catch(console.error);
-  });
 
-  $("#channel-list").on("click",".join-channel" , function (e) {
+
+  $("#channel-list").on("click", ".join-channel", function (e) {
     console.log($(this).data('type'));
-    if($(this).data('type') === 'text')
-    {
+    if ($(this).data('type') === 'text') {
       var data = {
-        name : $(this).data('name'),
-        id : $(this).data('channel'),
+        name: $(this).data('name'),
+        id: $(this).data('channel'),
       };
       socket.changeChannel(data);
       console.log(data);
     }
-    else
-    {
+    else {
       $('#disconnect-voice').visible();
-      socket.joinVoice(server_id, $(this).data('channel'), $('#remote-audio'), mediaSoup);
       socket.startVoice();
     }
   });
@@ -137,13 +113,13 @@ $(function () {
       id: $(this).data("server"),
       name: $(this).data("name")
     }
-
+    console.log(server);
     socket.connectServer(server);
   });
-  $('#join-voice').on('click', function(){
-    
+  $('#join-voice').on('click', function () {
+
   });
-  $('#disconnect-voice').on('click', function(){
+  $('#disconnect-voice').on('click', function () {
     socket.stopVoice();
     $(this).invisible();
   });
@@ -153,18 +129,15 @@ $(function () {
   $("#settings").on("click", function (e) {
     hasShow($(".setting-menu"));
     audioSetup($('#mic-setting'));
-    $('#username').text(store.get('token').username);
+    //$('#username').text(store.get('token').username);
     $('#level').empty();
-    $('#level').append(store.get('volume'));
-    $('#audio-level').val(store.get('volume'));
+
+  });
+  $("#friend").on("click", function (e) {
+    hasShow($(".friends-menu"));
   });
   $("#logout-button").on("click", function (e) {
-    var result = dialog.showMessageBoxSync({
-      type: "warning",
-      buttons: ["Yes", "No"],
-      title: "Logout",
-      message: "Are you sure you want to logout?"
-    }) == 0 ? true : false;
+    var result = messagePrompt("Logout", "Are you sure you want to logout?");
     if (result) {
       ipcRenderer.send('logout');
     }
@@ -187,15 +160,31 @@ $(function () {
       $(".server-list").removeClass("show");
     }
   });
+  $('#add-channel').on('click', function () {
+    prompt({
+      title: 'New Channel',
+      label: 'Channel Name',
+      type: 'input',
+      alwaysOnTop: true,
+    }).then((result) => {
+      if (result !== null) {
+        ipcRenderer.send('new-channel', { name: result, server: server.id, type: "text" });
+        socket.updateChannel();
+      }
+    }).catch(console.error);
+  });
 });
 
-//closes server list
+//closes server list, Settings list, friends list
 $(document).on('mouseup', function (e) {
   if (!$("#select").is(e.target) && $("#select").has(e.target).length === 0) {
     $(".server-list").removeClass("show");
   }
   if (!$('#settings').is(e.target) && $("#settings").has(e.target).length === 0) {
     $('.setting-menu').removeClass('show');
+  }
+  if (!$('#friend').is(e.target) && $("#friend").has(e.target).length === 0) {
+    $('.friends-menu').removeClass('show');
   }
 });
 
@@ -210,11 +199,9 @@ function audioSetup(element) {
   element.empty();
   navigator.mediaDevices.enumerateDevices().then(devices =>
     devices.forEach(device => {
-      let el = null
       if ('audioinput' === device.kind) {
         element.append(`<option value='${device.deviceId}'>${device.label}</option>`);
-        if(device.deviceId === store.get('mic'))
-        {
+        if (device.deviceId === store.get('mic')) {
           element.val(device.deviceId);
         }
       }
@@ -234,3 +221,52 @@ $(function () {
     });
   };
 }(jQuery));
+
+
+
+//Shows Message prompt, yes or no
+function messagePrompt(title, message) {
+  return dialog.showMessageBoxSync({
+    type: "warning",
+    buttons: ["Yes", "No"],
+    title: title,
+    message: message
+  }) == 0 ? true : false;
+}
+
+//Sends message to the server
+function sendMessage(e) {
+  e.preventDefault();
+  //Checks if input is empty and only contains white spaces
+  if ($("#message").val().length && $("#message").val().trim().length) {
+    //Sends message to the server
+    if ($("#message").val().startsWith('/invite')) {
+      const username = $("#message").val().split(' ')[1];
+      ipcRenderer.send('invite-user', { server: server.id, username });
+      socket.push('invite-user', { server: server.id, username })
+      $("#message").val('');
+    }
+    else {
+      socket.send({ username: store.get('token').username, msg: $("#message").val() })
+      $("#message").val('');
+    }
+  }
+}
+
+//Setup
+function setup() {
+  socket = new ClientSocket();
+  if (!store.has('volume')) {
+    store.set('volume', 100);
+  }
+  if (!store.has('mic')) {
+    store.set('mic', 'default');
+  }
+  if (store.has('token')) {
+    socket.connect(store.get('token'));
+  }
+  audioSetup($('#mic-setting'));
+  $('#username').text(store.get('token').username);
+  $('#level').append(store.get('volume'));
+  $('#audio-level').val(store.get('volume'));
+}

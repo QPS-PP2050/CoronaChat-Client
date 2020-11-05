@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -9,22 +9,43 @@
 </head>
 
 <body>
-  <script>
-    require('../lib/renderer');
-  </script>
+  <div class="user-chat" id="pm-chat" style="visibility: hidden;">
+    <a id="close-chat" class="close-button">X</a>
+    <div class="chat-window">
+      <div class="side-panel-left"></div>  
+      <div class="chat">
+        <div class="chat-name">
+        </div>
+        <div class="message-log">
+          <ul id="pm-messages" class="chat-log"></ul>
+        </div>
+        <form id="send-pm" class="message-sec">
+          <input placeholder="Message" id="pm-message" autocomplete="off" /><button id="sendpm">Send</button>
+        </form>
+      </div>
+      <div class="side-panel-right">
+        
+        <div class="member-pan">
+          <p>Private Chate</p>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="chat-window">
     <div class="top-bubbles">
       <span title="Profile" class="profile-bubble">
-        <img id="settings" src="../lib/virus.png" width="40" height="40" />
-
+        <img alt="Settings" title="Settings" id="settings" src="../lib/virus.png" width="40" height="40" />
       </span>
       <ul class="setting-menu">
         <li id="setting-button"><a>Settings</a></li>
         <li id="logout-button"><a>Logout</a></li>
       </ul>
       <span title="Friends" id="friend" class="friends-bubble">
-        <img src="../lib/friend.png" width="40" height="40" />
+        <img alt="Settings" title="Settings" src="../lib/friend.png" width="40" height="40" />
       </span>
+      <ul class="friends-menu" id="friends-list">
+        <li><a>No Friends</a></li>
+      </ul>
     </div>
     <div class="profile-display">
       <div class="setting-left">
@@ -41,10 +62,10 @@
         </ul>
       </div>
       <div class="setting-right">
-        <span id="profile-panel" style="position: absolute;">
+        <div id="profile-panel" style="position: absolute;">
           <div class="profile-setting">
-            <img id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100" />
-            <div class="username-display"><span>
+            <img alt="Profile" title="Profile" id="profile-image" class="profile-image" src="../lib/virus.png" width="100" height="100" />
+            <div class="username-display">
                 <p>Username:</p>
                 <p id="username"></p>
             </div>
@@ -67,22 +88,22 @@
               <label for="new-username">New Username</label>
               <input type="text" id="new-username" required />
               <label for="user-password">Password</label>
-              <input type="password" id="current-password"/>
+              <input type="password" id="user-password"/>
               <button id="username-change">Change</button><button class="cancel">Cancel</button>
             </div>
           </div>
-        </span>
-        <span id="audio-settings" style="visibility: hidden; position: absolute;">
+        </div>
+        <div id="audio-settings" style="visibility: hidden; position: absolute;">
           <div class="main-setting">
-            <span class="output-setting">
+            <div class="output-setting">
               <label for="audio-level">Audio Level: </label><p id="level"></p>
               <input class="slider" value="100" min="0" max="100" type="range" id="audio-level"/>
               <select id="mic-setting"></select>
               <button id="apply-volume">Apply</button>
-            </span>
+            </div>
           </div>
         </div>
-      </span>
+      </div>
     </div>
     <div class="side-panel-left">
       <div class="top-panel">
@@ -101,7 +122,7 @@
       <div id="chat-window" class="message-log">
         <ul id="messages" class="chat-log"></ul>
       </div>
-      <form action="" id="send-msg" class="message-sec">
+      <form id="send-msg" class="message-sec">
         <input placeholder="Message" id="message" autocomplete="off" /><button id="sendmsg">Send</button>
       </form>
     </div>
@@ -114,12 +135,14 @@
       <div id="member-list" class="member-pan">
         <p id="server-name"></p>
         <ul class="member_list" id="mem_list">
+          
         </ul>
       </div>
     </div>
   </div>
-  </div>
-  </div>
+  <script>
+    require('../lib/renderer');
+  </script>
 </body>
 
 </html>

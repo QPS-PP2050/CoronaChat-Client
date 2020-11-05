@@ -55,6 +55,27 @@ button, input, select {font-family:Lucida Console;outline: none;}
     display: block;
 }
 
+.close-button:hover
+{
+    background-color: #41A3F2;
+}
+
+.close-button
+{
+    position: absolute;
+    float: left;
+    padding: 5px;
+}
+
+.user-chat
+{
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #2B6A9E;
+}
+
 .message-content
 {
     margin-top: 15px;
@@ -89,12 +110,33 @@ button, input, select {font-family:Lucida Console;outline: none;}
     grid-column: 2;
 }
 
-.setting-menu li a:hover
+.friends-menu
+{
+    left: 75px; 
+}
+
+.setting-menu 
+{
+    left: 15px;
+}
+
+.setting-menu, .friends-menu
+{
+    top: 50px;
+    margin: 0;
+    margin-top: 15px;
+    list-style-type: none;
+    position: absolute;
+    display: none;
+    background-color: #1F4D73;
+}
+
+.setting-menu li a:hover, .friends-menu li a:hover
 {
     background-color: #2B6A9E;
 }
 
-.setting-menu li a
+.setting-menu li a, .friends-menu li a
 {
     display: block;
     padding: 15px;
@@ -112,12 +154,7 @@ button, input, select {font-family:Lucida Console;outline: none;}
     border-radius: 15px;
 }
 
-.main-setting button:hover
-{
-    background-color: #41A3F2;
-}
-
-.user-info button:hover
+.main-setting button:hover, .user-info button:hover
 {
     background-color: #41A3F2;
 }
@@ -143,18 +180,6 @@ button, input, select {font-family:Lucida Console;outline: none;}
 {
     
     background-color: #de0404 !important;
-}
-
-.setting-menu
-{
-    top: 50px;
-    left: 15px;
-    margin: 0;
-    margin-top: 15px;
-    list-style-type: none;
-    position: absolute;
-    display: none;
-    background-color: #1F4D73;
 }
 
 .profile-image
@@ -389,15 +414,26 @@ button, input, select {font-family:Lucida Console;outline: none;}
 {
     display: block;
 }
-
 .member_list a
 {
-    width: 100%;
-    padding: 15px;
-    display: block;
+    display: inline-block;
+    padding: 15px 8px;
+}
+.member_list span img
+{
+    width: 48px;
+    height: 48px;
 }
 
-.member_list li a:hover
+.member_list span
+{
+    align-items: center;
+    width: 100%;
+    display: flex;
+    justify-items: center;
+}
+
+.member_list li span:hover
 {
     background-color: #41A3F2;
     cursor: pointer;
@@ -423,6 +459,7 @@ button, input, select {font-family:Lucida Console;outline: none;}
     display: grid;
     grid-template-rows: auto 1fr;
     height: calc(100vh - 80px);
+    width: 100%;
 }
 
 .side-panel-left button

@@ -1,4 +1,4 @@
-const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer, LocalStorage } = require('electron');
+const { Menu, app, BrowserWindow, dialog, ipcMain, ipcRenderer, LocalStorage, Renderer } = require('electron');
 const url = require('url');
 const path = require('path');
 const { inspect } = require('util');
@@ -6,11 +6,11 @@ const { checkServerIdentity } = require('tls');
 const fetch = require('electron-fetch').default;
 const settings = require('electron-settings');
 const Store = require('electron-store');
-
+app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://coronachat.xyz';
+const baseURL = 'https://192.168.20.200:8080';
 
 
 var win;
@@ -53,6 +53,16 @@ const menuTemplate = [
 //This is a temp function to bring up dev tools for debugging, final version will have this removed
 function devTools(){
   win.webContents.openDevTools();
+}
+
+function messageBox(title, message, type)
+{
+  dialog.showMessageBox({
+    type: type,
+    buttons: ["Ok"],
+    title: title,
+    message: message
+  });
 }
 
 //Creates window
@@ -107,6 +117,10 @@ app.on('activate', () => {
   }
 });
 
+ipcMain.on('add-friend', (event, username) => {
+  
+});
+
 ipcMain.on('change-username', (event, data) =>{
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
     method: 'PATCH',
@@ -117,33 +131,23 @@ ipcMain.on('change-username', (event, data) =>{
     }
   })
   .then(res => {
-    
     res.json().then(json => {
+      console.log(res.status);
+      console.log(json)
       if(res.status == 201)
       {
         store.set('token', json.session);
-        ipcMain.send("update-username");
-        dialog.showMessageBox({
-          type: "info",
-          buttons: ["Ok"],
-          title: "Username",
-          message: json.reason
-        });
+        event.sender.send("update-username");
+        messageBox("Username", json.reason, "info");
       }
       else
-      {
-        dialog.showMessageBox({
-          type: "warning",
-          buttons: ["Ok"],
-          title: "Username",
-          message: json.reason
-        });
-      }
+        messageBox("Username", json.reason, "warning");
     })
   });
 });
 
 ipcMain.on('change-password', (event, data) =>{
+  console.log(data)
   fetch(`${baseURL}/api/users/${store.get('token').id}`, { 
     method: 'PATCH',
     body:    JSON.stringify(data),
@@ -152,19 +156,17 @@ ipcMain.on('change-password', (event, data) =>{
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => {
-    dialog.showMessageBox({
-      type: "info",
-      buttons: ["Ok"],
-      title: "Password",
-      message: json.reason
+  .then((res) => {
+    res.json().then(json => {
+      if(res.status == 201)
+        messageBox("Password", json.reason, "info");
+      else
+        messageBox("Password", json.reason, "warning");
     });
   })
 });
 
 ipcMain.on('invite-user', (event, data) => {
-  console.log(data)
   fetch(`${baseURL}/api/servers/${data.server}/members`, {
     method: 'PUT',
     body: JSON.stringify({username: data.username}),
@@ -184,12 +186,23 @@ ipcMain.on('delete-account', (event, data) => {
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => console.log(json))
+  .then((res) => {
+    res.json().then(json => {
+      if(res.status == 200)
+      {
+        messageBox("Delete Account", "Success on deletion of account", "info");
+        event.reply('delete-account', {result:true})
+      }
+      else
+      {
+        messageBox("Delete Account", json.reason, "warning");
+        event.reply('delete-account', {result:false})
+      }
+    });
+  })
 });
 
 ipcMain.on('new-channel', (event, data) =>{
-  
   fetch(`${baseURL}/api/servers/${data.server}/channels/`, { 
     method: 'POST',
     body:    JSON.stringify(data),
@@ -198,8 +211,12 @@ ipcMain.on('new-channel', (event, data) =>{
       'Authorization': `Bearer ${store.get('token').token}`
     }
   })
-  .then(res => res.json())
-  .then(json => console.log(json))
+  .then(res => {
+    if(res.status == 201)
+      messageBox("New Channel", "New channel was created", "info");
+    else
+      messageBox("New Channel", json.reason, "warning");
+  });
 });
 
 ipcMain.on('logout', (event) =>{
@@ -221,6 +238,7 @@ ipcMain.on('register-window', (event)=>{
   win.title = "Register";
 })
 
+//This deals with sending the user details to the server via post
 ipcMain.on('register', (event, data) => {
   fetch(`${baseURL}/api/users`, {
     method: 'POST',
@@ -229,8 +247,9 @@ ipcMain.on('register', (event, data) => {
   })
   .then(res => {
     res.status;
-    if(res.status == 201)
+    if(res.status == 202)
     {
+      //if user is registered it will return the user to the login
       win.loadURL(`file://${__dirname}/html/login.html`);
     }
     else
@@ -242,19 +261,24 @@ ipcMain.on('register', (event, data) => {
   });
 });
 
+
+
+//When client sends register, this sends a post request to the server to see if user is valid
 ipcMain.on('login', (event, data) => {
+
   cred = {
     email : data.email,
     password : data.password
   }
+
   fetch(`${baseURL}/api/users/login`, { 
     method: 'POST',
     body:    JSON.stringify(cred),
     headers: { 'Content-Type': 'application/json' },
   }).then(res => {
-    res.status;
     if(res.status == 200)
     {
+      //If the user is valid, the client then stores the session to the store for the main page to use
       res.json().then(json =>{
         store.set('login', data.login);
         store.set('token', json.session);
@@ -268,4 +292,3 @@ ipcMain.on('login', (event, data) => {
     }
   });
 });
-

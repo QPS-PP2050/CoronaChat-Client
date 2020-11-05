@@ -1,4 +1,6 @@
 const Store = require('electron-store');
+var $, jQuery;
+$ = jQuery = require('jquery');
 const store = new Store();
 
 const mediaType = {
@@ -17,8 +19,11 @@ const _EVENTS = {
     stopScreen: 'stopScreen'
 }
 
+var $, jQuery;
+$ = jQuery = require('jquery');
+const store = new Store();
 
-class RoomClient {
+class ClientVoice {
 
     constructor(remoteAudioEl, mediasoupClient, socket, room_id, name) {
         this.name = name
@@ -26,6 +31,19 @@ class RoomClient {
         this.mediasoupClient = mediasoupClient
 
         this.socket = socket
+
+        this.socket.request = async (type, data = {}) => {
+            return new Promise((resolve, reject) => {
+                this.socket.emit(type, data, (data) => {
+                    if (data.error) {
+                        reject(data.error)
+                    } else {
+                        resolve(data)
+                    }
+                })
+            })
+        }
+
         this.producerTransport = null
         this.consumerTransport = null
         this.device = null
@@ -46,7 +64,8 @@ class RoomClient {
         }.bind(this))
 
 
-        this.createRoom(room_id).then(async function () {
+        this.createRoom(room_id).then(async function (e) {
+            console.log(e)
             await this.join(name, room_id)
             this.initSockets()
             this._isOpen = true
@@ -56,16 +75,14 @@ class RoomClient {
     ////////// INIT /////////
 
     async createRoom(room_id) {
-        await this.socket.request('createRoom', {
+        return this.socket.request('createRoom', {
             room_id
-        }).catch(err => {
-            console.log(err)
         })
     }
 
     async join(name, room_id) {
-
-        socket.request('join-voice', {
+        console.log('join')
+        this.socket.request('join-voice', {
             name,
             room_id
         }).then(async function (e) {
@@ -111,14 +128,16 @@ class RoomClient {
             }
 
             this.producerTransport = device.createSendTransport(data);
+            console.log(data)
+            console.log(this.producerTransport)
 
             this.producerTransport.on('connect', async function ({
                 dtlsParameters
             }, callback, errback) {
                 this.socket.request('connectTransport', {
-                        dtlsParameters,
-                        transport_id: data.id
-                    })
+                    dtlsParameters,
+                    transport_id: data.id
+                })
                     .then(callback)
                     .catch(errback)
             }.bind(this));
@@ -179,9 +198,9 @@ class RoomClient {
                 dtlsParameters
             }, callback, errback) {
                 this.socket.request('connectTransport', {
-                        transport_id: this.consumerTransport.id,
-                        dtlsParameters
-                    })
+                    transport_id: this.consumerTransport.id,
+                    dtlsParameters
+                })
                     .then(callback)
                     .catch(errback);
             }.bind(this));
@@ -193,7 +212,7 @@ class RoomClient {
 
                     case 'connected':
                         //remoteVideo.srcObject = await stream;
-                        //await socket.request('resume');
+                        //await this.socket.request('resume');
                         break;
 
                     case 'failed':
@@ -225,8 +244,8 @@ class RoomClient {
         this.socket.on('newProducers', async function (data) {
             console.log('new producers', data)
             for (let {
-                    producer_id
-                } of data) {
+                producer_id
+            } of data) {
                 await this.consume(producer_id)
             }
         }.bind(this))
@@ -267,40 +286,42 @@ class RoomClient {
             console.log('producer already exists for this type ' + type)
             return
         }
-        console.log('mediacontraints:',mediaConstraints)
+        console.log('mediacontraints:', mediaConstraints)
         let stream;
         try {
             stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints)
             console.log(navigator.mediaDevices.getSupportedConstraints())
 
-
+            console.log(stream)
+            console.log(stream.getAudioTracks()[0])
             const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
             const params = {
                 track
             };
             if (!audio && !screen) {
                 params.encodings = [{
-                        rid: 'r0',
-                        maxBitrate: 100000,
-                        //scaleResolutionDownBy: 10.0,
-                        scalabilityMode: 'S1T3'
-                    },
-                    {
-                        rid: 'r1',
-                        maxBitrate: 300000,
-                        scalabilityMode: 'S1T3'
-                    },
-                    {
-                        rid: 'r2',
-                        maxBitrate: 900000,
-                        scalabilityMode: 'S1T3'
-                    }
+                    rid: 'r0',
+                    maxBitrate: 100000,
+                    //scaleResolutionDownBy: 10.0,
+                    scalabilityMode: 'S1T3'
+                },
+                {
+                    rid: 'r1',
+                    maxBitrate: 300000,
+                    scalabilityMode: 'S1T3'
+                },
+                {
+                    rid: 'r2',
+                    maxBitrate: 900000,
+                    scalabilityMode: 'S1T3'
+                }
                 ];
                 params.codecOptions = {
                     videoGoogleStartBitrate: 1000
                 };
             }
-            producer = await this.producerTransport.produce(params)
+
+            let producer = await this.producerTransport.produce(params)
 
             console.log('producer', producer)
 
@@ -346,6 +367,7 @@ class RoomClient {
             })
 
             this.producerLabel.set(type, producer.id)
+            await this.consume(producer.id)
 
             switch (type) {
                 case mediaType.audio:
@@ -372,10 +394,15 @@ class RoomClient {
 
             this.consumers.set(consumer.id, consumer)
 
-            var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
-            audio.prop('volume', store.get('volume'));
-            this.remoteAudioEl.append(audio);
-            
+            let elem = document.createElement('audio')
+            elem.srcObject = stream
+            elem.id = consumer.id
+            elem.playsinline = false
+            elem.autoplay = true
+            //var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
+            //audio.prop('volume', (store.get('volume') / 100));
+            this.remoteAudioEl.append(elem);
+
             consumer.on('trackended', function () {
                 this.removeConsumer(consumer.id)
             }.bind(this))
@@ -506,7 +533,7 @@ class RoomClient {
     ///////  HELPERS //////////
 
     async roomInfo() {
-        let info = await socket.request('getMyRoomInfo')
+        let info = await this.socket.request('getMyRoomInfo')
         return info
     }
 
@@ -537,3 +564,5 @@ class RoomClient {
         return _EVENTS
     }
 }
+
+exports.ClientVoice = ClientVoice;

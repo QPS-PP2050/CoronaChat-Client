@@ -41,7 +41,7 @@ input {font-family:Lucida Console;}
     max-width: 600px;
 }
 
-.login input[type=text], input[type=password]
+.login input[type=text], input[type=password], input[type=email]
 {
     width:  100%;
     display: block;

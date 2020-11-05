@@ -10,7 +10,7 @@ app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
 const store = new Store();
 
 let session = null;
-const baseURL = 'https://192.168.20.200:8080';
+const baseURL = 'https://coronachat.xyz:8080';
 
 
 var win;

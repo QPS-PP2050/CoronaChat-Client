@@ -156,7 +156,7 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
             $(events.UI.MEMBER_LIST).empty();
             list.forEach(member => {
-                $(events.UI.MEMBER_LIST).append(`<li><span class="member"><img src="${member.avatarURL}"><a data-user="${member.username}">${member.username}</a></span></li>`);
+                $(events.UI.MEMBER_LIST).append(`<li><span class="member"><img src="${member.avatarURL}"><a data-user="${member.id}">${member.username}</a></span></li>`);
             });
         });
         //Deals with clearing the socket when disconnecting

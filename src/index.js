@@ -81,6 +81,7 @@ function createWindow()
     minHeight: 600,
     minWidth: 800,
     title: "Corona Chat",
+    icon: __dirname + "/lib/assets/corona_chat.ico",
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true

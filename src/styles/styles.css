@@ -333,6 +333,19 @@ button, input, select {font-family:Lucida Console;outline: none;}
     z-index: 100;
 }
 
+
+.bubbles
+{
+    text-align: center;
+}
+
+.bubbles img 
+{
+    filter: hue-rotate(30deg);
+    width: 40px;
+    height: 40px;
+}
+
 .top-bubbles span
 {
     display: inline-block;

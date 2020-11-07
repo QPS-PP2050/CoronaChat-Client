@@ -391,7 +391,6 @@ class ClientVoice {
             this.consumers.set(consumer.id, consumer)
             if(consumer.localId !== "0")
             {
-                console.log(consumer);
                 let elem = document.createElement('audio')
                 elem.srcObject = stream
                 elem.id = consumer.id

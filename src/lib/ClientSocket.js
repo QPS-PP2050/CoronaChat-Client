@@ -39,7 +39,7 @@ class ClientSocket {
 
             this.socket.on('profile', (data) => {
                 // data directly provides profile URL
-                console.log(data)
+                $('#profile-image').attr("src", data);
             })
 
             this.socket.on(events.EVENTS.SERVER, (data) => {

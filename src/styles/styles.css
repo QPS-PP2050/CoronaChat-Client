@@ -188,17 +188,12 @@ button, input, select {font-family:Lucida Console;outline: none;}
     grid-column: 1;
 }
 
-.username-display span
+.username-display
 {
-    display: block;
     width: 100%;
     background-color: #8BC5F4;
     padding: 16px;
     border-radius: 15px;
-}
-
-.username-display
-{
     display: flex;
     grid-column: 2;
     justify-content:left;

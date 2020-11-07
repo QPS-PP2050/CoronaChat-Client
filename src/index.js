@@ -75,18 +75,24 @@ function createWindow()
     height = store.get('height');
     width = store.get('width');
   } 
-   win = new BrowserWindow({
+  var icon;
+  if(process.platform == "win32")
+    icon = __dirname + "/lib/assets/corona_chat.ico";
+  else if(process.platform == "linux")
+    icon = __dirname + "/lib/assets/linux_icon.png"; 
+  win = new BrowserWindow({
     width: width,
     height: height,
     minHeight: 600,
     minWidth: 800,
     title: "Corona Chat",
-    icon: __dirname + "/lib/assets/corona_chat.ico",
+    icon: icon,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
     }
   });
+  
   if(store.get('login') === true)
   {
     win.loadURL(`file://${__dirname}/html/index.html`);

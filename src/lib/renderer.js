@@ -239,14 +239,22 @@ function sendMessage(e) {
   e.preventDefault();
   //Checks if input is empty and only contains white spaces
   if ($("#message").val().length && $("#message").val().trim().length) {
-    //Sends message to the server
-    if ($("#message").val().startsWith('/invite')) {
+    
+    if($("#message").val().startsWith('/kick'))
+    {
+      const username = $("#message").val().split(' ')[1];
+      ipcRenderer.send('kick-user', { server: server.id, username });
+      socket.push('kick-user', { server: server.id, username })
+      $("#message").val('');
+    }
+    else if ($("#message").val().startsWith('/invite')) {
       const username = $("#message").val().split(' ')[1];
       ipcRenderer.send('invite-user', { server: server.id, username });
       socket.push('invite-user', { server: server.id, username })
       $("#message").val('');
     }
     else {
+      //Sends message to the server
       socket.send({ username: store.get('token').username, msg: $("#message").val() })
       $("#message").val('');
     }

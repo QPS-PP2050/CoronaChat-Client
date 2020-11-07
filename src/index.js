@@ -173,6 +173,17 @@ ipcMain.on('change-password', (event, data) =>{
   })
 });
 
+ipcMain.on('kick-user', (event, data) =>{
+  fetch(`${baseURL}/api/servers/${data.server}/members`, {
+    method: 'PATCH',
+    body: JSON.stringify({username: data.username}),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.get('token').token}`
+    }
+  })
+});
+
 ipcMain.on('invite-user', (event, data) => {
   fetch(`${baseURL}/api/servers/${data.server}/members`, {
     method: 'PUT',

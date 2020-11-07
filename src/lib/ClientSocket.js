@@ -207,7 +207,6 @@ class ClientSocket {
         if (this.clientVoice) {
             this.clientVoice.closeProducer('audioType');
             this.clientVoice.exit();
-            this.voiceSocket();
         }
     }
 }

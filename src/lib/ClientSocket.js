@@ -52,7 +52,6 @@ class ClientSocket {
             });
             //Handles direct messaging of users
             this.socket.on('direct-message', (data) => {
-                
                 this.reciepent = data.reciepent;
                 $('pm-chat').css('visibility', 'visible');
                 var author = $('<span></span>');
@@ -183,7 +182,7 @@ class ClientSocket {
         this.serverSocket.on(events.EVENTS.MEMBER_UPDATE, (list) => {
             $(events.UI.MEMBER_LIST).empty();
             list.forEach(member => {
-                $(events.UI.MEMBER_LIST).append(`<li><span class="member"><img src="${member.avatarURL}"><a data-user="${member.id}">${member.username}</a></span></li>`);
+                $(events.UI.MEMBER_LIST).append(`<li><span class="member" data-user="${member.id}"><img src="${member.avatarURL}"><a>${member.username}</a></span></li>`);
             });
         });
         //Deals with clearing the socket when disconnecting

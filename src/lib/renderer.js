@@ -52,12 +52,12 @@ $(function () {
   //Context menu when right click on a user
   $('#mem_list').on('contextmenu', '.member', function (e) {
     const menu = new Menu();
-    var user = $(this).text();
+    var user = $(this);
     menu.append(new MenuItem({ label: "Message", click() 
     { 
       //Click on message opens up the pm window
       $('#pm-chat').visible();
-      socket.pmUser(user);
+      socket.pmUser(user.data('user'));
     } 
   }));
     menu.popup({ window: remote.getCurrentWindow() }, false);

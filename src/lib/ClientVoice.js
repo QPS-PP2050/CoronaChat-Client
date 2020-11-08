@@ -363,7 +363,6 @@ class ClientVoice {
             })
 
             this.producerLabel.set(type, producer.id)
-            await this.consume(producer.id)
 
             switch (type) {
                 case mediaType.audio:

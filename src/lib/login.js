@@ -14,6 +14,7 @@ $(function(){
         //sends username and password to the server
         ipcRenderer.send('login', {email, password, login: check });
     });
+    //Goes to the register
     $('#register').on('click', function(){
         ipcRenderer.send('register-window');
     });

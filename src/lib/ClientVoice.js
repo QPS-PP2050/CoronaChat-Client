@@ -379,8 +379,6 @@ class ClientVoice {
 
     async consume(producer_id) {
 
-        //let info = await roomInfo()
-
         this.getConsumeStream(producer_id).then(function ({
             consumer,
             stream,
@@ -394,8 +392,6 @@ class ClientVoice {
             elem.id = consumer.id
             elem.playsinline = false
             elem.autoplay = true
-            //var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
-            //audio.prop('volume', (store.get('volume') / 100));
             this.remoteAudioEl.append(elem);
 
             consumer.on('trackended', function () {

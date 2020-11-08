@@ -52,7 +52,6 @@ class ClientSocket {
             });
             //Handles direct messaging of users
             this.socket.on('direct-message', (data) => {
-                console.log(data);
                 this.recipient = data.recipient;
                 $('#pm-chat').css('visibility', 'visible');
                 var author = $('<span></span>');

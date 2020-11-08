@@ -34,7 +34,7 @@ $(function () {
   //Sends message to PM
   $('#send-pm').submit(function (e){
     e.preventDefault();
-    socket.send({ username: store.get('token').username, msg: $("#message").val()}, pm = true);
+    socket.send({ username: store.get('token').username, msg: $("#pm-message").val()}, pm = true);
     $("#pm-message").val('');
   });
   //Closes PM window

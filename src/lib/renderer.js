@@ -27,82 +27,89 @@ ipcRenderer.on('update-username', () => {
 
 //Submits input form and sends message
 $(function () {
+  //Sends message to server
   $("#send-msg").submit(function (e) {
     sendMessage(e);
   });
-
+  //Sends message to PM
   $('#send-pm').submit(function (e){
     e.preventDefault();
     socket.send({ username: store.get('token').username, msg: $("#message").val()}, pm = true);
     $("#pm-message").val('');
   });
-});
-
-//Dropsdown and closes server list
-$(function () {
+  //Closes PM window
   $('#close-chat').on('click', function (e) {
     $('#pm-chat').invisible();
     $('#pm-messages').empty();
-    socket.pmUser(null); 
   });
+  //Deletes account
   $('#delete-account').on('click', function (e) {
     var result = messagePrompt("Delete", "Are you sure you want to delete your account?");
     if (result) {
       ipcRenderer.send('delete-account', { userID: store.get('token').id });
     }
   });
+  //Context menu when right click on a user
   $('#mem_list').on('contextmenu', '.member', function (e) {
     const menu = new Menu();
     var user = $(this).text();
     menu.append(new MenuItem({ label: "Message", click() 
     { 
+      //Click on message opens up the pm window
       $('#pm-chat').visible();
       socket.pmUser(user);
-      $('#pm-recipient').append(`<li>${user}</li>`);
     } 
   }));
     menu.popup({ window: remote.getCurrentWindow() }, false);
   });
+  //Applies the volume for voice and the input device
   $('#apply-volume').on('click', function () {
     store.set('volume', $('#audio-level').val());
     store.set('mic', $('#mic-setting').val());
   });
+  //Changes the display of the volume
   $('#audio-level').change(function () {
     $('#level').empty();
     $('#level').append($(this).val());
   });
+  //Displays the profile of the user
   $('#profile').on('click', function () {
     $('#profile-panel').visible();
     $('#audio-settings').invisible();
   });
+  //Displays the audio settings
   $('#audio').on('click', function () {
     $('#profile-panel').invisible();
     $('#audio-settings').visible();
   });
+  //Changes password of user
   $('#password-change').on('click', function () {
     var current_password = $('#current-password').val();
     var password = $('#new-password').val();
     ipcRenderer.send('change-password', { password });
   });
+  //Changes the username of the user
   $('#username-change').on('click', function () {
     var username = $('#new-username').val();
     var password = $('#user-password').val();
     ipcRenderer.send('change-username', { username });
   });
+  //closes the change username or password
   $('#profile-panel .cancel').on('click', function () {
     $('#change-username-pane').removeClass('show');
     $('#change-password-pane').removeClass('show');
   });
+  //Shows the change username
   $('#change-password').on('click', function () {
     $('#change-username-pane').removeClass('show');
     hasShow($('#change-password-pane'));
   });
+  //Shows the change password
   $('#change-username').on('click', function () {
     $('#change-password-pane').removeClass('show');
     hasShow($('#change-username-pane'));
   });
-
-
+  //Changes the text channel or joins the voice
   $("#channel-list").on("click", ".join-channel", function (e) {
     console.log($(this).data('type'));
     if ($(this).data('type') === 'text') {
@@ -117,6 +124,7 @@ $(function () {
       socket.startVoice();
     }
   });
+  //Changes the server
   $("#server").on("click", ".init", function (e) {
     server = {
       id: $(this).data("server"),
@@ -125,6 +133,7 @@ $(function () {
     console.log(server);
     socket.connectServer(server);
   });
+  //Disconnects the user from voice chat
   $('#disconnect-voice').on('click', function () {
     socket.stopVoice();
     $(this).invisible();
@@ -132,25 +141,28 @@ $(function () {
   $("#connect").on("click", function (e) {
     socket.joinVoice(1, 1, $('#audio-channel'));
   });
+  //Frops down settings menu
   $("#settings").on("click", function (e) {
     hasShow($(".setting-menu"));
     audioSetup($('#mic-setting'));
-    //$('#username').text(store.get('token').username);
     $('#level').empty();
-
   });
+  //Drops down the friends menu
   $("#friend").on("click", function (e) {
     hasShow($(".friends-menu"));
   });
+  //Logs out user
   $("#logout-button").on("click", function (e) {
     var result = messagePrompt("Logout", "Are you sure you want to logout?");
     if (result) {
       ipcRenderer.send('logout');
     }
   });
+  //Displays the settings menu and the profile window
   $("#setting-button").on("click", function (e) {
     $(".profile-display").visible();
   });
+  //Closes the profile and settings window
   $("#settings-close").on("click", function (e) {
     $('#change-username-pane').removeClass('show');
     $('#change-password-pane').removeClass('show');
@@ -158,6 +170,7 @@ $(function () {
     $("#audio-settings").invisible();
     $("#profile-panel").invisible();
   });
+  //Drops down the server list
   $("#select").on("click", function (e) {
     if (!$(".server-list").hasClass("show")) {
       $(".server-list").addClass("show");
@@ -166,6 +179,7 @@ $(function () {
       $(".server-list").removeClass("show");
     }
   });
+  //adds new channel to the server
   $('#add-channel').on('click', function () {
     prompt({
       title: 'New Channel',
@@ -194,6 +208,7 @@ $(document).on('mouseup', function (e) {
   }
 });
 
+//A function that adds or removes css class show
 function hasShow(element) {
   if (element.hasClass('show'))
     element.removeClass('show');
@@ -201,6 +216,7 @@ function hasShow(element) {
     element.addClass('show');
 }
 
+//Sets up the avaliable mic settings for voice
 function audioSetup(element) {
   element.empty();
   navigator.mediaDevices.enumerateDevices().then(devices =>
@@ -215,6 +231,7 @@ function audioSetup(element) {
   );
 }
 
+//Simple function for element visilility
 $(function () {
   $.fn.invisible = function () {
     return this.each(function () {

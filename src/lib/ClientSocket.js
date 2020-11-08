@@ -52,13 +52,7 @@ class ClientSocket {
             });
             //Handles direct messaging of users
             this.socket.on('direct_message', (data) => {
-                //Checks if the pm reciver is the same as the users username
-                console.log(data);
-                if(this.reviver == null)
-                {
-                    this.reciver = data.sender;
-                    $('#pm-recipient').append(`<li>${data.recipient}</li>`);
-                }
+                this.reciepent = data.reciepent;
                 $('pm-chat').css('visibility', 'visible');
                 var author = $('<span></span>');
                 var pm_message = $('<span></span>');
@@ -77,7 +71,7 @@ class ClientSocket {
 
     pmUser(user)
     {
-        this.reciver = user;
+        this.reciepent = user;
     }
 
     //Updates chat channels
@@ -101,7 +95,7 @@ class ClientSocket {
     send(data, pm = false) {
         if(pm)
         {
-            this.socket.emit('direct_message', {message: data.msg, sender: data.username, recipient: this.reciver });
+            this.socket.emit('direct_message', {message: data.msg, sender: data.username, recipient: this.reciepent });
         }
         else
         {

@@ -51,7 +51,7 @@ class ClientSocket {
                 });
             });
             //Handles direct messaging of users
-            this.socket.on('direct_message', (data) => {
+            this.socket.on('direct-message', (data) => {
                 
                 this.reciepent = data.reciepent;
                 $('pm-chat').css('visibility', 'visible');
@@ -96,7 +96,7 @@ class ClientSocket {
     send(data, pm = false) {
         if(pm)
         {
-            this.socket.emit('direct_message', {message: data.msg, sender: data.username, recipient: this.reciepent });
+            this.socket.emit('direct-message', {message: data.msg, sender: data.username, recipient: this.reciepent });
         }
         else
         {

@@ -381,30 +381,29 @@ class ClientVoice {
 
         //let info = await roomInfo()
 
-        
         this.getConsumeStream(producer_id).then(function ({
             consumer,
             stream,
             kind
         }) {
+
             this.consumers.set(consumer.id, consumer)
-            if(consumer.localId !== "0")
-            {
-                let elem = document.createElement('audio')
-                elem.srcObject = stream
-                elem.id = consumer.id
-                elem.playsinline = false
-                elem.autoplay = true
-                this.remoteAudioEl.append(elem);
-            }
+
+            let elem = document.createElement('audio')
+            elem.srcObject = stream
+            elem.id = consumer.id
+            elem.playsinline = false
+            elem.autoplay = true
+            //var audio = $(`<audio src='${stream}' autoplay playsinline='false'/>`);
+            //audio.prop('volume', (store.get('volume') / 100));
+            this.remoteAudioEl.append(elem);
+
             consumer.on('trackended', function () {
                 this.removeConsumer(consumer.id)
             }.bind(this))
             consumer.on('transportclose', function () {
                 this.removeConsumer(consumer.id)
             }.bind(this))
-            
-            
 
         }.bind(this))
     }

@@ -494,6 +494,17 @@ button, input, select {font-family:Lucida Console;outline: none;}
     width: 100%;
 }
 
+.message-log li
+{
+    padding: 15px;
+}
+
+.message-log ul
+{
+    list-style-type: none;
+    margin: 0;
+}
+
 .message-log
 {
     margin-top: 15px;

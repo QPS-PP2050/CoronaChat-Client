@@ -52,8 +52,9 @@ class ClientSocket {
             });
             //Handles direct messaging of users
             this.socket.on('direct-message', (data) => {
-                this.reciepent = data.reciepent;
-                $('pm-chat').css('visibility', 'visible');
+                console.log(data);
+                this.recipient = data.recipient;
+                $('#pm-chat').css('visibility', 'visible');
                 var author = $('<span></span>');
                 var pm_message = $('<span></span>');
                 var parent = $('<li></li>');
@@ -63,7 +64,7 @@ class ClientSocket {
                 author.append(data.sender);
                 parent.append(author);
                 parent.append(pm_message);
-                $('pm-messages').append(parent);
+                $('#pm-messages').append(parent);
                 $('#pm-window').scrollTop($('#pm-window').prop("scrollHeight"));
             });
         });
@@ -71,7 +72,7 @@ class ClientSocket {
 
     pmUser(user)
     {
-        this.reciepent = user;
+        this.recipient = user;
     }
 
     //Updates chat channels
@@ -95,7 +96,7 @@ class ClientSocket {
     send(data, pm = false) {
         if(pm)
         {
-            this.socket.emit('direct-message', {message: data.msg, sender: data.username, recipient: this.reciepent });
+            this.socket.emit('direct-message', {message: data.msg, sender: data.username, recipient: this.recipient });
         }
         else
         {

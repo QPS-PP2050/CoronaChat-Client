@@ -11,7 +11,7 @@ var server;
 const Store = require('electron-store');
 const store = new Store();
 let socket = null;
-
+let pm_user = null;
 
 setup();
 
@@ -30,16 +30,20 @@ $(function () {
   $("#send-msg").submit(function (e) {
     sendMessage(e);
   });
+
+  $('#send-pm').submit(function (e){
+    e.preventDefault();
+    socket.send({ username: store.get('token').username, msg: $("#message").val()}, pm = true);
+    $("#pm-message").val('');
+  });
 });
 
 //Dropsdown and closes server list
 $(function () {
-  $('#send-pm').on('submit', function (e) {
-    e.preventDefault();
-  });
-
   $('#close-chat').on('click', function (e) {
     $('#pm-chat').invisible();
+    $('#pm-messages').empty();
+    socket.pmUser(null); 
   });
   $('#delete-account').on('click', function (e) {
     var result = messagePrompt("Delete", "Are you sure you want to delete your account?");
@@ -49,7 +53,14 @@ $(function () {
   });
   $('#mem_list').on('contextmenu', '.member', function (e) {
     const menu = new Menu();
-    menu.append(new MenuItem({ label: "Message", click() { $('#pm-chat').visible() } }));
+    var user = $(this).text();
+    menu.append(new MenuItem({ label: "Message", click() 
+    { 
+      $('#pm-chat').visible();
+      socket.pmUser(user);
+      $('#pm-recipient').append(`<li>${user}</li>`);
+    } 
+  }));
     menu.popup({ window: remote.getCurrentWindow() }, false);
   });
   $('#apply-volume').on('click', function () {
@@ -71,7 +82,6 @@ $(function () {
   $('#password-change').on('click', function () {
     var current_password = $('#current-password').val();
     var password = $('#new-password').val();
-    console.log(password)
     ipcRenderer.send('change-password', { password });
   });
   $('#username-change').on('click', function () {
@@ -101,7 +111,6 @@ $(function () {
         id: $(this).data('channel'),
       };
       socket.changeChannel(data);
-      console.log(data);
     }
     else {
       $('#disconnect-voice').visible();
@@ -115,9 +124,6 @@ $(function () {
     }
     console.log(server);
     socket.connectServer(server);
-  });
-  $('#join-voice').on('click', function () {
-
   });
   $('#disconnect-voice').on('click', function () {
     socket.stopVoice();

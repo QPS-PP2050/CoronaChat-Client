@@ -25,6 +25,8 @@ class ClientSocket {
 
     //Deals with connecting to the server
     connect(socksess) {
+        this.pm = false;
+        this.reciver = null;
         this.manager = io.Manager('https://coronachat.xyz:8080', {
             reconnect: true,
             transportOptions: {
@@ -48,10 +50,34 @@ class ClientSocket {
                     $('#server').append(`<a class="init" data-name="${item.name}" data-server="${item.id}">${item.name}</a>`);
                 });
             });
-            this.socket.on('private-message', (data) => {
-                
+            //Handles direct messaging of users
+            this.socket.on('direct_message', (data) => {
+                //Checks if the pm reciver is the same as the users username
+                console.log(data);
+                if(this.reviver == null)
+                {
+                    this.reciver = data.sender;
+                    $('#pm-recipient').append(`<li>${data.recipient}</li>`);
+                }
+                $('pm-chat').css('visibility', 'visible');
+                var author = $('<span></span>');
+                var pm_message = $('<span></span>');
+                var parent = $('<li></li>');
+                pm_message.addClass('message-content');
+                author.addClass('author-content');
+                pm_message.append(data.message);
+                author.append(data.sender);
+                parent.append(author);
+                parent.append(pm_message);
+                $('pm-messages').append(parent);
+                $('#pm-window').scrollTop($('#pm-window').prop("scrollHeight"));
             });
         });
+    }
+
+    pmUser(user)
+    {
+        this.reciver = user;
     }
 
     //Updates chat channels
@@ -72,10 +98,18 @@ class ClientSocket {
     }
 
     //Sends message to the server
-    send(data) {
-        if (this.serverSocket) {
-            this.serverSocket.emit(events.EVENTS.MESSAGE, { channel: this.chanel_id, author: data.username, message: data.msg });
+    send(data, pm = false) {
+        if(pm)
+        {
+            this.socket.emit('direct_message', {message: data.msg, sender: data.username, recipient: this.reciver });
         }
+        else
+        {
+            if (this.serverSocket) {
+                this.serverSocket.emit(events.EVENTS.MESSAGE, { channel: this.chanel_id, author: data.username, message: data.msg });
+            }
+        }
+        
     }
 
     push(event, data) {
@@ -95,8 +129,6 @@ class ClientSocket {
             this.socketList[`/${server.id}`].firstConnect = true;
             this.socketList[`/${server.id}`].ready = false;
         }
-
-
 
         if (this.serverSocket) {
             this.serverSocket.firstConnect = false
